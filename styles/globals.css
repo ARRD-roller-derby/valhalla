@@ -1,0 +1,488 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: AmaticSC;
+  src: url('/static/fonts/AmaticSC-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: AmaticSC;
+  src: url('/static/fonts/AmaticSC-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url('/static/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url('/static/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url('/static/fonts/Poppins-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  --color-arrd: #378f6a;
+  --color-second: #0d4863;
+  --color-tierce: #f4cb71;
+  --color-quator: #1e583d;
+  --color-txt: #adadad;
+  --color-txt-light: #dfdfdf;
+  --color-txt-error: #c15151;
+  --color-bg: #18191a;
+  --color-bg-dark: #0d0d0e;
+  --color-bg-light: #212422;
+  --color-bg-light-extra: rgb(56, 61, 58);
+  --color-bg-light-subtitle: rgb(64, 70, 66);
+  --color-bg-accent: #cecbc1;
+  --color-link: #30b980;
+  --color-border: #2a2b2d;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-color: var(--color-second) var(--color-bg-light);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-second);
+  transition: 200ms ease-in-out;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, sans-serif;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg);
+  font-size: 18px;
+  box-sizing: border-box;
+  height: 100vh;
+  color: var(--color-txt);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+label {
+  font-family: AmaticSC, cursive;
+  font-weight: 700;
+  margin: 0;
+}
+
+h1:before {
+  content: '- ';
+}
+
+h1:after {
+  content: ' -';
+}
+
+.warning {
+  background: var(--color-txt-error);
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-link);
+  transition: 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--color-second);
+}
+
+.titlePage {
+  text-align: center;
+}
+
+.containerInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  font-size: 14px;
+  outline: none;
+  padding: 5px 10px;
+  border: 1px solid var(--color-arrd);
+  border-radius: 2px;
+  transition: 0.2s ease-in-out;
+  background: var(--color-bg-light);
+  color: var(--color-txt);
+}
+
+.input:focus {
+  border-radius: 15px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: var(--color-txt-light);
+  border: 1px solid var(--color-link);
+}
+
+.cross {
+  position: absolute;
+  right: 5px;
+  z-index: 2;
+}
+
+label {
+  cursor: pointer;
+}
+
+.containerRadio {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+}
+
+.header {
+  background: var(--color-bg);
+  padding: 5px;
+  box-shadow: 0 5px 10px var(--color-bg);
+  position: sticky;
+  top: 0;
+  text-align: center;
+  z-index: 5;
+}
+
+.section {
+  position: relative;
+  background: var(--color-bg-light);
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.close {
+  cursor: pointer;
+  position: relative;
+  width: 26px;
+  height: 26px;
+  transform-origin: center center;
+  transform: rotate(45deg);
+  transition: 0.2s ease-in-out;
+}
+
+.close:after,
+.close:before {
+  position: absolute;
+  content: '';
+  background: var(--color-arrd);
+  height: 4px;
+  border-radius: 10px;
+}
+
+.close:hover {
+  transform: rotate(135deg) scale(1.1);
+}
+
+.close:before {
+  left: 0;
+  right: 0;
+  top: calc(50% - 2px);
+}
+
+.close:after {
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 2px);
+  width: 4px;
+  height: 100%;
+}
+
+button,
+.buttonReset,
+.button {
+  background: var(--color-bg-light-subtitle);
+  border-radius: 50px;
+  color: #fff;
+  outline: 0;
+  border: none;
+  padding: 8px 13px;
+  font-size: 12px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  text-align: center;
+}
+
+label.button {
+  font-family: Poppins, sans-serif;
+  font-weight: normal;
+}
+
+button:hover,
+.buttonReset:hover .button:hover {
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+button[type='reset'],
+.buttonReset {
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-arrd);
+}
+
+button:disabled,
+button[data-disabeld='true'],
+input:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+p {
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+input {
+  background: none;
+  border: none;
+  padding: 5px;
+  color: var(--color-txt);
+  transition: 200ms ease-in-out;
+  outline: none;
+  font-size: 14px;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.05);
+}
+
+input:focus {
+  box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.1);
+}
+
+label {
+  color: var(--color-tierce);
+  white-space: nowrap;
+}
+
+label::first-letter {
+  text-transform: uppercase;
+}
+
+/**--- TRANSITIONS ----*/
+
+.alert-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.alert-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.alert-exit {
+  opacity: 1;
+}
+
+.alert-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateX(20%);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-20%);
+}
+
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 500ms, transform 500ms;
+}
+
+.flap-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.flap-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.flap-exit {
+  opacity: 1;
+}
+
+.flap-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.shutter-enter {
+  background: black;
+  transform: translateY(100%);
+}
+
+.shutter-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.shutter-exit {
+  opacity: 1;
+}
+
+.shutter-exit-active {
+  background: black;
+  transform: translateY(100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.shutterSmall-enter {
+  opacity: 0;
+  transform: translateY(10%);
+}
+
+.shutterSmall-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.shutterSmall-exit {
+  opacity: 1;
+}
+
+.shutterSmall-exit-active {
+  opacity: 0;
+  transform: translateX(10%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.aside-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.aside-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.aside-exit {
+  opacity: 1;
+}
+
+.aside-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.tab-enter {
+  opacity: 0;
+  transform: translateX(10%);
+}
+
+.tab-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.tab-exit {
+  opacity: 1;
+  position: relative;
+}
+
+.tab-exit-active {
+  opacity: 0;
+  transform: translateX(-10%);
+  transition: opacity 200ms, transform 200ms;
+  position: absolute;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+}
+
+.fa-primary {
+  fill: #836728;
+}
+
+.fa-secondary {
+  fill: var(--color-tierce);
+}
