@@ -1,24 +1,13 @@
 import { getSession } from 'next-auth/react'
 import { GetServerSidePropsContext } from 'next'
-import { useSession, signIn, signOut } from 'next-auth/react'
-export default function App() {
-  const { data: session } = useSession()
+import dynamic from 'next/dynamic'
 
-  console.log(session)
-  if (session) {
-    return (
-      <>
-        Signed in as {session?.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
-  }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  )
+const Index = dynamic(
+  () => import('@/pages_related/index').then((comp) => comp.Index),
+  { ssr: false }
+)
+export default function IndexPage() {
+  return <Index />
 }
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {

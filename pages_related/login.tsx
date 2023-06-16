@@ -6,6 +6,7 @@ export const Login: React.FC = () => {
   const handleSignIn = () => {
     signIn('discord')
   }
+
   return (
     <div className="flex flex-col justify-center items-center gap-2 h-screen">
       <div className="w-24">

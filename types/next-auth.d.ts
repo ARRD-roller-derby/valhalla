@@ -9,9 +9,13 @@ declare module 'next-auth' {
       email: string
       image: string
       emailVerified: string
-      roles: string[]
+      roles: {
+        id: string
+        name: string
+        color: string
+      }[]
       nickname: string
-      providerId: string
+      providerAccountId: string
     }
   }
 }
