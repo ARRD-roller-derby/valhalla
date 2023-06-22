@@ -3,19 +3,19 @@ import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { useSession } from 'next-auth/react'
 
-export const Avatar: React.FC = () => {
+export function Avatar() {
   const { data: session } = useSession()
 
   if (!session) return null
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button>
+        <Menu.Button as="div">
           <div>
             <img
               src={session.user.image}
               alt="avatar"
-              className="rounded-full w-8 h-8 border-2 border-arrd  focus-visible:ring-arrd focus-visible:ring-opacity-75"
+              className="rounded-full w-8 h-8 border-2 border-arrd cursor-pointer"
             />
           </div>
         </Menu.Button>

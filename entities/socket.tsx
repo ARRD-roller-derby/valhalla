@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  FC,
   ReactNode,
   useContext,
   useEffect,
@@ -33,10 +32,10 @@ export const SocketContext = createContext<ISocketMessage | null>(null)
 
 // HOOKS --------------------------------------------------------------------
 
-export const useSocketTrigger = (
+export function useSocketTrigger(
   type: TriggerTypes,
   action: (msg: number | string | Record<string, unknown>) => void
-) => {
+): ISocketMessage | null {
   const message = useContext(SocketContext)
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export const useSocketTrigger = (
   return message
 }
 
-export const useSocket = () => {
+export function useSocket() {
   const { data: session } = useSession()
   const [message, setMessage] = useState<ISocketMessage | null>(null)
 
@@ -69,7 +68,7 @@ export const useSocket = () => {
 }
 
 // PROVIDER -----------------------------------------------------------------
-export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
+export function SocketProvider({ children }: SocketProviderProps) {
   const message = useSocket()
 
   return (

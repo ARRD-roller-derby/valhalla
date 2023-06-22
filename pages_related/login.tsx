@@ -2,7 +2,7 @@ import { DiscordButton } from '@/ui/discord-button'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 
-export const Login: React.FC = () => {
+export function Login() {
   const handleSignIn = () => {
     signIn('discord')
   }
