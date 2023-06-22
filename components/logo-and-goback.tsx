@@ -4,13 +4,14 @@ import { ArrowLeft } from '../ui/icons/arrow-left'
 import { useMemo } from 'react'
 import { pageTitle } from '@/utils/pageTitle'
 import Image from 'next/image'
+import { APP_NAME } from '@/utils/constants'
 
 export function LogoAndGoBack() {
   const isMobile = useIsMobile()
   const router = useRouter()
   const currentPage = useMemo(() => {
     const title = pageTitle?.[router.route] || ''
-    return title || 'Valhalla'
+    return title || APP_NAME
   }, [router.route])
 
   if (router.asPath === '/' && isMobile)
@@ -20,6 +21,7 @@ export function LogoAndGoBack() {
         <div>{currentPage}</div>
       </div>
     )
+
   return (
     <div>
       <Image

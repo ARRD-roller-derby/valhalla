@@ -1,3 +1,4 @@
+export const APP_NAME = 'Valhalla'
 export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || ''
 export const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || ''
 export const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID || ''

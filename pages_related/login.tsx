@@ -1,4 +1,5 @@
 import { DiscordButton } from '@/ui/discord-button'
+import { APP_NAME } from '@/utils/constants'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 
@@ -18,7 +19,7 @@ export function Login() {
         />
       </div>
 
-      <h1>Valhalla</h1>
+      <h1>{APP_NAME}</h1>
       <div>
         <DiscordButton onClick={handleSignIn} />
       </div>
