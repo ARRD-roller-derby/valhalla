@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import useIsMobile from '@/hooks/is-mobile.hook'
 import { useRouter } from 'next/router'
 import { ArrowLeft } from '../ui/icons/arrow-left.icon'
@@ -5,21 +6,26 @@ import { useMemo } from 'react'
 import { pageTitle } from '@/utils/pageTitle'
 import Image from 'next/image'
 import { APP_NAME } from '@/utils/constants'
+import { routes } from '@/utils/menu.routes'
+import Link from 'next/link'
 
 export function LogoAndGoBack() {
   const isMobile = useIsMobile()
   const router = useRouter()
+
   const currentPage = useMemo(() => {
-    const title = pageTitle?.[router.route] || ''
+    const routeRegex = new RegExp(router.route)
+    const findRoute = routes.find((route) => route.path.match(routeRegex))
+    const title = findRoute?.name || ''
     return title || APP_NAME
   }, [router.route])
 
-  if (router.asPath !== '/' && isMobile)
+  if (router.asPath !== '/agenda' && isMobile)
     return (
-      <div>
-        <ArrowLeft />
-        <div>{currentPage}</div>
-      </div>
+      <Link className="flex gap-1 items-center" href={'/'}>
+        <ArrowLeft className="fill-arrd text-lg" />
+        <div className="text-tierce">{currentPage}</div>
+      </Link>
     )
 
   return (
