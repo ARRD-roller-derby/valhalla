@@ -319,6 +319,12 @@ label::first-letter {
   text-transform: uppercase;
 }
 
+[data-active='true'],
+[data-active='true'] > svg {
+  color: var(--color-tierce);
+  fill: var(--color-tierce);
+}
+
 /**--- TRANSITIONS ----*/
 
 .alert-enter {

@@ -32,7 +32,19 @@ module.exports = {
         discord: '#5468ff',
         discordHover: '#656c85cc',
       },
+      gridTemplateAreas: {
+        'menu-desktop': ['nav nav', 'menu main'],
+        'menu-mobile': ['nav', 'main', 'menu'],
+      },
+      gridTemplateColumns: {
+        'menu-desktop': 'auto 1fr',
+        'menu-mobile': '1fr',
+      },
+      gridTemplateRows: {
+        'menu-desktop': 'auto 1fr',
+        'menu-mobile': 'auto 1fr auto',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@savvywombat/tailwindcss-grid-areas')],
 }

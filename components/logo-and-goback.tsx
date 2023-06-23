@@ -1,6 +1,6 @@
 import useIsMobile from '@/hooks/is-mobile.hook'
 import { useRouter } from 'next/router'
-import { ArrowLeft } from '../ui/icons/arrow-left'
+import { ArrowLeft } from '../ui/icons/arrow-left.icon'
 import { useMemo } from 'react'
 import { pageTitle } from '@/utils/pageTitle'
 import Image from 'next/image'
@@ -14,7 +14,7 @@ export function LogoAndGoBack() {
     return title || APP_NAME
   }, [router.route])
 
-  if (router.asPath === '/' && isMobile)
+  if (router.asPath !== '/' && isMobile)
     return (
       <div>
         <ArrowLeft />
