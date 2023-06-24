@@ -4,6 +4,10 @@ import { useCallback, useEffect, useReducer } from 'react'
 
 interface ICallDay {
   date: dayjs.Dayjs
+  day: number
+  month: number
+  isCurrentMonth: boolean
+  events: IEvent[]
 }
 
 interface IEvent {
@@ -77,8 +81,8 @@ const reducer = (state: IState, action: IAction): IState => {
 export function useCalendar() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const generateCalendarDays = useCallback(() => {
-    const thisMonth = dayjs().set('year', state.year).month(state.month),
+  const generateCalendarDays = useCallback((year: number, month: number) => {
+    const thisMonth = dayjs().set('year', year).set('month', month),
       firstDay = dayjs(thisMonth).startOf('month'),
       lastDay = dayjs(thisMonth).endOf('month'),
       firstCalDay = firstDay.subtract(firstDay.day() - 1, 'day'),
@@ -95,40 +99,30 @@ export function useCalendar() {
         date: day,
         month: day.month(),
         day: day.day(),
+        isCurrentMonth: day.month() === month,
         events: [],
       })
     }
 
     return generateCal.slice(0, 35)
-  }, [state.year, state.month])
+  }, [])
 
-  const attachEventsToDays = useCallback(
-    (calendarDays: ICallDay[], events: IEvent[]) => {
-      return calendarDays.map((day) => ({
-        ...day,
-        events: events.filter(
-          (event) =>
-            dayjs(event.start).format('DD-MM-YY') ===
-            day.date.format('DD-MM-YY')
-        ),
-      }))
+  const createCalendar = useCallback(
+    (year: number, month: number) => {
+      const thisMonth = dayjs().set('year', year).set('month', month)
+      const firstDay = dayjs(thisMonth).startOf('month')
+      const lastDay = dayjs(thisMonth).endOf('month')
+
+      dispatch({
+        type: SET_CALENDAR,
+        cal: generateCalendarDays(year, month),
+        currentMonth: thisMonth.format('MMMM YYYY'),
+        startOfMonth: firstDay.toISOString(),
+        endOfMonth: lastDay.toISOString(),
+      })
     },
-    []
+    [generateCalendarDays]
   )
-
-  const createCalendar = useCallback(() => {
-    const thisMonth = dayjs().set('year', state.year).month(state.month)
-    const firstDay = dayjs(thisMonth).startOf('month')
-    const lastDay = dayjs(thisMonth).endOf('month')
-
-    dispatch({
-      type: SET_CALENDAR,
-      cal: generateCalendarDays(),
-      currentMonth: thisMonth.format('MMMM YYYY'),
-      startOfMonth: firstDay.toISOString(),
-      endOfMonth: lastDay.toISOString(),
-    })
-  }, [generateCalendarDays, attachEventsToDays, state.year, state.month])
 
   const nextMonth = () => {
     dispatch({ type: NEXT_MONTH })
@@ -139,7 +133,7 @@ export function useCalendar() {
   }
 
   useEffect(() => {
-    createCalendar()
+    createCalendar(state.year, state.month)
   }, [state.year, state.month])
 
   return {

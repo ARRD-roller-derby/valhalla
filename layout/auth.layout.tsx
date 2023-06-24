@@ -3,7 +3,6 @@ import { LogoAndGoBack } from '@/components/logo-and-goback'
 import { Menu } from '@/components/menu'
 import { Wallet } from '@/components/wallet'
 import { SocketProvider } from '@/entities/socket'
-import useIsMobile from '@/hooks/is-mobile.hook'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -34,7 +33,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         <div className="grid-in-menu">
           <Menu />
         </div>
-        <main className="h-full overflow-y-auto grid-in-main">{children}</main>
+        <main className="h-full overflow-y-auto grid-in-main p-2">
+          {children}
+        </main>
       </div>
     </SocketProvider>
   )
