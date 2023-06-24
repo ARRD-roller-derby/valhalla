@@ -9,6 +9,7 @@ declare module 'next-auth' {
       email: string
       image: string
       emailVerified: string
+      wallet: number
       roles: {
         id: string
         name: string

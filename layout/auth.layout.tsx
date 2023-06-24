@@ -1,6 +1,7 @@
 import { Avatar } from '@/components/avatar'
 import { LogoAndGoBack } from '@/components/logo-and-goback'
 import { Menu } from '@/components/menu'
+import { Wallet } from '@/components/wallet'
 import { SocketProvider } from '@/entities/socket'
 import useIsMobile from '@/hooks/is-mobile.hook'
 
@@ -25,8 +26,8 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       >
         <nav className="grid-in-nav flex justify-between items-center p-1">
           <LogoAndGoBack />
-          <div className="flex items-center gap-1">
-            <p>wallet (ecoute le socket)</p>
+          <div className="flex items-center gap-3">
+            <Wallet />
             <Avatar />
           </div>
         </nav>

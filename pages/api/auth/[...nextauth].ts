@@ -31,6 +31,12 @@ export const authOptions = {
       const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
       await MongoDb()
       const user = await User.findById(session.user.id)
+
+      if (!user?.wallet) {
+        user.wallet = 500
+        await user.save()
+      }
+
       if (!user.providerAccountId) {
         const account = await Account.findOne({ userId: session.user.id })
         if (account) {
@@ -38,6 +44,8 @@ export const authOptions = {
           await user.save()
         }
       }
+
+      console.log('user', user)
 
       if (!user) return session
 

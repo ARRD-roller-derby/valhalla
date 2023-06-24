@@ -1,6 +1,4 @@
 import { Schema, model, models } from 'mongoose'
-import { ObjectId } from 'mongodb'
-
 export enum Pronoun {
   ELLE = 'elle',
   IL = 'il',
