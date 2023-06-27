@@ -1,5 +1,5 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
-import { MONGO_URI } from '@/utils/constants'
+import { MONGO_URI } from '@/utils'
 import { MongoClient } from 'mongodb'
 
 declare global {

@@ -11,7 +11,7 @@ import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
 import { MongoDb } from '@/db/db'
 import { REST } from '@discordjs/rest'
-import { User } from '@/models/user.model'
+import { TRole, User } from '@/models/user.model'
 import { Routes } from 'discord-api-types/v10'
 
 export const authOptions = {
@@ -32,39 +32,28 @@ export const authOptions = {
       await MongoDb()
       const user = await User.findById(session.user.id)
 
-      if (!user?.wallet) {
-        user.wallet = 500
-        await user.save()
-      }
+      if (!user?.wallet) user.wallet = 500
 
       if (!user.providerAccountId) {
         const account = await Account.findOne({ userId: session.user.id })
-        if (account) {
-          user.providerAccountId = account.providerAccountId
-          await user.save()
-        }
+        if (account) user.providerAccountId = account.providerAccountId
       }
-
-      console.log('user', user)
 
       if (!user) return session
 
-      const guildRoles: any = await rest.get(
+      const guildRoles = (await rest.get(
         Routes.guildRoles(DISCORD_GUILD_ID)
-      )
+      )) as TRole[]
+
       const member: any = await rest.get(
         Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId)
       )
-      const roles = guildRoles
-        .filter((role: { id: string }) => member.roles.includes(role.id))
-        .map((role: any) => ({
-          id: role.id,
-          name: role.name,
-          color: role.color,
-        }))
+
+      user.roles = guildRoles.filter((role) => member.roles.includes(role.id))
+      await user.save()
       session.user = {
         ...session.user,
-        roles,
+        roles: user.roles,
         nickname: member.nick,
       }
       return session

@@ -1,0 +1,7 @@
+export * from './address-book.icon'
+export * from './agenda.icon'
+export * from './arrow-left.icon'
+export * from './discord.icon'
+export * from './dragon.icon'
+export * from './game.icon'
+export * from './skill.icon'

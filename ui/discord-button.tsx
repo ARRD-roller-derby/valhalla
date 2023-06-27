@@ -1,4 +1,4 @@
-import { DiscordIcon } from './icons/discord.icon'
+import { DiscordIcon } from '@/ui'
 
 interface DiscordButtonProps {
   onClick: () => void

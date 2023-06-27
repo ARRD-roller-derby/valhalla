@@ -2,15 +2,14 @@
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useReducer } from 'react'
 
-interface ICallDay {
+export interface ICallDay {
   date: dayjs.Dayjs
   day: number
   month: number
   isCurrentMonth: boolean
-  events: IEvent[]
 }
 
-interface IEvent {
+export interface IEventCal {
   start: Date
   end: Date
   title: string
@@ -100,7 +99,6 @@ export function useCalendar() {
         month: day.month(),
         day: day.day(),
         isCurrentMonth: day.month() === month,
-        events: [],
       })
     }
 

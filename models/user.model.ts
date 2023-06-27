@@ -5,8 +5,15 @@ export enum Pronoun {
   IEL = 'iel',
 }
 
-export interface UserInterface {
+export type TRole = {
+  id: string
+  name: string
+  color: number
+}
+
+export interface IUser {
   _id: string
+  id: string
   providerAccountId: string
   wallet: number
   name: string
@@ -14,16 +21,25 @@ export interface UserInterface {
   numRoster: number
   mst: boolean
   msp: boolean
-  dailyContestAvgTime: number
-  dailyContestAvgAccuracy: number
+  image: string
+  roles: TRole[]
 }
 
-const userSchema = new Schema<UserInterface>({
+const userSchema = new Schema<IUser>({
   providerAccountId: String,
   wallet: Number,
   name: String,
   derbyName: String,
   numRoster: Number,
+  mst: Boolean,
+  msp: Boolean,
+  roles: [
+    {
+      id: String,
+      name: String,
+      color: Number,
+    },
+  ],
 })
 
 export const User = models.users || model('users', userSchema)

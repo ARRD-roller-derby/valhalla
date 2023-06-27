@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
 
 const Agenda = dynamic(
-  () => import('@/pages_related/agenda').then((comp) => comp.Agenda),
+  () => import('@/pages_related').then((comp) => comp.Agenda),
   { ssr: false }
 )
 export default function AgendaPage() {

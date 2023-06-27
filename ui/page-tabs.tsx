@@ -9,7 +9,7 @@ interface ITab {
 export function PageTabs({ tabs }: { tabs: ITab[] }) {
   return (
     <Tab.Group>
-      <Tab.List className="flex justify-center gap-4">
+      <Tab.List className="flex justify-center gap-4 sticky top-0 bg-bg">
         {tabs.map((tab) => (
           <Tab key={tab.title} className="hover:shadow-none p-0">
             {({ selected }) => (

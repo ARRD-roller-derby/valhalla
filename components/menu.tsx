@@ -1,5 +1,5 @@
-import useIsMobile from '@/hooks/is-mobile.hook'
-import { routes } from '@/utils/menu.routes'
+import { useIsMobile } from '@/hooks'
+import { routes } from '@/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 

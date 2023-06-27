@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useIsMobile from '@/hooks/is-mobile.hook'
+import { useIsMobile } from '@/hooks'
 import { useRouter } from 'next/router'
-import { ArrowLeft } from '../ui/icons/arrow-left.icon'
+import { ArrowLeft } from '@/ui'
 import { useMemo } from 'react'
 import Image from 'next/image'
-import { APP_NAME } from '@/utils/constants'
-import { routes } from '@/utils/menu.routes'
+import { APP_NAME, routes } from '@/utils'
 import Link from 'next/link'
 
 export function LogoAndGoBack() {

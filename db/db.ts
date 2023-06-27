@@ -1,4 +1,4 @@
-import { MONGO_URI } from '@/utils/constants'
+import { MONGO_URI } from '@/utils'
 import mongoose from 'mongoose'
 
 const connectMongo = async () => mongoose.connect(MONGO_URI)

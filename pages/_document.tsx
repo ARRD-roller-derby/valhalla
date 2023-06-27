@@ -14,7 +14,7 @@ export default function DocumentPage() {
         <link rel="icon" type="image/ico" sizes="64x64" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body>
+      <body className=" bg-bg text-txt">
         <Main />
         <NextScript />
       </body>

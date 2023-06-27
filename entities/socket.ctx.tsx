@@ -6,7 +6,7 @@ import {
   createContext,
   useState,
 } from 'react'
-import { PUSHER_KEY, PUSHER_REGION } from '../utils/constants'
+import { PUSHER_KEY, PUSHER_REGION } from '@/utils'
 import Pusher from 'pusher-js'
 import { useSession } from 'next-auth/react'
 

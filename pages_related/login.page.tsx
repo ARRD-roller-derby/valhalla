@@ -1,5 +1,5 @@
-import { DiscordButton } from '@/ui/discord-button'
-import { APP_NAME } from '@/utils/constants'
+import { DiscordButton } from '@/ui'
+import { APP_NAME } from '@/utils'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import { useLocalState } from './localstate.hook'
+import { useLocalState } from '@/hooks'
 
-export default function useIsMobile(): boolean {
+export function useIsMobile(): boolean {
   const { localState, setLocalState } = useLocalState<{ isMobile: boolean }>(
     { isMobile: true },
     'valhalla_device'

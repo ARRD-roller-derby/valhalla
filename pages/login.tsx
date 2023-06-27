@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 
 const Login = dynamic(
-  () => import('@/pages_related/login').then((comp) => comp.Login),
+  () => import('@/pages_related/login.page').then((comp) => comp.Login),
   {
     ssr: false,
   }

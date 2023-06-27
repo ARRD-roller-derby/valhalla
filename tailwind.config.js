@@ -2,11 +2,20 @@
 module.exports = {
   content: [
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages_related/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages_related/**/*.page.{js,ts,jsx,tsx,mdx}',
     './ui/**/*.{js,ts,jsx,tsx,mdx}',
     './layout/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+      serif: ['Inter', 'sans-serif'],
+      mono: ['Inter', 'sans-serif'],
+      amatic: ['"amaticsc"', 'cursive'],
+      poppins: ['"poppins"', 'sans-serif'],
+    },
+
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

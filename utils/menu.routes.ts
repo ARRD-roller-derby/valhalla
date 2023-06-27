@@ -1,7 +1,4 @@
-import { AddressBookIcon } from '@/ui/icons/address-book.icon'
-import { AgendaIcon } from '@/ui/icons/agenda.icon'
-import { GameIcon } from '@/ui/icons/game.icon'
-import { SkillIcon } from '@/ui/icons/skill.icon'
+import { AddressBookIcon, AgendaIcon, GameIcon, SkillIcon } from '@/ui'
 
 export const routes = [
   {
