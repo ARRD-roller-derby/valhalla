@@ -1,9 +1,10 @@
 {
-  "cSpell.words": [
-    "arrd",
-    "goback",
-    "headlessui",
-    "localstate",
-    "valhalla"
-  ]
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": ["arrd", "evenement", "goback", "headlessui", "localstate", "nextauth", "valhalla"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

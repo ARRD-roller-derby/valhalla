@@ -1,0 +1,23 @@
+import { useEvent } from '@/entities'
+import { dc } from '@/utils'
+import dayjs from 'dayjs'
+import Link from 'next/link'
+
+interface EventLinkProps {
+  small?: boolean
+}
+export function EventLink({ small = false }: EventLinkProps) {
+  const { event } = useEvent()
+
+  return (
+    <Link
+      href={`/agenda/${event._id}`}
+      key={event._id.toString()}
+      className={dc('rounded border border-arrd-secondary text-arrd-textExtraLight', [small, 'p-1', 'p-2'])}
+    >
+      <span className="text-arrd-highlight">{dayjs(event.start).format('HH:mm')}</span>
+      <span className="text-arrd-secondary"> | </span>
+      {event.title}
+    </Link>
+  )
+}

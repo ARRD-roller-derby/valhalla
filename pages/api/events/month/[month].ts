@@ -1,22 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import dayjs from 'dayjs'
 import { checkRoles } from '@/utils/check-roles'
-import { Event, IParticipant } from '@/models'
+import { Event } from '@/models'
+import { authOptions } from '../../auth/[...nextauth]'
+import { publicParticipants } from '@/utils'
+process.env.TZ = 'Europe/Paris'
 
-export default async function eventsMonth(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const session = await getSession({ req })
+export default async function eventsMonth(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
   const month = parseInt(req.query.month as string)
-  await MongoDb()
+
   const startOfMonth = dayjs().month(month).startOf('month').toISOString()
   const endOfMonth = dayjs().month(month).endOf('month').toISOString()
-  const isMember = checkRoles(['member'], user)
+  const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
   const between = {
     start: {
@@ -29,13 +29,13 @@ export default async function eventsMonth(
   if (!isMember) {
     or.push({
       ...between,
-      visibility: 'member',
+      visibility: 'public',
     })
   } else if (isMember && !isAdmin) {
     or.push({
       ...between,
       visibility: {
-        $in: ['member', 'public'],
+        $in: ['membre', 'public'],
       },
     })
   }
@@ -43,22 +43,18 @@ export default async function eventsMonth(
   if (isAdmin) {
     or.push({
       ...between,
-      visibility: 'admin',
     })
   }
 
+  await MongoDb()
   const events = await Event.find({ $or: or })
 
-  //Il ne faut pas retourner les participants, seulement ma présence
   const eventsWithoutParticipants = events.map((event) => {
     const { participants, ...rest } = event.toObject()
     return {
       ...rest,
-      participants: participants.filter(
-        (participant: IParticipant) => participant.userId === user._id
-      ),
+      participants: publicParticipants(event, user),
     }
   })
-
-  return res.status(200).json(eventsWithoutParticipants)
+  return res.status(200).json({ events: eventsWithoutParticipants })
 }

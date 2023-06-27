@@ -1,11 +1,6 @@
 import clientPromise from '@/db/mongo.auth.connect'
 import { Account } from '@/models/account.model'
-import {
-  DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET,
-  DISCORD_GUILD_ID,
-  DISCORD_TOKEN,
-} from '@/utils/constants'
+import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_GUILD_ID, DISCORD_TOKEN } from '@/utils/constants'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
@@ -16,7 +11,6 @@ import { Routes } from 'discord-api-types/v10'
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
-  debug: true,
   providers: [
     DiscordProvider({
       clientId: DISCORD_CLIENT_ID,
@@ -29,6 +23,8 @@ export const authOptions = {
   callbacks: {
     async session(session: any) {
       const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
+      const guildRoles = (await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))) as TRole[]
+      const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, session.user.providerAccountId))
       await MongoDb()
       const user = await User.findById(session.user.id)
 
@@ -41,15 +37,16 @@ export const authOptions = {
 
       if (!user) return session
 
-      const guildRoles = (await rest.get(
-        Routes.guildRoles(DISCORD_GUILD_ID)
-      )) as TRole[]
+      const roles = guildRoles
+        .filter((role) => member.roles.includes(role.id))
+        .map((role) => ({
+          id: role.id,
+          name: role.name,
+          color: role.color,
+        }))
 
-      const member: any = await rest.get(
-        Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId)
-      )
+      user.roles = roles.filter((role) => roles.find((r) => r.id === role.id))
 
-      user.roles = guildRoles.filter((role) => member.roles.includes(role.id))
       await user.save()
       session.user = {
         ...session.user,

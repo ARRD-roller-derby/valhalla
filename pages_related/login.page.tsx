@@ -9,17 +9,10 @@ export function Login() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2 h-screen">
-      <div className="w-24">
-        <Image
-          src="/static/images/valhalla.svg"
-          alt="logo arrd"
-          width={75}
-          height={75}
-        />
-      </div>
+    <div className="flex h-screen flex-col items-center justify-center gap-2 bg-arrd-bg">
+      <Image src="/static/images/valhalla.svg" alt="logo arrd" width={75} height={75} />
 
-      <h1>{APP_NAME}</h1>
+      <h1 className="font-amatic text-2xl">{APP_NAME}</h1>
       <div>
         <DiscordButton onClick={handleSignIn} />
       </div>

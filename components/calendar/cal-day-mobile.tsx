@@ -13,23 +13,16 @@ export function CalDayMobile({ day }: CalDayMobileProps) {
   return (
     <div
       className={dc(
-        'rounded-full flex justify-center items-center relative  h-8 w-8',
-        [
-          day.isCurrentMonth,
-          'text-txtLight',
-          'bg-bg opacity-50 cursor-not-allowed',
-        ],
-        [dayjs().isSame(day.date, 'day'), 'bg-second', 'bg-arrd'],
-        [
-          !!currentDay && dayjs(currentDay).isSame(day.date, 'day'),
-          'ring-4 ring-tierce ',
-        ]
+        'relative flex h-8 w-8 items-center justify-center rounded-full',
+        [day.isCurrentMonth, 'text-txtLight', 'bg-bg cursor-not-allowed opacity-50'],
+        [dayjs().isSame(day.date, 'day'), 'bg-arrd-accent', 'bg-arrd-bgLight'],
+        [!!currentDay && dayjs(currentDay).isSame(day.date, 'day'), 'ring-tierce ring-4 ']
       )}
       onClick={() => setCurrentDay(day.date)}
     >
       {day.date.format('DD')}
       {day.isCurrentMonth && events.length > 0 && (
-        <div className="absolute -top-1 -right-1 text-xs font-semibold  cursor-pointer bg-second h-4 w-4 rounded-full flex justify-center items-center">
+        <div className="absolute -right-1 -top-1 flex h-4  w-4 cursor-pointer items-center justify-center rounded-full bg-arrd-secondary text-xs font-semibold">
           {events.length}
         </div>
       )}

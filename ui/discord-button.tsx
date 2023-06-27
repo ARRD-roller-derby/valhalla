@@ -7,9 +7,9 @@ interface DiscordButtonProps {
 export function DiscordButton({ onClick }: DiscordButtonProps) {
   return (
     <div
-      className="bg-discord text-white flex items-center gap-1 
-  rounded-md p-2 cursor-pointer 
-  fill-white hover:bg-discordHover ease-in-out duration-200"
+      className="flex cursor-pointer items-center gap-1 rounded-md 
+  bg-arrd-discord fill-white p-2 
+  text-white duration-200 ease-in-out hover:bg-arrd-discordHover"
       onClick={onClick}
     >
       <DiscordIcon />

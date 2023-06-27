@@ -1,11 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  ReactNode,
-  useContext,
-  useEffect,
-  createContext,
-  useState,
-} from 'react'
+import { ReactNode, useContext, useEffect, createContext, useState } from 'react'
 import { PUSHER_KEY, PUSHER_REGION } from '@/utils'
 import Pusher from 'pusher-js'
 import { useSession } from 'next-auth/react'
@@ -21,9 +15,9 @@ export enum TriggerTypes {
   EVENT = 'event',
 }
 
-interface ISocketMessage {
+interface ISocketMessage<T = any> {
   type: TriggerTypes
-  value: number | string | Record<string, unknown>
+  value: T
   id: string
 }
 
@@ -32,10 +26,7 @@ export const SocketContext = createContext<ISocketMessage | null>(null)
 
 // HOOKS --------------------------------------------------------------------
 
-export function useSocketTrigger(
-  type: TriggerTypes,
-  action: (msg: number | string | Record<string, unknown>) => void
-): ISocketMessage | null {
+export function useSocketTrigger<T>(type: TriggerTypes, action: (msg: T) => void): ISocketMessage | null {
   const message = useContext(SocketContext)
 
   useEffect(() => {
@@ -52,6 +43,7 @@ export function useSocket() {
   const cbSocket = (data: ISocketMessage) => {
     setMessage(data)
     setTimeout(() => setMessage(null), 400)
+    return data
   }
 
   useEffect(() => {
@@ -61,7 +53,8 @@ export function useSocket() {
 
     const channel = pusher.subscribe('valhalla')
     channel.bind('public', cbSocket)
-    if (session?.user?.id) channel.bind(session?.user?.id, cbSocket)
+
+    if (session?.user?.id) channel.bind(session.user.id, cbSocket)
   }, [])
 
   return message
@@ -71,7 +64,5 @@ export function useSocket() {
 export function SocketProvider({ children }: SocketProviderProps) {
   const message = useSocket()
 
-  return (
-    <SocketContext.Provider value={message}>{children}</SocketContext.Provider>
-  )
+  return <SocketContext.Provider value={message}>{children}</SocketContext.Provider>
 }

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useIsMobile } from '@/hooks'
 import { useRouter } from 'next/router'
-import { ArrowLeft } from '@/ui'
+import { ArrowLeftIcon } from '@/ui'
 import { useMemo } from 'react'
 import Image from 'next/image'
 import { APP_NAME, routes } from '@/utils'
@@ -20,8 +20,8 @@ export function LogoAndGoBack() {
 
   if (router.asPath !== '/agenda' && isMobile)
     return (
-      <Link className="flex gap-1 items-center" href={'/'}>
-        <ArrowLeft className="fill-arrd text-lg" />
+      <Link className="flex items-center gap-1" href={'/'}>
+        <ArrowLeftIcon className="fill-arrd-primary text-lg" />
         <div className="text-tierce">{currentPage}</div>
       </Link>
     )
@@ -33,7 +33,7 @@ export function LogoAndGoBack() {
         alt="logo"
         width={50}
         height={50}
-        className="rounded-full w-8 h-8 border-2 border-arrd cursor-pointer"
+        className="h-8 w-8 cursor-pointer rounded-full"
       />
     </div>
   )

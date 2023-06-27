@@ -3,10 +3,7 @@ import { useEffect } from 'react'
 import { useLocalState } from '@/hooks'
 
 export function useIsMobile(): boolean {
-  const { localState, setLocalState } = useLocalState<{ isMobile: boolean }>(
-    { isMobile: true },
-    'valhalla_device'
-  )
+  const { localState, setLocalState } = useLocalState<{ isMobile: boolean }>({ isMobile: true }, 'valhalla_device')
 
   function handleResize() {
     setLocalState({ isMobile: window.innerWidth <= 600 ? true : false })

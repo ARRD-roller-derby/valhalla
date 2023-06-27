@@ -17,30 +17,52 @@ module.exports = {
     },
 
     extend: {
+      animationDelay: {
+        1: '0.1s',
+        2: '0.2s',
+        3: '0.3s',
+        4: '0.4s',
+        5: '0.5s',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        arrd: '#378f6a',
-        second: '#0d4863',
-        tierce: '#f4cb71',
-        quator: '#1e583d',
-        txt: '#adadad',
-        txtLight: '#dfdfdf',
-        txtError: '#c15151',
-        bg: '#18191a',
-        bgDark: '#0d0d0e',
-        bgLight: '#212422',
-        bgLightExtra: 'rgb(56, 61, 58)',
-        bgLightSubtitle: 'rgb(64, 70, 66)',
-        bgAccent: '#cecbc1',
-        link: '#30b980',
-        border: '#2a2b2d',
-        discord: '#5468ff',
-        discordHover: '#656c85cc',
+        arrd: {
+          // Couleurs principales
+          primary: '#378f6a',
+          secondary: '#0d4863',
+          accent: '#1e583d',
+          highlight: '#f4cb71',
+
+          // Couleurs de texte
+          text: '#adadad',
+          textLight: '#dfdfdf',
+          textExtraLight: '#f7f7f7',
+          textDark: '#6e6e6e',
+
+          textError: '#c15151',
+
+          // Couleurs d'arrière-plan
+          bg: '#18191a',
+          bgDark: '#0d0d0e',
+          bgLight: '#212422',
+          bgLightExtra: 'rgb(56, 61, 58)',
+          bgLightSubtitle: 'rgb(64, 70, 66)',
+
+          // Couleurs d'accentuation
+          link: '#30b980',
+
+          // Couleurs de bordure
+          border: '#2a2b2d',
+
+          // Couleurs spécifiques
+          discord: '#5468ff',
+          discordHover: '#656c85cc',
+        },
       },
+
       gridTemplateAreas: {
         'menu-desktop': ['nav nav', 'menu main'],
         'menu-mobile': ['nav', 'main', 'menu'],

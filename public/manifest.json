@@ -1,7 +1,7 @@
 {
-  "name": "Njörd",
-  "short_name": "Njörd",
-  "description":"Conçu par le ARRD",
+  "name": "Valhalla",
+  "short_name": "Valhalla",
+  "description": "Conçu par le ARRD",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",

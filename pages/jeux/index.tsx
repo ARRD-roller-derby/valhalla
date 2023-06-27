@@ -2,12 +2,9 @@ import { getSession } from 'next-auth/react'
 import { GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
 
-const Agenda = dynamic(
-  () => import('@/pages_related').then((comp) => comp.Agenda),
-  { ssr: false }
-)
-export default function AgendaPage() {
-  return <Agenda />
+const Games = dynamic(() => import('@/pages_related').then((comp) => comp.Games), { ssr: false })
+export default function GamesPage() {
+  return <Games />
 }
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
