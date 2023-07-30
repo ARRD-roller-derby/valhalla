@@ -34,11 +34,6 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
   const [form, setForm] = useState(formInit)
 
   useEffect(() => {
-    if (form.start.isAfter(form.end)) setForm((prev) => ({ ...prev, end: form.start }))
-    if (form.end.isBefore(form.start, 'day')) setForm((prev) => ({ ...prev, start: form.end }))
-  }, [form.start, form.end])
-
-  useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
 
     if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))

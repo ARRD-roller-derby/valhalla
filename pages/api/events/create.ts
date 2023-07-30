@@ -6,7 +6,24 @@ import { authOptions } from '../auth/[...nextauth]'
 import { Address, Event } from '@/models'
 import { uuid } from 'uuidv4'
 import { publishToDiscord } from '@/services/publish-to-discord'
+
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import timezone from 'dayjs/plugin/timezone'
+import duration from 'dayjs/plugin/duration'
+import isBetween from 'dayjs/plugin/isBetween'
+import fr from 'dayjs/locale/fr'
+
+dayjs.extend(relativeTime)
+dayjs.extend(localizedFormat)
+dayjs.extend(timezone)
+dayjs.extend(duration)
+dayjs.extend(isBetween)
+dayjs.locale(fr)
+dayjs.tz.guess()
+dayjs.tz.setDefault('Europe/Paris')
+
 import { tiptapJsonToMd } from '@/utils/tiptap-json-to-md'
 process.env.TZ = 'Europe/Paris'
 
