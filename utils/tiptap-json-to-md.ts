@@ -29,7 +29,7 @@ export function tiptapJsonToMd(contentArray: ITipTapContent[]) {
       markdown += txt + ' '
     } else if (content.type === 'heading') {
       markdown += '\n'
-      markdown += `${'#'.repeat(content.attrs?.level || 0)} ${content.content ? tiptapJsonToMd(content.content) : ''}\n`
+      markdown += `${'#'.repeat(content.attrs?.level ?? 0)} ${content.content ? tiptapJsonToMd(content.content) : ''}\n`
     } else if (content.type === 'paragraph') {
       markdown += `${content.content ? tiptapJsonToMd(content.content) : ''}\n`
     } else if (content.type === 'bulletList') {

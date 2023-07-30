@@ -88,7 +88,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
       markdown += `*Date: ${dayjs(event.start).format('LLLL')}*\n`
     }
 
-    if (event.address) {
+    if (event.address?.label) {
       markdown += `### Adresse\n${event.address.label}\n`
     }
 
