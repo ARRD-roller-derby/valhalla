@@ -25,6 +25,12 @@ export interface IUser {
   roles: TRole[]
 }
 
+const RoleSchema = new Schema<TRole>({
+  id: String,
+  name: String,
+  color: Number,
+})
+
 const userSchema = new Schema<IUser>({
   providerAccountId: String,
   wallet: Number,
@@ -33,13 +39,7 @@ const userSchema = new Schema<IUser>({
   numRoster: Number,
   mst: Boolean,
   msp: Boolean,
-  roles: [
-    {
-      id: String,
-      name: String,
-      color: Number,
-    },
-  ],
+  roles: [RoleSchema],
 })
 
 export const User = models.users || model('users', userSchema)

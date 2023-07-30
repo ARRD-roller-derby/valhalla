@@ -1,27 +1,27 @@
-import { ROLES_CAN_CREATE_EVENT, useEvents } from '@/entities'
+import { ROLES_CAN_CREATE_EVENT, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
 import { useIsMobile, useCalendar } from '@/hooks'
 import { Button } from '@/ui'
 import dayjs from 'dayjs'
 import { useEffect, useMemo } from 'react'
-import { CalDayDesktop, CalDayMobile } from '@/components'
+import { CalDayDesktop, CalDayMobile, CalEventForDay, EventCreateModal } from '@/components'
 import { checkRoles, dc } from '@/utils'
-import { EventModal } from './event-modal'
 import { useSession } from 'next-auth/react'
+import { IEvent } from '@/models'
 
 export function Calendar() {
   const isMobile = useIsMobile()
   const { data: session } = useSession()
   const user = session?.user
-  const { events, currentDay, fetchForCal } = useEvents()
-  const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } =
-    useCalendar()
+  const { events, currentDay, socketEvt, fetchForCal } = useEvents()
+  const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } = useCalendar()
+
+  useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
   const calWithEvents = useMemo(() => {
     return cal.map((day) => {
       const dayEvents = events.filter((event) => {
         return dayjs(event.start).isSame(day.date, 'day')
       })
 
-      //TODO voir si le format est bon ?
       return { ...day, events: dayEvents }
     })
   }, [cal, events])
@@ -34,19 +34,19 @@ export function Calendar() {
   const canSee = checkRoles(ROLES_CAN_CREATE_EVENT, user)
 
   return (
-    <div className="p-4 bg-color-bg-light rounded-lg">
-      <div className="grid grid-cols-[auto_1fr_auto] items-center justify-center mb-4">
+    <div className="rounded-lg p-4">
+      <div className="mb-4 grid grid-cols-[auto_1fr_auto] items-center justify-center">
         <Button text="Précédent" onClick={previousMonth} />
-        <div className="font-bold text-tierce text-center first-letter:uppercase md:text-xl">
+        <div className="text-center font-bold text-arrd-highlight first-letter:uppercase md:text-xl">
           {currentMonth}
         </div>
         <Button text="Suivant" onClick={nextMonth} />
       </div>
 
-      <div className={dc([isMobile, 'grid grid-rows-[auto_1fr] gap-2 h-full'])}>
+      <div className={dc([isMobile, 'grid h-full grid-rows-[auto_1fr] gap-2'])}>
         <div className={dc('grid grid-cols-7', [isMobile, 'gap-3', 'gap-1'])}>
           {Array.from({ length: 7 }, (_, i) => i + 1).map((numDay) => (
-            <div key={numDay} className="font-bold text-center text-second">
+            <div key={numDay} className="text-second text-center font-bold">
               {dayjs()
                 .day(numDay)
                 .format(isMobile ? 'ddd' : 'dddd')}
@@ -55,30 +55,19 @@ export function Calendar() {
 
           {calWithEvents.map((day) =>
             isMobile ? (
-              <CalDayMobile
-                day={day}
-                key={dayjs(day.date).format('DD-MM-YYYY')}
-              />
+              <CalDayMobile day={day} key={dayjs(day.date).format('DD-MM-YYYY')} />
             ) : (
-              <CalDayDesktop
-                day={day}
-                key={dayjs(day.date).format('DD-MM-YYYY')}
-              />
+              <CalDayDesktop day={day} key={dayjs(day.date).format('DD-MM-YYYY')} />
             )
           )}
         </div>
 
         {isMobile && currentDay && (
-          <div className="flex flex-col gap-2 py-2">
+          <div className="flex flex-col gap-4 py-4">
             {canSee && (
-              <EventModal
-                day={currentDay}
-                customButton={(onClick) => (
-                  <Button text="Créer un évènement" onClick={onClick} />
-                )}
-              />
+              <EventCreateModal customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />} />
             )}
-            <div>event</div>
+            <CalEventForDay />
           </div>
         )}
       </div>

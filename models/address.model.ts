@@ -9,8 +9,10 @@ export interface IAddress {
   zipCode: string
   number: string
   street: string
-  label?: string
+  label: string
   updatedAt: Date
+  // Count pour order en fonction du nombre de fois que l'adresse a été utilisée
+  popularity: number
 }
 
 export const AddressSchema = new Schema<IAddress>({
@@ -21,6 +23,7 @@ export const AddressSchema = new Schema<IAddress>({
   number: String,
   street: String,
   label: String,
+  popularity: Number,
   updatedAt: Date,
 })
 

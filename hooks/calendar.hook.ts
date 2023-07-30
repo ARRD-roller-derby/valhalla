@@ -85,10 +85,7 @@ export function useCalendar() {
       firstDay = dayjs(thisMonth).startOf('month'),
       lastDay = dayjs(thisMonth).endOf('month'),
       firstCalDay = firstDay.subtract(firstDay.day() - 1, 'day'),
-      lastCalDay = lastDay.add(
-        lastDay.day() === 0 ? 0 : 7 - lastDay.day(),
-        'day'
-      ),
+      lastCalDay = lastDay.add(lastDay.day() === 0 ? 0 : 7 - lastDay.day(), 'day'),
       numOfDay = lastCalDay.diff(firstCalDay, 'day'),
       generateCal = []
 

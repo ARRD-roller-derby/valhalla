@@ -8,7 +8,7 @@ export const routes = [
     inMenu: true,
   },
   {
-    name: 'skills',
+    name: 'Ma progression',
     path: '/skills',
     icon: SkillIcon,
     inMenu: true,

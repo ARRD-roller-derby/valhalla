@@ -1,22 +1,25 @@
 import { ObjectId } from 'mongodb'
 import { Schema, model, models } from 'mongoose'
-import { AddressSchema, IAddress } from '@/models'
 
 export enum EEventType {
-  training = 'training',
-  generalAssembly = 'generalAssembly',
-  scrimmage = 'scrimmage',
-  match = 'match',
-  bootcamp = 'bootcamp',
-  online = 'online',
-  event = 'event',
-  other = 'other',
+  derbyTraining = 'Entraînement de derby',
+  skateTraining = 'Cours de patinage',
+  generalAssembly = 'Assemblée générale',
+  scrimmage = 'Scrimmage',
+  match = 'Match',
+  bootcamp = 'Bootcamp',
+  online = 'En ligne',
+  event = 'Événement',
+  other = 'Autre',
 }
+
+export type TParticipantStatus = 'présent' | 'absent' | 'à confirmer'
 
 export interface IParticipant {
   _id: ObjectId
   userId: string
-  status: 'present' | 'absent' | 'pending'
+  name: string
+  status: TParticipantStatus
   updatedAt: Date
   type: string
   guestsNumber: number
@@ -24,16 +27,20 @@ export interface IParticipant {
 
 export interface IEvent {
   _id: ObjectId
-  visibility: 'public' | 'member' | 'admin'
+  visibility: 'public' | 'membre' | 'admin' | 'bureau'
   cancelled: boolean
-  recurrenceId: string
+  recurrenceId?: string
   type: EEventType
-  description?: string
+  description?: Object
   title?: string
   start: Date
   end: Date
   participants: IParticipant[]
-  address?: IAddress
+  address?: {
+    label: string
+    lat: number
+    lon: number
+  }
   leader?: {
     userId: string
     name: string
@@ -45,6 +52,7 @@ const ParticipantSchema = new Schema<IParticipant>({
   status: String,
   updatedAt: Date,
   type: String,
+  name: String,
   guestsNumber: Number,
 })
 
@@ -53,12 +61,16 @@ const EventSchema = new Schema<IEvent>({
   cancelled: Boolean,
   recurrenceId: String,
   type: String,
-  description: String,
+  description: Object,
   title: String,
   start: Date,
   end: Date,
   participants: [ParticipantSchema],
-  address: AddressSchema,
+  address: {
+    label: String,
+    lat: Number,
+    lon: Number,
+  },
   leader: {
     userId: String,
     name: String,
