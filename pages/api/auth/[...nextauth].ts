@@ -24,7 +24,7 @@ export const authOptions = {
     async session(session: any) {
       const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
       const guildRoles = (await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))) as TRole[]
-      const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, session.user.providerAccountId))
+
       await MongoDb()
       const user = await User.findById(session.user.id)
 
@@ -34,6 +34,7 @@ export const authOptions = {
         const account = await Account.findOne({ userId: session.user.id })
         if (account) user.providerAccountId = account.providerAccountId
       }
+      const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
 
       if (!user) return session
 
