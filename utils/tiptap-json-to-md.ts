@@ -45,5 +45,6 @@ export function tiptapJsonToMd(contentArray: ITipTapContent[]) {
     }
   })
 
-  return markdown.trim()
+  const md = markdown.trim().split('\n')
+  return md.filter((line, index) => md.indexOf(line) === index).join('\n')
 }

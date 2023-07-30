@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../auth/[...nextauth]'
-import { Event, IParticipant, User } from '@/models'
+import { Event, IParticipant } from '@/models'
 import { capitalizeFirstLetter, publicParticipants } from '@/utils'
 import { bank, publishToDiscord, trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
@@ -37,9 +37,9 @@ export default async function event_participation(req: NextApiRequest, res: Next
 
   if (!event) return res.status(404).send('Événement non trouvé')
   if (!event.participants) event.participants = []
-  const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
+  const participantEvt = event.participants.find((p: IParticipant) => p.userId === user.id)
 
-  if (!participant) {
+  if (!participantEvt) {
     event.participants.push({
       userId: user.id,
       status: 'présent',
@@ -52,25 +52,26 @@ export default async function event_participation(req: NextApiRequest, res: Next
 
     bank(user.id, 15)
   } else {
-    if (!participant.name) {
-      participant.name = user.name
+    if (!participantEvt.name) {
+      participantEvt.name = user.name
     }
     if (form.participation === 'absent.e') {
-      participant.status = 'absent.e'
-      participant.type = form.participation
+      participantEvt.status = 'absent.e'
+      participantEvt.type = form.participation
     } else {
-      participant.status =
-        form.participation === participant.type && participant.status === 'présent' ? 'à confirmer' : 'présent'
+      participantEvt.status =
+        form.participation === participantEvt.type && participantEvt.status === 'présent' ? 'à confirmer' : 'présent'
     }
-    participant.type = form.participation
-    participant.guestsNumber = form.guestsNumber || 0
-    participant.updatedAt = dayjs().toDate()
+    participantEvt.type = form.participation
+    participantEvt.guestsNumber = form.guestsNumber || 0
+    participantEvt.updatedAt = dayjs().toDate()
 
     event.participants = event.participants.map((p: IParticipant) => {
       if (p.userId === user.id) return participant
       return p
     })
   }
+  const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
 
   event.save()
 

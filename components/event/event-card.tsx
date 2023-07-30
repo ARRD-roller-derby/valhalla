@@ -42,10 +42,10 @@ export function EventCard() {
         )}
       </div>
 
-      <div className="grid grid-rows-[1fr_auto] gap-3 uppercase">
+      <div className="grid grid-rows-[1fr_auto] gap-3">
         <div>
           <Link href={`/agenda/${event._id}`}>
-            <div className="text-md rounded border border-arrd-secondary p-2  text-arrd-textExtraLight">
+            <div className="text-md rounded border border-arrd-secondary p-2  uppercase text-arrd-textExtraLight">
               {event.title}
             </div>
           </Link>

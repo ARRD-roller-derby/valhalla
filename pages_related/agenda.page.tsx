@@ -13,33 +13,35 @@ export function Agenda() {
 
   return (
     <AuthLayout title="Agenda">
-      <PageTabs
-        tabs={[
-          {
-            title: 'événements',
-            tab: 'events',
-            element: (
-              <div className="flex flex-col gap-3 p-2">
-                {canSee && (
-                  <div className="flex justify-end">
-                    <EventCreateModal
-                      day={dayjs()}
-                      customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />}
-                    />
-                  </div>
-                )}
+      <div className="grid h-full grid-rows-[auto_1fr_auto] items-start gap-1 p-2">
+        <PageTabs
+          tabs={[
+            {
+              title: 'événements',
+              tab: 'events',
+              element: (
+                <div className="flex flex-col gap-3 p-2">
+                  {canSee && (
+                    <div className="flex justify-end">
+                      <EventCreateModal
+                        day={dayjs()}
+                        customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />}
+                      />
+                    </div>
+                  )}
 
-                <NextEvents />
-              </div>
-            ),
-          },
-          {
-            title: 'calendrier',
-            tab: 'calendar',
-            element: <Calendar />,
-          },
-        ]}
-      />
+                  <NextEvents />
+                </div>
+              ),
+            },
+            {
+              title: 'calendrier',
+              tab: 'calendar',
+              element: <Calendar />,
+            },
+          ]}
+        />
+      </div>
     </AuthLayout>
   )
 }

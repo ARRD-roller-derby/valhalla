@@ -95,7 +95,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
     if (description) {
       markdown += tiptapJsonToMd(description.content)
     }
-    markdown += `\n[Voir l'événement](${req.headers.origin}/events/${event._id})`
+    markdown += `\n[Voir l'événement](${req.headers.origin}/agenda/${event._id})`
 
     publishToDiscord('event', markdown)
   })

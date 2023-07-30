@@ -16,7 +16,7 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
   const { loading, createEvent, currentDay } = useEvents()
   const formInit = {
     type: EVENT_TYPES[0],
-    title: '',
+    title: EVENT_TYPES[0],
     description: {},
     start: day || currentDay || dayjs(),
     startHour: dayjs().format('HH:mm'),
@@ -31,20 +31,30 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
       value: '',
     } as TOption,
   }
+
   const [form, setForm] = useState(formInit)
 
   useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
-
     if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
   }, [form.type])
 
   const handleSubmit = async () => {
     const { description, visibility, type, title, address } = form
-    const start = dayjs(`${form.start.format('YYYY-MM-DD')}T${form.startHour}:00.000Z`)
-    const end = dayjs(`${form.end.format('YYYY-MM-DD')}T${form.endHour}:00.000Z`)
+    const [startHour, startMinute] = form.startHour.split(':')
+    const [endHour, endMinute] = form.endHour.split(':')
+
+    const start = dayjs(form.start.toDate())
+      .set('hour', parseInt(startHour))
+      .set('minute', parseInt(startMinute))
+      .set('second', 0)
+    const end = dayjs(form.end.toDate())
+      .set('hour', parseInt(endHour))
+      .set('minute', parseInt(endMinute))
+      .set('second', 0)
+
     const event: IEventForm = {
-      title: title,
+      title: title || type,
       type,
       description,
       visibility: visibility.value as string,

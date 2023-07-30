@@ -17,6 +17,7 @@ import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
+import { dc } from '@/utils'
 
 interface MenuBarProps {
   editor: any | null
@@ -151,7 +152,7 @@ export function Editor({ content, onChange }: EditorProps) {
   )
 }
 
-export function ReadEditor({ content }: { content: Object }) {
+export function ReadEditor({ content, fullHeight }: { content: Object; fullHeight?: boolean }) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -167,5 +168,5 @@ export function ReadEditor({ content }: { content: Object }) {
     content,
     editable: false,
   })
-  return <EditorContent editor={editor} className="max-h-40 overflow-auto p-1 outline-none" />
+  return <EditorContent editor={editor} className={dc('p-1 outline-none', [!fullHeight, 'max-h-40  overflow-auto'])} />
 }

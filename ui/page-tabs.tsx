@@ -39,9 +39,11 @@ export function PageTabs({ tabs }: { tabs: ITab[] }) {
           </Tab>
         ))}
       </Tab.List>
-      <Tab.Panels>
+      <Tab.Panels className="relative h-full">
         {tabs.map((tab) => (
-          <Tab.Panel key={tab.title}>{tab.element}</Tab.Panel>
+          <Tab.Panel key={tab.title} className="h-full">
+            {tab.element}
+          </Tab.Panel>
         ))}
       </Tab.Panels>
     </Tab.Group>
