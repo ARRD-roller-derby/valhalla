@@ -6,7 +6,7 @@ import { authOptions } from '../auth/[...nextauth]'
 import { Address, Event } from '@/models'
 import { uuid } from 'uuidv4'
 import { publishToDiscord } from '@/services/publish-to-discord'
-
+import { tiptapJsonToMd } from '@/utils/tiptap-json-to-md'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -24,7 +24,6 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-import { tiptapJsonToMd } from '@/utils/tiptap-json-to-md'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_create(req: NextApiRequest, res: NextApiResponse) {

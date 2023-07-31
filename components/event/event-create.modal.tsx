@@ -19,8 +19,8 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
     title: EVENT_TYPES[0],
     description: {},
     start: day || currentDay || dayjs(),
-    startHour: dayjs().format('HH:mm'),
-    endHour: dayjs().add(1, 'hour').format('HH:mm'),
+    startHour: dayjs().add(1, 'hour').set('minute', 0).format('HH:mm'),
+    endHour: dayjs().add(2, 'hour').set('minute', 0).format('HH:mm'),
     end: day || currentDay || dayjs(),
     recurrence: false,
     frequency: frequencyOpts[0],
@@ -43,7 +43,6 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
     const { description, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
     const [endHour, endMinute] = form.endHour.split(':')
-
     const start = dayjs(form.start.toDate())
       .set('hour', parseInt(startHour))
       .set('minute', parseInt(startMinute))
