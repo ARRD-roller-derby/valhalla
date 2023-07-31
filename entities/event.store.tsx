@@ -123,7 +123,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
     try {
       const res = await fetch(`/api/events/${id}`)
       const { event } = await res.json()
-      set((state) => ({ events: [...state.events, event], loading: false }))
+      set((state) => ({ events: [...state.events.filter((e) => e._id !== id), event], loading: false }))
     } catch (err: any) {
       set({ loading: false, error: "impossible de récupérer l' événement" })
     }
