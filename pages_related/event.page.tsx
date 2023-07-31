@@ -8,12 +8,12 @@ export function Event() {
   const router = useRouter()
   const { data: session } = useSession()
   const user = session?.user
-  if (!user) return null
+  if (!user) return <></>
 
   const { getEvent } = useEvents()
 
   const event = getEvent(router.query.eventId as any)
-  const title = event ? `${event.title} | AGENDA` : `AGENDA`
+  const title = event && event.title ? `${event.title} | AGENDA` : `AGENDA`
 
   return (
     <AuthLayout title={title}>

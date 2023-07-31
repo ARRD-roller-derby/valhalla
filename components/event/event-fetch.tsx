@@ -1,7 +1,6 @@
 import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
 import { IEvent } from '@/models'
 import { Loader } from '@/ui/Loader'
-
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Event } from '@/components'
@@ -23,17 +22,17 @@ export function EventFetch() {
 
   return (
     <>
-      {loading && !event?._id && (
+      {loading && !event && (
         <div className="flex h-full items-center justify-center">
           <Loader />
         </div>
       )}
-      {!loading && event?._id && (
+      {!loading && event && (
         <EventProvider event={event}>
           <Event />
         </EventProvider>
       )}
-      {!loading && !event?._id && <div className="flex h-full items-center justify-center">non trouvé</div>}
+      {!loading && !event && <div className="flex h-full items-center justify-center">non trouvé</div>}
     </>
   )
 }
