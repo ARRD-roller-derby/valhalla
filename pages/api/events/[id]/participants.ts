@@ -1,24 +1,32 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { Event } from '@/models'
+import { Event, Purchase } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { ROLES, checkRoles } from '@/utils'
+import { PURCHASE_TYPES, ROLES, checkRoles } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_participants(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
-
   if (!user) return res.status(403).send('non autorisé')
 
   const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
-  if (!canSee)
-    return res.status(200).json({
-      participants: [],
+
+  if (!canSee) {
+    // rechercher un purchase de type spyAttendees dans l'heure
+    const lastPurchase = await Purchase.count({
+      userId: user.id,
+      name: PURCHASE_TYPES.spyAttendees,
+      createdAt: { $gte: new Date(Date.now() - 60 * 60 * 1000) },
     })
 
+    if (lastPurchase === 0)
+      return res.status(200).json({
+        participants: [],
+      })
+  }
   await MongoDb()
 
   const event = await Event.findOne({ _id: req.query.id })

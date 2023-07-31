@@ -1,48 +1,55 @@
-import { useEvent, useEvents } from '@/entities'
-import { IParticipant } from '@/models'
+import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
+import { IEvent, IParticipant } from '@/models'
 import { Button, DragonIcon, FooterModal, HandIcon, Modal } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { ROLES, checkRoles, dc, participationTypes } from '@/utils'
+import { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+const order = ['coach', 'assist-coach', 'organizer', 'patineur.euse', 'visiteur.euse / NSO', 'invité.e', 'absent.e']
+
+// Fonction de comparaison pour trier les participants
+const compareParticipants = (participantA: IParticipant, participantB: IParticipant) => {
+  const typeA = participantA.type
+  const typeB = participantB.type
+
+  const indexA = order.indexOf(typeA)
+  const indexB = order.indexOf(typeB)
+
+  // Trier en fonction de l'index dans le tableau d'ordre personnalisé
+  if (indexA < indexB) {
+    return -1
+  } else if (indexA > indexB) {
+    return 1
+  } else {
+    return 0
+  }
+}
 
 export function EventAttendees() {
-  const { participants, loadingEvent, fetchParticipation, spyParticipation } = useEvents()
+  const [loading, setLoading] = useState(false)
+  const { participants, fetchParticipation, spyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
-  const user = session?.user
   const presentCount = participants.filter((p) => p.status !== 'absent').length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
+  const canSeeAttendees = useMemo(() => {
+    if (!session?.user) return false
+    checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session?.user)
+  }, [session])
 
-  if (!user) return null
-  const canSeeAttendees = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
+  const handleFetch = async () => {
+    setLoading(true)
+    await fetchParticipation(event._id)
+    setLoading(false)
+  }
+  useEffect(() => {
+    if (session?.user) handleFetch()
+  }, [session])
 
   const handleSpy = async () => {
     await spyParticipation(event._id)
-  }
-
-  useEffect(() => {
-    fetchParticipation(event._id)
-  }, [])
-
-  const order = ['coach', 'assist-coach', 'organizer', 'patineur.euse', 'visiteur.euse / NSO', 'invité.e', 'absent.e']
-
-  // Fonction de comparaison pour trier les participants
-  const compareParticipants = (participantA: IParticipant, participantB: IParticipant) => {
-    const typeA = participantA.type
-    const typeB = participantB.type
-
-    const indexA = order.indexOf(typeA)
-    const indexB = order.indexOf(typeB)
-
-    // Trier en fonction de l'index dans le tableau d'ordre personnalisé
-    if (indexA < indexB) {
-      return -1
-    } else if (indexA > indexB) {
-      return 1
-    } else {
-      return 0
-    }
   }
 
   return (
@@ -70,7 +77,7 @@ export function EventAttendees() {
               footer={(close) => (
                 <FooterModal
                   closeModal={close}
-                  loading={loadingEvent === event._id}
+                  loading={loading}
                   txtConfirm={`Espionner pour 35 dr.`}
                   onConfirm={() => handleSpy()}
                 />
@@ -93,7 +100,7 @@ export function EventAttendees() {
           )}
         </div>
       </div>
-      {loadingEvent === event._id && (
+      {loading && (
         <div className="flex justify-center">
           <Loader />
         </div>

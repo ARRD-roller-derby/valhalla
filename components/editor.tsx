@@ -11,13 +11,15 @@ import {
   EditorMenuGroup,
   CodeIcon,
   LinkIcon,
+  ListIcon,
 } from '@/ui'
-import { ListIcon } from '@/ui/icons/list.icon'
+import { dc } from '@/utils'
+
+// TipTap
 import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
-import { dc } from '@/utils'
 
 interface MenuBarProps {
   editor: any | null

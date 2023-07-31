@@ -3,8 +3,9 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { ROLES, checkRoles } from '@/utils'
+import { PURCHASE_TYPES, ROLES, checkRoles } from '@/utils'
 import { bank } from '@/services'
+import { Purchase } from '@/models/purchase.model'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_spy(req: NextApiRequest, res: NextApiResponse) {
@@ -34,7 +35,7 @@ export default async function event_spy(req: NextApiRequest, res: NextApiRespons
     if (!canSee) return res.status(403).send('non autorisé')
   }
 
-  bank(user.id, -35)
+  bank(user.id, -35, 1, PURCHASE_TYPES.spyAttendees)
   return res.status(200).json({
     participants: event.participants || [],
   })

@@ -50,7 +50,7 @@ export default async function event_participation(req: NextApiRequest, res: Next
       guestsNumber: form.guestsNumber || 0,
     })
 
-    bank(user.id, 15)
+    bank(user.id, 15, 1)
   } else {
     if (!participantEvt.name) {
       participantEvt.name = user.name
@@ -100,16 +100,11 @@ Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
     publishToDiscord('logs', msg)
   }
 
-  if (participant.type.match(/coach|orga/)) {
-    trigger('public', TriggerTypes.EVENT, {
-      value: {
-        event: {
-          ...event.toJSON(),
-          participants: publicParticipants(event, user),
-        },
-      },
-    })
-  }
+  trigger('public', TriggerTypes.PARTICIPATION, {
+    value: {
+      eventId: event._id,
+    },
+  })
 
   return res.status(200).json({
     event: {

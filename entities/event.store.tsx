@@ -33,6 +33,7 @@ interface ISetEvents {
   fetchForCal: (month: number) => Promise<void>
   fetchForNext: () => Promise<void>
   fetchParticipation: (eventId: ObjectId) => Promise<void>
+  syncParticipation: (eventId: ObjectId) => Promise<void>
   spyParticipation(eventId: ObjectId): Promise<void>
   setCurrentDay: (day: dayjs.Dayjs) => void
   createEvent: (event: IEventForm) => Promise<void>
@@ -149,7 +150,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
     }
   },
   async fetchParticipation(eventId) {
-    set({ loadingEvent: eventId })
+    set({ loadingEvent: eventId, participants: [], error: undefined })
     try {
       const res = await fetch(`/api/events/${eventId}/participants`)
       const { participants } = await res.json()
@@ -166,6 +167,15 @@ export const useEvents = create<IEventStore>((set, get) => ({
       set({ participants, loadingEvent: null })
     } catch (err: any) {
       set({ loadingEvent: null, error: 'impossible de récupérer les participants' })
+    }
+  },
+  async syncParticipation(id) {
+    try {
+      const res = await fetch(`/api/events/${id}/participants`)
+      const { participants } = await res.json()
+      set({ participants })
+    } catch (err: any) {
+      console.log(err)
     }
   },
 

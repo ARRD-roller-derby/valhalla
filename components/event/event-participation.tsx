@@ -1,27 +1,54 @@
-import { useEvent, useEvents } from '@/entities'
+import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
 import { QuestionIcon } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
 import dayjs from 'dayjs'
+import { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
 
 export function EventParticipation() {
-  const { loadingEvent, changeMyParticipation } = useEvents()
+  const { loadingEvent, changeMyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
-  const roles = session?.user?.roles.map((role) => role.name.toLocaleLowerCase()) || []
-  const myParticipation = useMemo(() => {
+  const roles = useMemo(() => {
+    if (!session?.user) return ['membre']
+    return session?.user?.roles.map((role) => role.name.toLocaleLowerCase()) || []
+  }, [session])
+
+  useSocketTrigger<{ eventId: ObjectId }>(TriggerTypes.PARTICIPATION, ({ eventId }) => {
+    if (!session?.user) return
+    if (event?._id === eventId) syncParticipation(event._id)
+  })
+  const participations = useMemo<{
+    participationTypesCount: { [key: string]: number }
+    myParticipation: { label: string; status: string; type: string }
+  }>(() => {
     const participation = event?.participants.find((part) => part.userId === session?.user?.id)
+    const participationTypesCount = participationTypes
+      .map((pType) => ({
+        key: pType.key,
+        count: event?.participants.filter((part) => part.type === pType.key).length,
+      }))
+      .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.count }), {})
+
     if (!participation || participation?.type === 'absent.e')
-      return { label: 'Je serais ', status: 'absent.e', type: 'absent.e' }
+      return {
+        participationTypesCount,
+        myParticipation: { label: 'Je serais ', status: 'absent.e', type: 'absent.e' },
+      }
 
     return {
-      ...participation,
-      label:
-        participation.status === 'à confirmer' ? 'Je serai peut-être présent en tant que ' : 'Je serai en tant que',
+      participationTypesCount,
+      myParticipation: {
+        ...participation,
+        label:
+          participation.status === 'à confirmer' ? 'Je serai peut-être présent en tant que ' : 'Je serai en tant que',
+      },
     }
   }, [event])
+
+  const { myParticipation, participationTypesCount } = participations
 
   if (loadingEvent === event._id)
     return (
@@ -33,7 +60,7 @@ export function EventParticipation() {
   if (dayjs(event.end).isBefore(dayjs())) return null
   return (
     <div className="mt-2 fill-arrd-highlight">
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-3">
         {participationTypes
           .filter((pType) => pType?.roles?.some((role) => roles.includes(role)))
           .filter((pType) => pType?.type?.includes(event?.type))
@@ -50,8 +77,13 @@ export function EventParticipation() {
               {myParticipation.type !== PARTICIPATION_TYPES.absent &&
                 myParticipation.type === pType.key &&
                 myParticipation.status === 'à confirmer' && (
-                  <QuestionIcon className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-arrd-primary fill-white p-1" />
+                  <QuestionIcon className="absolute -bottom-1 -right-2 h-4 w-4 rounded-full bg-arrd-primary fill-white p-1" />
                 )}
+              {participationTypesCount[pType.key] > 0 && (
+                <div className="absolute -bottom-1 -left-2  flex h-4 w-4 items-center justify-center rounded-full bg-arrd-secondary p-1 text-xs text-white">
+                  {participationTypesCount[pType.key]}
+                </div>
+              )}
             </div>
           ))}
       </div>
