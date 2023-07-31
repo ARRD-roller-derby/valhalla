@@ -8,8 +8,6 @@ export function Event() {
   const router = useRouter()
   const { data: session } = useSession()
   const user = session?.user
-  if (!user) return <></>
-
   const { getEvent } = useEvents()
 
   const event = getEvent(router.query.eventId as any)

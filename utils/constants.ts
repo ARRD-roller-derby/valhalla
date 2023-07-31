@@ -58,3 +58,7 @@ export const PARTICIPATION_TYPES = {
   invite: 'invité.e',
   absent: 'absent.e',
 }
+
+export const PURCHASE_TYPES = {
+  spyAttendees: 'spyAttendees',
+}

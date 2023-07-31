@@ -13,6 +13,7 @@ export enum TriggerTypes {
   WALLET = 'wallet',
   EVENTS = 'events',
   EVENT = 'event',
+  PARTICIPATION = 'participation',
 }
 
 interface ISocketMessage<T = any> {

@@ -4,15 +4,16 @@ import { Loader } from '@/ui/Loader'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Event } from '@/components'
+import { useSession } from 'next-auth/react'
 
 export function EventFetch() {
+  const { data: sessions } = useSession()
   const router = useRouter()
   const { loading, findOne, getEvent, setEvent } = useEvents()
   const event = getEvent(router.query.eventId as any)
-
   useEffect(() => {
-    findOne(router.query.eventId as any)
-  }, [])
+    if (sessions?.user) findOne(router.query.eventId as any)
+  }, [sessions])
 
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, (msg) => {
     if (!msg || !msg.event) return

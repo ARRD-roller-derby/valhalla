@@ -1,11 +1,10 @@
+import dayjs from 'dayjs'
+import Link from 'next/link'
 import { useEvent } from '@/entities'
 import { ReadEditor } from '../editor'
-import dayjs from 'dayjs'
 import { ArrowLeftIcon, CancelMsg } from '@/ui'
-import { EventParticipation } from './event-participation'
-import { useMemo } from 'react'
-import Link from 'next/link'
 import { EventOrgaDetails } from './event-orga-details'
+import { EventParticipation } from './event-participation'
 
 export function EventCard() {
   const { event } = useEvent()

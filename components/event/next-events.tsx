@@ -3,15 +3,17 @@ import { Loader } from '@/ui/Loader'
 import { useEffect } from 'react'
 import { EventCard } from '@/components'
 import { IEvent } from '@/models'
+import { useSession } from 'next-auth/react'
 
 export function NextEvents() {
+  const { data: session } = useSession()
   const { events, loading, fetchForNext, socketEvt } = useEvents()
 
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
 
   useEffect(() => {
-    fetchForNext()
-  }, [])
+    if (session?.user) fetchForNext()
+  }, [session])
 
   if (loading)
     return (

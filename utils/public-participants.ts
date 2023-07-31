@@ -1,7 +1,12 @@
 import { IEvent, IParticipant, IUser } from '@/models'
-import { PARTICIPATION_TYPES } from './constants'
+import { PARTICIPATION_TYPES, ROLES } from './constants'
+import { checkRoles } from './check-roles'
 
 export function publicParticipants(event: IEvent, user: IUser): IParticipant[] {
+  const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
+
+  if (canSee) return event?.participants || []
+
   const participants = event?.participants || []
   return participants.filter((participant: IParticipant) => {
     if (user.id === participant.userId) return true
