@@ -195,11 +195,12 @@ export const useEvents = create<IEventStore>((set, get) => ({
         method: 'POST',
         body: JSON.stringify({ participation, eventId }),
       })
-      const { event } = await res.json()
+      const { event, participant } = await res.json()
 
       set((state) => {
         const events = state.events.map((e) => (e._id === event._id ? event : e))
-        return { events, loadingEvent: null }
+        const participants = state.participants.map((p) => (p._id === participant._id ? participant : p))
+        return { events, participants, loadingEvent: null }
       })
     } catch (err: any) {
       set({ loadingEvent: null, error: "impossible de créer l'événement" })

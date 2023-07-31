@@ -116,5 +116,6 @@ Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
       ...event.toJSON(),
       participants: publicParticipants(event, user),
     },
+    participant,
   })
 }

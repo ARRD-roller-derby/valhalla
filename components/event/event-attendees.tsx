@@ -1,6 +1,6 @@
 import { useEvent, useEvents } from '@/entities'
 import { IParticipant } from '@/models'
-import { Button, DragonIcon, FooterModal, HandIcon, Modal, SkaterIcon } from '@/ui'
+import { Button, DragonIcon, FooterModal, HandIcon, Modal } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { ROLES, checkRoles, dc, participationTypes } from '@/utils'
 import { useSession } from 'next-auth/react'
