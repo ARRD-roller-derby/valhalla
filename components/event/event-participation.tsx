@@ -28,7 +28,9 @@ export function EventParticipation() {
     const participationTypesCount = participationTypes
       .map((pType) => ({
         key: pType.key,
-        count: event?.participants.filter((part) => part.type === pType.key).length,
+        count: event?.participants
+          .filter((part) => part.status !== 'à confirmer')
+          .filter((part) => part.type === pType.key).length,
       }))
       .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.count }), {})
 
@@ -60,7 +62,7 @@ export function EventParticipation() {
   if (dayjs(event.end).isBefore(dayjs())) return null
   return (
     <div className="mt-2 fill-arrd-highlight">
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 pr-1">
         {participationTypes
           .filter((pType) => pType?.roles?.some((role) => roles.includes(role)))
           .filter((pType) => pType?.type?.includes(event?.type))
@@ -80,7 +82,7 @@ export function EventParticipation() {
                   <QuestionIcon className="absolute -bottom-1 -right-2 h-4 w-4 rounded-full bg-arrd-primary fill-white p-1" />
                 )}
               {participationTypesCount[pType.key] > 0 && (
-                <div className="absolute -bottom-1 -left-2  flex h-4 w-4 items-center justify-center rounded-full bg-arrd-secondary p-1 text-xs text-white">
+                <div className="absolute -right-2 -top-1  flex h-4 w-4 items-center justify-center rounded-full bg-arrd-primary p-1 text-xs text-white">
                   {participationTypesCount[pType.key]}
                 </div>
               )}
