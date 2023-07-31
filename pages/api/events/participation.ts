@@ -67,7 +67,7 @@ export default async function event_participation(req: NextApiRequest, res: Next
     participantEvt.updatedAt = dayjs().toDate()
 
     event.participants = event.participants.map((p: IParticipant) => {
-      if (p.userId === user.id) return participant
+      if (p.userId === user.id) return participantEvt
       return p
     })
   }
