@@ -2,7 +2,7 @@ import { useEvent, useEvents } from '@/entities'
 import { IParticipant } from '@/models'
 import { Button, DragonIcon, FooterModal, HandIcon, Modal, SkaterIcon } from '@/ui'
 import { Loader } from '@/ui/Loader'
-import { ROLES, checkRoles, participationTypes } from '@/utils'
+import { ROLES, checkRoles, dc, participationTypes } from '@/utils'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 
@@ -11,7 +11,8 @@ export function EventAttendees() {
   const { event } = useEvent()
   const { data: session } = useSession()
   const user = session?.user
-  const presentCount = participants.filter((p) => p.type !== 'absent.e').length
+  const presentCount = participants.filter((p) => p.status !== 'absent').length
+  const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
 
   if (!user) return null
   const canSeeAttendees = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
@@ -51,6 +52,7 @@ export function EventAttendees() {
           {participants.length > 0 && (
             <div className="text-arrd-highlight">
               {presentCount} présent·e{participants.length > 1 ? '·s' : ''}
+              {hasConfirmedCount > 0 && ` dont ${hasConfirmedCount} à confirmer`}
             </div>
           )}
         </div>
@@ -101,11 +103,19 @@ export function EventAttendees() {
           {participants.sort(compareParticipants).map((p) => {
             const icon = participationTypes.find((pType) => pType.key === p.type)?.icon || <HandIcon />
             return (
-              <div key={p.name} className="flex items-center  gap-2 rounded border border-arrd-bgLight p-2">
+              <div
+                key={p.name}
+                className={dc('flex items-center  gap-2 rounded border border-arrd-bgLight p-2', [
+                  !!p.status.match(/absent/),
+                  'opacity-50',
+                ])}
+              >
                 <div className="h-6 w-6 fill-arrd-highlight">{icon}</div>
                 <div className="font-bold first-letter:uppercase">
                   {p.name}
-                  <div className="text-right text-xs italic text-arrd-primary">{p.type}</div>
+                  <div className="text-right text-xs italic text-arrd-primary">
+                    {p.type} {p.status === 'à confirmer' ? '?' : ''}
+                  </div>
                 </div>
               </div>
             )
