@@ -1,6 +1,9 @@
+// Bibliothèque externe
+import Pusher from 'pusher'
+
+// Bibliothèque interne
 import { TriggerTypes } from '@/entities'
 import { PUSHER_API_ID, PUSHER_KEY, PUSHER_REGION, PUSHER_SECRET } from '@/utils'
-import Pusher from 'pusher'
 
 /**
  *

@@ -1,3 +1,10 @@
+// Bibliothèques externes
+import Underline from '@tiptap/extension-underline'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
+
+// Bibliothèques internes
 import {
   BoldIcon,
   EditorMenuBtn,
@@ -15,19 +22,14 @@ import {
 } from '@/ui'
 import { dc } from '@/utils'
 
-// TipTap
-import Underline from '@tiptap/extension-underline'
-import { EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Link from '@tiptap/extension-link'
-
 interface MenuBarProps {
   editor: any | null
 }
 
 export function MenuBar({ editor }: MenuBarProps) {
-  if (!editor) return null
+  if (!editor) return <></>
 
+  // const
   const headerOpts = [
     {
       name: 'h1',
@@ -128,6 +130,7 @@ interface EditorProps {
   onChange: (value: Object) => void
 }
 export function Editor({ content, onChange }: EditorProps) {
+  // hooks
   const editor = useEditor({
     extensions: [
       StarterKit,

@@ -1,6 +1,6 @@
+// Bibliothèque interne
 import { IEvent, IParticipant, IUser } from '@/models'
-import { PARTICIPATION_TYPES, ROLES } from './constants'
-import { checkRoles } from './check-roles'
+import { PARTICIPATION_TYPES, ROLES, checkRoles } from '@/utils'
 
 export function publicParticipants(event: IEvent, user: IUser): IParticipant[] {
   const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)

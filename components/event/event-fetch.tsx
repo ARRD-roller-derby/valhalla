@@ -1,25 +1,36 @@
-import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
-import { IEvent } from '@/models'
-import { Loader } from '@/ui/Loader'
+// Bibliothèques externes
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { Event } from '@/components'
 import { useSession } from 'next-auth/react'
 
-export function EventFetch() {
-  const { data: sessions } = useSession()
-  const router = useRouter()
-  const { loading, findOne, getEvent, setEvent } = useEvents()
-  const event = getEvent(router.query.eventId as any)
-  useEffect(() => {
-    if (sessions?.user) findOne(router.query.eventId as any)
-  }, [sessions])
+// Bibliothèques internes
+import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
+import { Loader } from '@/ui/Loader'
+import { Event } from '@/components'
 
+// Modèles
+import { IEvent } from '@/models'
+
+export function EventFetch() {
+  // stores
+  const { data: sessions } = useSession()
+  const { loading, findOne, getEvent, setEvent } = useEvents()
+
+  // hooks
+  const router = useRouter()
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, (msg) => {
     if (!msg || !msg.event) return
     const isThisEvent = event?._id === msg.event._id
     if (isThisEvent) setEvent(msg.event)
   })
+
+  // const
+  const event = getEvent(router.query.eventId as any)
+
+  // effects
+  useEffect(() => {
+    if (sessions?.user) findOne(router.query.eventId as any)
+  }, [sessions])
 
   return (
     <>

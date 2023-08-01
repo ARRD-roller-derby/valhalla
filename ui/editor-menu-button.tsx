@@ -1,5 +1,8 @@
-import { dc } from '@/utils'
+// Bibliothèques externes
 import { Editor } from '@tiptap/react'
+
+// Bibliothèques internes
+import { dc } from '@/utils'
 
 interface EditorMenuBtnProps {
   editor: Editor

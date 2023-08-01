@@ -1,20 +1,26 @@
+// Bibliothèques externes
+import { useSession } from 'next-auth/react'
+import dayjs from 'dayjs'
+
+// Bibliothèques internes
 import { ROLES_CAN_CREATE_EVENT, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
 import { useIsMobile, useCalendar } from '@/hooks'
 import { Button } from '@/ui'
-import dayjs from 'dayjs'
 import { useEffect, useMemo } from 'react'
 import { CalDayDesktop, CalDayMobile, CalEventForDay, EventCreateModal } from '@/components'
 import { checkRoles, dc } from '@/utils'
-import { useSession } from 'next-auth/react'
+
+// Modèles
 import { IEvent } from '@/models'
 
 export function Calendar() {
-  const isMobile = useIsMobile()
+  // stores
   const { data: session } = useSession()
-  const user = session?.user
   const { events, currentDay, socketEvt, fetchForCal } = useEvents()
   const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } = useCalendar()
 
+  // hooks
+  const isMobile = useIsMobile()
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
   const calWithEvents = useMemo(() => {
     return cal.map((day) => {
@@ -26,12 +32,19 @@ export function Calendar() {
     })
   }, [cal, events])
 
+  // memo
+  const canSee = useMemo(() => {
+    if (!session?.user) return false
+    return checkRoles(ROLES_CAN_CREATE_EVENT, session.user)
+  }, [session])
+
+  // effects
   useEffect(() => {
     fetchForCal(currentMonthNum)
   }, [fetchForCal, currentMonthNum])
 
-  if (!user) return null
-  const canSee = checkRoles(ROLES_CAN_CREATE_EVENT, user)
+  // render
+  if (!session?.user) return <></>
 
   return (
     <div className="rounded-lg p-4">

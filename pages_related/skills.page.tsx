@@ -1,5 +1,8 @@
-import { AuthLayout } from '@/layout'
+// Bibliothèques externes
 import { useSession } from 'next-auth/react'
+
+// Bibliothèques internes
+import { AuthLayout } from '@/layout'
 
 export function Skills() {
   const { data: session } = useSession()

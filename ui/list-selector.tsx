@@ -1,5 +1,8 @@
+// Bibliothèques externes
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
+
+// Bibliothèques internes
 import { ShortIcon } from '@/ui'
 import { dc } from '@/utils'
 import { TOption } from '@/types'
@@ -10,8 +13,10 @@ interface ListSelectorProps {
   options: TOption[]
 }
 export function ListSelector({ onSelect, defaultValue, options }: ListSelectorProps) {
+  // state
   const [selected, setSelected] = useState<TOption>(defaultValue || options[0])
 
+  // functions
   const handleSelect = (options: TOption) => {
     setSelected(options)
     onSelect(options)

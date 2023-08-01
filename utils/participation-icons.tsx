@@ -1,7 +1,7 @@
+// Bibliothèque interne
 import { EVENT_TYPES, TEventType } from '@/entities'
-import { WhistleIcon } from '../ui/icons/whistle.icon'
-import { HandIcon, HelpIcon, IslandIcon, OrganizerIcon, SkaterIcon, WalkIcon } from '@/ui'
-import { PARTICIPATION_TYPES, ROLES } from './constants'
+import { HandIcon, WhistleIcon, HelpIcon, IslandIcon, OrganizerIcon, SkaterIcon, WalkIcon } from '@/ui'
+import { PARTICIPATION_TYPES, ROLES } from '@/utils'
 
 interface IParticipationType {
   label: string

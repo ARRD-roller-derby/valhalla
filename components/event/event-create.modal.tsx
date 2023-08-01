@@ -1,10 +1,12 @@
-import dayjs from 'dayjs'
-import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
-import { EventTypeSelector } from './event-type.selector'
+// Bibliothèques externes
 import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+
+// Bibliothèques internes
+import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
 import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
 import { frequencyOpts, visibilityOpts } from '@/utils'
-import { Editor, AddressSelector } from '@/components'
+import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { TOption } from '@/types'
 
 interface EventModalProps {
@@ -13,7 +15,10 @@ interface EventModalProps {
 }
 
 export function EventCreateModal({ day, customButton }: EventModalProps) {
+  // stores
   const { loading, createEvent, currentDay } = useEvents()
+
+  // const
   const formInit = {
     type: EVENT_TYPES[0],
     title: EVENT_TYPES[0],
@@ -32,13 +37,10 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
     } as TOption,
   }
 
+  // state
   const [form, setForm] = useState(formInit)
 
-  useEffect(() => {
-    const titleIsType = EVENT_TYPES.find((type) => type === form.title)
-    if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
-  }, [form.type])
-
+  // functions
   const handleSubmit = async () => {
     const { description, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
@@ -72,6 +74,12 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
     }
     createEvent(event)
   }
+
+  // effect
+  useEffect(() => {
+    const titleIsType = EVENT_TYPES.find((type) => type === form.title)
+    if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
+  }, [form.type])
 
   return (
     <Modal

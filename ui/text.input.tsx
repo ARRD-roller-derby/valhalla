@@ -1,4 +1,5 @@
-import { CrossIcon } from './icons'
+// Bibliothèques internes
+import { CrossIcon } from '@/ui'
 
 interface TextInputProps {
   value: string

@@ -1,7 +1,9 @@
+// Bibliothèques externes
 import { getSession } from 'next-auth/react'
 import { GetServerSidePropsContext } from 'next'
 import dynamic from 'next/dynamic'
 
+// Import dynamique
 const Games = dynamic(() => import('@/pages_related').then((comp) => comp.Games), { ssr: false })
 export default function GamesPage() {
   return <Games />

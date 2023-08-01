@@ -1,17 +1,20 @@
+// Bibliothèques externes
 import { useEvent } from '@/entities'
 import dayjs from 'dayjs'
-import { ReadEditor } from '../editor'
 
+// Bibliothèques internes
+import { ReadEditor, EventOrgaDetails, EventDeleteBtn, EventCancelBtn } from '@/components'
 import dynamic from 'next/dynamic'
-import { EventOrgaDetails } from './event-orga-details'
-import { EventCancelBtn } from './event-cancel.button'
 import { DangerZone } from '@/ui'
-import { EventDeleteBtn } from './event-delete.button'
 
+// Importation dynamique
 const Map = dynamic(() => import('../../ui/map').then((mod) => mod.Map), { ssr: false })
 
 export function EventDetails() {
+  // stores
   const { event } = useEvent()
+
+  // const
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
 
   return (

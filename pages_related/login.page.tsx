@@ -1,9 +1,13 @@
-import { DiscordButton } from '@/ui'
-import { APP_NAME } from '@/utils'
+// Bibliothèques externes
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 
+// Bibliothèques internes
+import { DiscordButton } from '@/ui'
+import { APP_NAME } from '@/utils'
+
 export function Login() {
+  // functions
   const handleSignIn = () => {
     signIn('discord')
   }

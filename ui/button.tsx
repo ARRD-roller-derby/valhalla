@@ -1,3 +1,4 @@
+// Bibliothèques internes
 import { dc } from '@/utils'
 
 interface ButtonProps {
@@ -9,6 +10,7 @@ interface ButtonProps {
 }
 
 export function Button({ onClick, text, type, disabled, loading }: ButtonProps) {
+  // const
   const styles = {
     primary: 'bg-arrd-bgLight',
     secondary: 'bg-arrd-secondary',

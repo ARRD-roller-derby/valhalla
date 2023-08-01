@@ -1,13 +1,17 @@
+// Bibliothèques externes
 import dayjs from 'dayjs'
 import Link from 'next/link'
+
+// Bibliothèques internes
 import { useEvent } from '@/entities'
-import { ReadEditor } from '../editor'
+import { ReadEditor, EventOrgaDetails, EventParticipation } from '@/components'
 import { ArrowLeftIcon, CancelMsg } from '@/ui'
-import { EventOrgaDetails } from './event-orga-details'
-import { EventParticipation } from './event-participation'
 
 export function EventCard() {
+  // stores
   const { event } = useEvent()
+
+  // const
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
 
   return (

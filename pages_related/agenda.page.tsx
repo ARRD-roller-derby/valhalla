@@ -1,16 +1,26 @@
+// Bibliothèques externes
+import dayjs from 'dayjs'
+import { useSession } from 'next-auth/react'
+
+// Bibliothèques internes
 import { Calendar, NextEvents, EventCreateModal } from '@/components'
 import { AuthLayout } from '@/layout'
 import { Button, PageTabs } from '@/ui'
 import { ROLES, checkRoles } from '@/utils'
-import dayjs from 'dayjs'
-import { useSession } from 'next-auth/react'
+import { useMemo } from 'react'
 
 export function Agenda() {
+  // Stores
   const { data: session } = useSession()
   const user = session?.user
-  if (!user) return null
-  const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
 
+  // const
+  const canSee = useMemo(() => {
+    if (!session?.user) return false
+    return checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session.user)
+  }, [session])
+
+  if (!user) return <></>
   return (
     <AuthLayout title="Agenda">
       <div className="grid h-full grid-rows-[auto_1fr_auto] items-start gap-1 p-2">

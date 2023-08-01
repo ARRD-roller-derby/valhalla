@@ -1,12 +1,16 @@
-import { useEvent } from '@/entities'
-import { dc } from '@/utils'
+// Bibliothèques externes
 import dayjs from 'dayjs'
 import Link from 'next/link'
+
+// Bibliothèques internes
+import { useEvent } from '@/entities'
+import { dc } from '@/utils'
 
 interface EventLinkProps {
   small?: boolean
 }
 export function EventLink({ small = false }: EventLinkProps) {
+  // stores
   const { event } = useEvent()
 
   return (

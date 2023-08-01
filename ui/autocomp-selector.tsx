@@ -1,9 +1,11 @@
+// Bibliothèques externes
 import { Fragment, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
-import { ShortIcon } from '@/ui'
+
+// Bibliothèques internes
 import { dc } from '@/utils'
 import { TOption } from '@/types'
-import { Loader } from './Loader'
+import { ShortIcon, Loader } from '@/ui'
 import { useDebounce } from '@/hooks'
 
 interface ListSelectorProps {
@@ -14,15 +16,20 @@ interface ListSelectorProps {
   onSelect: (options: TOption) => void
 }
 export function AutoCompSelector({ defaultValue, options, loading, onSelect, onSearch }: ListSelectorProps) {
+  // state
   const [query, setQuery] = useState(defaultValue?.label || '')
   const [selected, setSelected] = useState<TOption>(defaultValue || options[0])
+
+  // hooks
   const debouncedQuery = useDebounce(query, 500)
 
+  // functions
   const handleSelect = (options: TOption) => {
     setSelected(options)
     onSelect(options)
   }
 
+  // effects
   useEffect(() => {
     if (debouncedQuery && debouncedQuery.length > 5) onSearch(debouncedQuery)
   }, [debouncedQuery])

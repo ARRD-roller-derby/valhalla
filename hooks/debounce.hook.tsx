@@ -1,8 +1,11 @@
+// Bibliothèques externes
 import { useEffect, useState } from 'react'
 
 export function useDebounce<T>(value: T, delay?: number): T {
+  // State
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
+  // Effects
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(value), delay || 500)
 

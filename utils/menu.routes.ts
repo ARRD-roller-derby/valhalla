@@ -1,3 +1,4 @@
+// Bibliothèque interne
 import { AddressBookIcon, AgendaIcon, GameIcon, SkillIcon } from '@/ui'
 
 export const routes = [

@@ -1,3 +1,4 @@
+// Bibliothèques internes
 import { useEvent, useEvents } from '@/entities'
 import { Button, FooterModal, Modal } from '@/ui'
 

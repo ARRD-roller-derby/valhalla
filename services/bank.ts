@@ -1,6 +1,9 @@
+// Bibliothèque externe
 import { User, Purchase } from '@/models'
 import { ObjectId } from 'mongodb'
-import { trigger } from './trigger'
+
+// Bibliothèque interne
+import { trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
 import { PURCHASE_TYPES } from '@/utils'
 

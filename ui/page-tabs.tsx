@@ -1,7 +1,10 @@
-import { dc } from '@/utils'
+// Bibliothèques externes
 import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
+
+// Bibliothèques internes
+import { dc } from '@/utils'
 
 interface ITab {
   element: React.ReactNode
@@ -10,16 +13,21 @@ interface ITab {
 }
 
 export function PageTabs({ tabs }: { tabs: ITab[] }) {
+  // hooks
   const { query, push } = useRouter()
+
+  // const
   const defaultTab = useMemo(() => {
     const idx = tabs.findIndex((tab) => tab.tab === query.tab)
     if (!query.tab || idx < 0) return 0
     return idx
   }, [query])
 
+  // functions
   const handleClick = (tab: ITab) => {
     push({ query: { ...query, tab: query.tab } }, { query: { ...query, tab: tab.tab } }, { shallow: true })
   }
+
   return (
     <Tab.Group defaultIndex={defaultTab}>
       <Tab.List className="sticky -top-1 z-10 flex justify-center gap-4 bg-arrd-bg p-1 text-arrd-primary">

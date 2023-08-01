@@ -1,5 +1,6 @@
+// Bibliothèques internes
 import { TOption } from '@/types'
-import { ListSelector } from './list-selector'
+import { ListSelector } from '@/ui'
 
 interface TimeInputProps {
   time: string
@@ -7,6 +8,7 @@ interface TimeInputProps {
 }
 
 export function TimeInput({ time, setTime }: TimeInputProps) {
+  // const
   const [hours, minutes] = time.split(':')
   const hourOptions = Array.from({ length: 24 }, (_, i) => {
     const hour = i.toString().padStart(2, '0')
@@ -20,6 +22,7 @@ export function TimeInput({ time, setTime }: TimeInputProps) {
     value: m,
   }))
 
+  // functions
   const handleHourChange = (hour: TOption) => setTime(`${hour.value}:${minutes}`)
   const handleMinuteChange = (minute: TOption) => setTime(`${hours}:${minute.value}`)
 

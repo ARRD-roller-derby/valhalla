@@ -1,11 +1,16 @@
-import { useIsMobile } from '@/hooks'
-import { dc, routes } from '@/utils'
+// Bibliothèques externes
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+// Bibliothèques internes
+import { useIsMobile } from '@/hooks'
+import { dc, routes } from '@/utils'
+
 export function Menu() {
+  // hooks
   const router = useRouter()
   const isMobile = useIsMobile()
+
   return (
     <div className="flex flex-auto justify-around gap-1 p-3 md:flex-col">
       {routes

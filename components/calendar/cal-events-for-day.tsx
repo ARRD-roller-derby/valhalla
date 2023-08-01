@@ -1,12 +1,16 @@
+// Bibliothèques internes
 import { EventProvider, useEvents } from '@/entities'
-import Link from 'next/link'
-import { EventLink } from '../event/event-link'
+import { EventLink } from '@/components'
 
 export function CalEventForDay() {
+  // stores
   const { getEventForCurrentDay } = useEvents()
+
+  // const
   const events = getEventForCurrentDay()
 
-  if (!events) return null
+  if (!events) return <></>
+
   return (
     <div className="flex  flex-col gap-3 overflow-auto">
       {events.map((event) => (

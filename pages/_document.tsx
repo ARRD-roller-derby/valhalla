@@ -1,10 +1,5 @@
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  DocumentContext,
-} from 'next/document'
+// Bibliothèques externes
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
 
 export default function DocumentPage() {
   return (

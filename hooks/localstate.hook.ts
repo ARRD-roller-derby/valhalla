@@ -1,3 +1,4 @@
+// Bibliothèque externe
 import { useState } from 'react'
 
 export function useLocalState<T>(
@@ -7,6 +8,7 @@ export function useLocalState<T>(
   localState: T
   setLocalState: (newState: T) => void
 } {
+  // const
   const ls = (): T => {
       if (typeof window !== 'undefined') {
         const ls = localStorage.getItem(nameOfState)
