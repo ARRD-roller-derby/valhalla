@@ -9,7 +9,7 @@ process.env.TZ = 'Europe/Paris'
 export default async function event_participants(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
-  const user = await User.findOne({ _id: session.user.id })
+  const { user } = session
   if (!user) return res.status(403).send('non autorisé')
 
   const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
