@@ -55,12 +55,11 @@ export default async function event_participation(req: NextApiRequest, res: Next
     if (!participantEvt.name) {
       participantEvt.name = user.name
     }
-    if (form.participation === 'absent.e') {
+    if (form.participation.match(/absent/)) {
       participantEvt.status = 'absent.e'
       participantEvt.type = form.participation
     } else {
-      participantEvt.status =
-        form.participation === participantEvt.type && participantEvt.status === 'présent' ? 'à confirmer' : 'présent'
+      participantEvt.status = participantEvt.status === 'présent' ? 'à confirmer' : 'présent'
     }
     participantEvt.type = form.participation
     participantEvt.guestsNumber = form.guestsNumber || 0
@@ -71,10 +70,8 @@ export default async function event_participation(req: NextApiRequest, res: Next
       return p
     })
   }
-  const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
-
   event.save()
-
+  const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
   const now = dayjs()
   const threeHoursBeforeStart = dayjs(event.start).subtract(3, 'hours')
 

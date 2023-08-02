@@ -158,7 +158,11 @@ export const useEvents = create<IEventStore>((set, get) => ({
     try {
       const res = await fetch(`/api/events/${eventId}/participants`)
       const { participants } = await res.json()
-      set({ participants, loadingEvent: null })
+      set({
+        participants,
+        loadingEvent: null,
+        events: get().events.map((e) => (e._id === eventId ? { ...e, participants } : e)),
+      })
     } catch (err: any) {
       set({ loadingEvent: null, error: 'impossible de récupérer les participants' })
     }
@@ -177,7 +181,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
     try {
       const res = await fetch(`/api/events/${id}/participants`)
       const { participants } = await res.json()
-      set({ participants })
+      set({ participants, events: get().events.map((e) => (e._id === id ? { ...e, participants } : e)) })
     } catch (err: any) {
       console.log(err)
     }
