@@ -5,7 +5,7 @@ export async function publishToDiscord(type: 'event' | 'news' | 'logs', content:
   const url = DISCORD_LINKS[type]
   if (!content || !url) return
 
-  fetch(url, {
+  await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

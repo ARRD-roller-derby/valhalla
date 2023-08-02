@@ -41,7 +41,7 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
   event.cancelled = !event.cancelled
   await event.save()
 
-  trigger('public', TriggerTypes.EVENT, {
+  await trigger('public', TriggerTypes.EVENT, {
     value: {
       event: {
         ...event.toJSON(),
@@ -54,7 +54,7 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
     const msg = `---\n l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format(
       'LLLL'
     )} est **ANNULÉ** \n---`
-    publishToDiscord('event', msg)
+    await publishToDiscord('event', msg)
   }
 
   return res.status(200).json({

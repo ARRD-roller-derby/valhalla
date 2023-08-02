@@ -39,7 +39,7 @@ export default async function event_delete(req: NextApiRequest, res: NextApiResp
   if (!event) return res.status(404).send('Événement non trouvé')
   await event.deleteOne()
 
-  trigger('public', TriggerTypes.EVENT, {
+  await trigger('public', TriggerTypes.EVENT, {
     value: {
       delete: event._id,
     },
@@ -48,7 +48,8 @@ export default async function event_delete(req: NextApiRequest, res: NextApiResp
   const msg = `---\n l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format(
     'LLLL'
   )} est **SUPPRIMÉ** \n---`
-  publishToDiscord('logs', msg)
+
+  await publishToDiscord('logs', msg)
 
   return res.status(200).json({
     event: {

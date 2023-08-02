@@ -36,8 +36,8 @@ export async function bank(userId: string, amount: number, quantity: number, nam
 
   if (user) {
     user.wallet += amount
-    user.save()
-    trigger(user.id, TriggerTypes.WALLET, {
+    await user.save()
+    await trigger(user.id, TriggerTypes.WALLET, {
       value: user.wallet,
     })
   }

@@ -62,7 +62,7 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
 
   const newEvent = await Event.findOne({ _id: req.query.id })
 
-  trigger('public', TriggerTypes.EVENT, {
+  await trigger('public', TriggerTypes.EVENT, {
     value: {
       userId: user.id,
       event: {
@@ -88,7 +88,7 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
   }
   markdown += `\n[Voir l'événement](${req.headers.origin}/agenda/${event._id})`
 
-  publishToDiscord('event', markdown)
+  await publishToDiscord('event', markdown)
 
   return res.status(200).json({
     event: {
