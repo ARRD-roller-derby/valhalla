@@ -1,3 +1,4 @@
+// Bibliothèque interne
 import { DISCORD_LINKS } from '@/utils'
 
 export async function publishToDiscord(type: 'event' | 'news' | 'logs', content: string) {

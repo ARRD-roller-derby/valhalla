@@ -1,3 +1,4 @@
+// Bibliothèques internes
 import { DiscordIcon } from '@/ui'
 
 interface DiscordButtonProps {

@@ -15,7 +15,6 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
     const { properties, geometry } = address
     const coordinates = geometry?.coordinates || [null, null]
 
-    console.log(address)
     return {
       label: `${properties.name} - ${properties.postcode} ${properties.city}`,
       value: {

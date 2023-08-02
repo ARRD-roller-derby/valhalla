@@ -1,7 +1,9 @@
+// Bibliothèques externes
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { Button, CrossIcon } from '@/ui'
-import { Loader } from './Loader'
+
+// Bibliothèques internes
+import { Button, CrossIcon, Loader } from '@/ui'
 
 // FOOTER ---------------------------------------------
 
@@ -15,6 +17,7 @@ interface FooterModalProps {
 }
 
 export function FooterModal({ onCancel, closeModal, onConfirm, txtCancel, txtConfirm, loading }: FooterModalProps) {
+  // functions
   const handleCancel = () => {
     onCancel?.()
     closeModal()
@@ -34,6 +37,8 @@ export function FooterModal({ onCancel, closeModal, onConfirm, txtCancel, txtCon
   )
 }
 
+// MODAL ---------------------------------------------
+
 interface ModalProps {
   children: (close: () => void) => React.ReactNode
   button: (open: () => void) => React.ReactNode
@@ -43,11 +48,11 @@ interface ModalProps {
   onOpen?: () => void
 }
 
-// MODAL ---------------------------------------------
-
 export function Modal({ title, children, button, onOpen, onClose, footer }: ModalProps) {
+  // states
   const [isOpen, setIsOpen] = useState(false)
 
+  // functions
   const closeModal = () => {
     onClose?.()
     setIsOpen(false)

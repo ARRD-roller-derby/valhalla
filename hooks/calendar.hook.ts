@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+// Bibliothèque externe
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useReducer } from 'react'
 
@@ -78,8 +79,10 @@ const reducer = (state: IState, action: IAction): IState => {
 }
 
 export function useCalendar() {
+  // state
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  // const
   const generateCalendarDays = useCallback((year: number, month: number) => {
     const thisMonth = dayjs().set('year', year).set('month', month),
       firstDay = dayjs(thisMonth).startOf('month'),
@@ -102,6 +105,7 @@ export function useCalendar() {
     return generateCal.slice(0, 35)
   }, [])
 
+  // functions
   const createCalendar = useCallback(
     (year: number, month: number) => {
       const thisMonth = dayjs().set('year', year).set('month', month)
@@ -127,6 +131,7 @@ export function useCalendar() {
     dispatch({ type: PREVIOUS_MONTH })
   }
 
+  // effects
   useEffect(() => {
     createCalendar(state.year, state.month)
   }, [state.year, state.month])

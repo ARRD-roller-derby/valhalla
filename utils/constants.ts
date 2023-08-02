@@ -1,3 +1,4 @@
+// Bibliothèque interne
 import { TOption } from '@/types'
 
 export const APP_NAME = 'Valhalla'

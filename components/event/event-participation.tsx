@@ -1,26 +1,34 @@
-import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
-import { QuestionIcon } from '@/ui'
-import { Loader } from '@/ui/Loader'
-import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
+// Bibliothèques externes
 import dayjs from 'dayjs'
 import { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
 
+// Bibliothèques internes
+import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
+import { QuestionIcon } from '@/ui'
+import { Loader } from '@/ui/Loader'
+import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
+
 export function EventParticipation() {
+  // stores
   const { loadingEvent, changeMyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
+
+  // hooks
+  useSocketTrigger<{ eventId: ObjectId }>(TriggerTypes.PARTICIPATION, ({ eventId }) => {
+    if (!session?.user) return
+    if (event?._id === eventId) syncParticipation(event._id)
+  })
+
+  // const
   const roles = useMemo(() => {
     if (!session?.user) return ['membre']
     return session?.user?.roles.map((role) => role.name.toLocaleLowerCase()) || []
   }, [session])
 
-  useSocketTrigger<{ eventId: ObjectId }>(TriggerTypes.PARTICIPATION, ({ eventId }) => {
-    if (!session?.user) return
-    if (event?._id === eventId) syncParticipation(event._id)
-  })
-  const participations = useMemo<{
+  const { myParticipation, participationTypesCount } = useMemo<{
     participationTypesCount: { [key: string]: number }
     myParticipation: { label: string; status: string; type: string }
   }>(() => {
@@ -50,8 +58,7 @@ export function EventParticipation() {
     }
   }, [event])
 
-  const { myParticipation, participationTypesCount } = participations
-
+  // render
   if (loadingEvent === event._id)
     return (
       <div className="flex justify-center">
@@ -59,7 +66,7 @@ export function EventParticipation() {
       </div>
     )
 
-  if (dayjs(event.end).isBefore(dayjs())) return null
+  if (dayjs(event.end).isBefore(dayjs())) return <></>
   return (
     <div className="mt-2 fill-arrd-highlight">
       <div className="flex justify-end gap-3 pr-1">

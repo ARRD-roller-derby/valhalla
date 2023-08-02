@@ -37,6 +37,7 @@ interface ISetEvents {
   spyParticipation(eventId: ObjectId): Promise<void>
   setCurrentDay: (day: dayjs.Dayjs) => void
   createEvent: (event: IEventForm) => Promise<void>
+  updateEvent: (id: ObjectId, event: IEventForm) => Promise<void>
   changeMyParticipation: (eventId: ObjectId, participation: string) => Promise<void>
   cancel(eventId: ObjectId): Promise<void>
   del(eventId: ObjectId): Promise<void>
@@ -124,7 +125,10 @@ export const useEvents = create<IEventStore>((set, get) => ({
     try {
       const res = await fetch(`/api/events/${id}`)
       const { event } = await res.json()
-      set((state) => ({ events: [...state.events.filter((e) => e._id !== id), event], loading: false }))
+      set((state) => ({
+        events: [...state.events.filter((e) => e._id !== id), event],
+        loading: false,
+      }))
     } catch (err: any) {
       set({ loading: false, error: "impossible de récupérer l' événement" })
     }
@@ -193,12 +197,28 @@ export const useEvents = create<IEventStore>((set, get) => ({
       set({ loading: false, error: "impossible de créer l'événement" })
     }
   },
+  async updateEvent(id, event) {
+    set({ loading: true })
+    try {
+      const res = await fetch(`/api/events/${id.toString()}/update`, {
+        method: 'PUT',
+        body: JSON.stringify(event),
+      })
+      const { event: evt } = await res.json()
+      set((state) => ({
+        events: [...state.events.filter((e) => e._id !== id), evt],
+        loading: false,
+      }))
+    } catch (err: any) {
+      set({ loading: false, error: "impossible de créer l'événement" })
+    }
+  },
   async changeMyParticipation(eventId, participation) {
     const { events } = get()
     const event = events.find((e) => e._id === eventId)
     if (!event) return
 
-    set({ loadingEvent: eventId })
+    set({ loadingEvent: eventId, error: undefined })
 
     try {
       const res = await fetch('/api/events/participation', {

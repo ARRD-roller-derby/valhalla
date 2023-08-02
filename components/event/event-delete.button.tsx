@@ -1,13 +1,22 @@
-import { useEvent, useEvents } from '@/entities'
-import { Button, FooterModal, Modal } from '@/ui'
+// Bibliothèques externes
 import { useRouter } from 'next/router'
 
+// Bibliothèques internes
+import { useEvent, useEvents } from '@/entities'
+import { Button, FooterModal, Modal } from '@/ui'
+
 export function EventDeleteBtn() {
-  const router = useRouter()
+  // stores
   const { loadingEvent, del } = useEvents()
   const { event } = useEvent()
+
+  // hooks
+  const router = useRouter()
+
+  // const
   const txt = "Supprimer l'événement"
 
+  // functions
   const handleSubmit = async () => {
     del(event._id)
     router.push('/agenda')

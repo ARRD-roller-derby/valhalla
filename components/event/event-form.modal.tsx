@@ -1,44 +1,61 @@
-import dayjs from 'dayjs'
-import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
-import { EventTypeSelector } from './event-type.selector'
+// Bibliothèques externes
 import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+
+// Bibliothèques internes
+import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
 import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
 import { frequencyOpts, visibilityOpts } from '@/utils'
-import { Editor, AddressSelector } from '@/components'
+import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { TOption } from '@/types'
+import { IEvent } from '@/models'
 
 interface EventModalProps {
   day?: dayjs.Dayjs
   customButton: (callbacks: () => void) => React.ReactNode // Update children prop
+  eventToUpdate?: IEvent
 }
 
-export function EventCreateModal({ day, customButton }: EventModalProps) {
-  const { loading, createEvent, currentDay } = useEvents()
+export function EventFormModal({ day, eventToUpdate, customButton }: EventModalProps) {
+  // stores
+  const { loading, currentDay, updateEvent, createEvent } = useEvents()
+
+  // const
+
   const formInit = {
     type: EVENT_TYPES[0],
     title: EVENT_TYPES[0],
     description: {},
-    start: day || currentDay || dayjs(),
-    startHour: dayjs().add(1, 'hour').set('minute', 0).format('HH:mm'),
-    endHour: dayjs().add(2, 'hour').set('minute', 0).format('HH:mm'),
-    end: day || currentDay || dayjs(),
+
     recurrence: false,
     frequency: frequencyOpts[0],
     frequencyCount: 1,
-    visibility: visibilityOpts[0],
+
+    ...eventToUpdate,
+    visibility: eventToUpdate?.visibility
+      ? {
+          label: visibilityOpts.find((opt) => opt.value === eventToUpdate.visibility)?.label || '',
+          value: eventToUpdate.visibility,
+        }
+      : visibilityOpts[0],
+    start: eventToUpdate?.start ? dayjs(eventToUpdate.start) : day || currentDay || dayjs(),
+    end: eventToUpdate?.end ? dayjs(eventToUpdate.end) : day || currentDay || dayjs(),
+    startHour: eventToUpdate?.start
+      ? dayjs(eventToUpdate.start).format('HH:mm')
+      : dayjs().add(1, 'hour').set('minute', 0).format('HH:mm'),
+    endHour: eventToUpdate?.end
+      ? dayjs(eventToUpdate.end).format('HH:mm')
+      : dayjs().add(2, 'hour').set('minute', 0).format('HH:mm'),
     address: {
-      label: '',
-      value: '',
+      label: eventToUpdate?.address?.label || '',
+      value: eventToUpdate?.address || '',
     } as TOption,
   }
 
+  // state
   const [form, setForm] = useState(formInit)
 
-  useEffect(() => {
-    const titleIsType = EVENT_TYPES.find((type) => type === form.title)
-    if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
-  }, [form.type])
-
+  // functions
   const handleSubmit = async () => {
     const { description, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
@@ -70,15 +87,31 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
       }
       event.recurrence = recurrence
     }
-    createEvent(event)
+
+    if (eventToUpdate) {
+      await updateEvent(eventToUpdate._id, event)
+    } else {
+      await createEvent(event)
+    }
   }
+
+  // effect
+  useEffect(() => {
+    const titleIsType = EVENT_TYPES.find((type) => type === form.title)
+    if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
+  }, [form.type])
 
   return (
     <Modal
       onOpen={() => setForm(formInit)}
       button={customButton}
       footer={(close) => (
-        <FooterModal closeModal={close} loading={loading} txtConfirm="Créer l'évènement" onConfirm={handleSubmit} />
+        <FooterModal
+          closeModal={close}
+          loading={loading}
+          txtConfirm={eventToUpdate ? 'Modifier' : 'Créer'}
+          onConfirm={handleSubmit}
+        />
       )}
     >
       {() => (
@@ -107,11 +140,13 @@ export function EventCreateModal({ day, customButton }: EventModalProps) {
             </div>
           </LabelBlock>
 
-          <Checkbox
-            label="Activer la récurrence"
-            checked={form.recurrence}
-            onChange={() => setForm((prev) => ({ ...prev, recurrence: !prev.recurrence }))}
-          />
+          {!eventToUpdate && (
+            <Checkbox
+              label="Activer la récurrence"
+              checked={form.recurrence}
+              onChange={() => setForm((prev) => ({ ...prev, recurrence: !prev.recurrence }))}
+            />
+          )}
 
           {form.recurrence && (
             <div className="mt-2 flex flex-col flex-wrap gap-1 sm:grid sm:grid-cols-[auto_1fr] sm:gap-3">

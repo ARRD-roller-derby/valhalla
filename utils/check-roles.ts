@@ -1,3 +1,4 @@
+// models
 import { IUser, TRole } from '@/models'
 
 export function checkRoles(roles: string[], user: IUser): boolean {

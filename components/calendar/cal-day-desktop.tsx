@@ -1,10 +1,13 @@
+// Bibliothèques externes
+import { useMemo } from 'react'
+import dayjs from 'dayjs'
+import { useSession } from 'next-auth/react'
+
+// Bibliothèques internes
+import { EventFormModal, EventLink } from '@/components'
 import { EventProvider, ROLES_CAN_CREATE_EVENT, useEvents } from '@/entities'
 import { ICallDay } from '@/hooks'
 import { checkRoles, dc } from '@/utils'
-import dayjs from 'dayjs'
-import { EventCreateModal } from '@/components'
-import { useSession } from 'next-auth/react'
-import { EventLink } from '../event/event-link'
 import { Modal } from '@/ui'
 
 interface CalDayDesktopProps {
@@ -12,16 +15,18 @@ interface CalDayDesktopProps {
 }
 
 export function CalDayDesktop({ day }: CalDayDesktopProps) {
+  // stores
   const { data: session } = useSession()
-  const user = session?.user
   const { getEventForDay } = useEvents()
+
+  // const
   const events = getEventForDay(day.date)
   const noEvent = events.length === 0
+  const canSee = useMemo(() => {
+    if (!session?.user) return false
+    return checkRoles(ROLES_CAN_CREATE_EVENT, session.user)
+  }, [session])
 
-  if (!user) return null
-  const canSee = checkRoles(ROLES_CAN_CREATE_EVENT, user)
-
-  //TODO on ouvre la modale des events si on clique dessus, mais sur le jour et sur "aucun", ou ouvre la modal de création d'event
   return (
     <div
       className={dc(
@@ -30,7 +35,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
         [dayjs().isSame(day.date, 'day'), 'border-arrd-accent', 'border-arrd-border']
       )}
     >
-      <EventCreateModal
+      <EventFormModal
         day={day.date}
         customButton={(onClick) => (
           <div
@@ -44,7 +49,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
 
       <div className="flex h-full flex-col pt-6 text-xs">
         {noEvent && canSee && (
-          <EventCreateModal
+          <EventFormModal
             day={day.date}
             customButton={(onClick) => (
               <div className="flex-grow cursor-pointer text-arrd-textLight" onClick={onClick} />

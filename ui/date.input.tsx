@@ -1,9 +1,12 @@
+// Bibliothèques externes
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+import dayjs from 'dayjs'
+
+// Bibliothèques internes
+import { ChevronLeftIcon, ChevronRightIcon } from '@/ui'
 import { useCalendar } from '@/hooks'
 import { dc } from '@/utils'
-import dayjs from 'dayjs'
-import { ChevronLeftIcon, ChevronRightIcon } from './icons'
 
 interface DateInputProps {
   date?: dayjs.Dayjs
@@ -11,7 +14,10 @@ interface DateInputProps {
 }
 
 export function DateInput({ date = dayjs(), setDate }: DateInputProps) {
+  // stores
   const { cal, previousMonth, nextMonth, currentMonth } = useCalendar()
+
+  // const
   const iconClasses = 'w-6 h-6 cursor-pointer fill-arrd-primary hover:fill-arrd-highlight'
 
   return (

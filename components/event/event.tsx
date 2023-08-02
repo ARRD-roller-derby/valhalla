@@ -1,5 +1,5 @@
-import { EventAttendees, EventDetails } from '@/components'
-import { EventParticipation } from '@/components/event/event-participation'
+// Bibliothèques internes
+import { EventAttendees, EventDetails, EventParticipation } from '@/components'
 import { useEvent } from '@/entities'
 import { CancelMsg, PageTabs } from '@/ui'
 import { dc } from '@/utils'

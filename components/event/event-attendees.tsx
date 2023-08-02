@@ -1,11 +1,15 @@
-import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
-import { IEvent, IParticipant } from '@/models'
+// Bibliothèques externes
+import { useEffect, useMemo, useState } from 'react'
+
+// Bibliothèques internes
+import { useEvent, useEvents } from '@/entities'
 import { Button, DragonIcon, FooterModal, HandIcon, Modal } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { ROLES, checkRoles, dc, participationTypes } from '@/utils'
-import { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
-import { useEffect, useMemo, useState } from 'react'
+
+// Modèles
+import { IParticipant } from '@/models'
 
 const order = ['coach', 'assist-coach', 'organizer', 'patineur.euse', 'visiteur.euse / NSO', 'invité.e', 'absent.e']
 

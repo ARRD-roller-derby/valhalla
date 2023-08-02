@@ -1,7 +1,10 @@
+// Bibliothèques externes
+import Head from 'next/head'
+
+// Bibliothèques internes
 import { Avatar, LogoAndGoBack, Menu, Wallet } from '@/components'
 import { SocketProvider } from '@/entities'
 import { dc } from '@/utils'
-import Head from 'next/head'
 
 interface AuthLayoutProps {
   children: React.ReactNode

@@ -1,20 +1,29 @@
+// Bibliothèques externes
+import { useEffect } from 'react'
+
+// Bibliothèques internes
 import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
 import { Loader } from '@/ui/Loader'
-import { useEffect } from 'react'
 import { EventCard } from '@/components'
-import { IEvent } from '@/models'
 import { useSession } from 'next-auth/react'
 
+// Modèles
+import { IEvent } from '@/models'
+
 export function NextEvents() {
+  // stores
   const { data: session } = useSession()
   const { events, loading, fetchForNext, socketEvt } = useEvents()
 
+  // hooks
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
 
+  // effects
   useEffect(() => {
     if (session?.user) fetchForNext()
   }, [session])
 
+  // render
   if (loading)
     return (
       <div className="flex items-center justify-center">

@@ -1,8 +1,5 @@
+//Bibliothèques externes
 import { SessionProvider } from 'next-auth/react'
-import 'leaflet/dist/leaflet.css'
-import 'nprogress/nprogress.css'
-import '../styles/globals.css'
-import 'cropperjs/dist/cropper.css'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -13,11 +10,19 @@ import fr from 'dayjs/locale/fr'
 import NProgress from 'nprogress'
 import { Router } from 'next/router'
 
+// Importer les styles
+import 'leaflet/dist/leaflet.css'
+import 'nprogress/nprogress.css'
+import '../styles/globals.css'
+import 'cropperjs/dist/cropper.css'
+
+// Barre de chargement
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 NProgress.configure({ showSpinner: false })
 
+// Configurer dayjs
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
 dayjs.extend(timezone)

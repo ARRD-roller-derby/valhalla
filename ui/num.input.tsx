@@ -1,4 +1,5 @@
-import { SquareMinusIcon, SquarePlusIcon } from './icons'
+// Bibliothèques internes
+import { SquareMinusIcon, SquarePlusIcon } from '@/ui'
 
 interface NumInputProps {
   num?: number
@@ -6,7 +7,9 @@ interface NumInputProps {
 }
 
 export function NumInput({ num = 0, setNum }: NumInputProps) {
+  // const
   const iconClasses = 'w-9 h-9 cursor-pointer fill-arrd-primary hover:fill-arrd-highlight'
+
   return (
     <div className="inline-flex items-center gap-1">
       <div onClick={() => setNum(num - 1)}>

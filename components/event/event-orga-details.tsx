@@ -1,9 +1,14 @@
-import { useEvent } from '@/entities'
+// Bibliothèques externes
 import { useMemo } from 'react'
 
+// Bibliothèques internes
+import { useEvent } from '@/entities'
+
 export function EventOrgaDetails() {
+  // stores
   const { event } = useEvent()
 
+  // const
   const coachAndAssistCoach = useMemo(() => {
     return {
       coach: event.participants.find((part) => part.type === 'coach'),

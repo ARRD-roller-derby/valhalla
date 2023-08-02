@@ -1,15 +1,22 @@
+// Bibliothèques externes
+import dayjs from 'dayjs'
+
+// Bibliothèques internes
 import { useEvents } from '@/entities'
 import { ICallDay } from '@/hooks'
 import { dc } from '@/utils'
-import dayjs from 'dayjs'
 
 interface CalDayMobileProps {
   day: ICallDay
 }
 
 export function CalDayMobile({ day }: CalDayMobileProps) {
+  // stores
   const { getEventForDay, currentDay, setCurrentDay } = useEvents()
+
+  // const
   const events = getEventForDay(day.date)
+
   return (
     <div
       className={dc(

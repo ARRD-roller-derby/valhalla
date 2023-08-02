@@ -1,13 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
+
+// Bibliothèques externes
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { useSession } from 'next-auth/react'
+
+// Bibliothèques internes
 import { dc } from '@/utils'
 
 export function Avatar() {
+  // stores
   const { data: session } = useSession()
 
-  if (!session) return null
+  if (!session) return <></>
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
