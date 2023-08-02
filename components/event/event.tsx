@@ -5,7 +5,6 @@ import { CancelMsg, PageTabs } from '@/ui'
 import { dc } from '@/utils'
 
 export function Event() {
-  // stores
   const { event } = useEvent()
 
   return (

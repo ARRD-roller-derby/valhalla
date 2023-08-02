@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
-import { EventCreateModal, EventLink } from '@/components'
+import { EventFormModal, EventLink } from '@/components'
 import { EventProvider, ROLES_CAN_CREATE_EVENT, useEvents } from '@/entities'
 import { ICallDay } from '@/hooks'
 import { checkRoles, dc } from '@/utils'
@@ -35,7 +35,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
         [dayjs().isSame(day.date, 'day'), 'border-arrd-accent', 'border-arrd-border']
       )}
     >
-      <EventCreateModal
+      <EventFormModal
         day={day.date}
         customButton={(onClick) => (
           <div
@@ -49,7 +49,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
 
       <div className="flex h-full flex-col pt-6 text-xs">
         {noEvent && canSee && (
-          <EventCreateModal
+          <EventFormModal
             day={day.date}
             customButton={(onClick) => (
               <div className="flex-grow cursor-pointer text-arrd-textLight" onClick={onClick} />

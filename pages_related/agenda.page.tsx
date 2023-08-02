@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
-import { Calendar, NextEvents, EventCreateModal } from '@/components'
+import { Calendar, NextEvents, EventFormModal } from '@/components'
 import { AuthLayout } from '@/layout'
 import { Button, PageTabs } from '@/ui'
 import { ROLES, checkRoles } from '@/utils'
@@ -33,7 +33,7 @@ export function Agenda() {
                 <div className="flex flex-col gap-3 p-2">
                   {canSee && (
                     <div className="flex justify-end">
-                      <EventCreateModal
+                      <EventFormModal
                         day={dayjs()}
                         customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />}
                       />

@@ -1,6 +1,6 @@
 // Bibliothèques externes
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
@@ -13,24 +13,23 @@ import { IEvent } from '@/models'
 
 export function EventFetch() {
   // stores
-  const { data: sessions } = useSession()
-  const { loading, findOne, getEvent, setEvent } = useEvents()
+  const { data: session } = useSession()
+  const { loading, events, findOne, setEvent, getEvent } = useEvents()
 
   // hooks
   const router = useRouter()
-  useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, (msg) => {
+  useSocketTrigger<{ event: IEvent; userId: string }>(TriggerTypes.EVENT, (msg) => {
     if (!msg || !msg.event) return
-    const isThisEvent = event?._id === msg.event._id
-    if (isThisEvent) setEvent(msg.event)
+    const isThisEvent = router.query.eventId === msg.event._id.toString()
+    if (isThisEvent && msg.userId !== session?.user._id) setEvent(msg.event)
   })
 
-  // const
-  const event = getEvent(router.query.eventId as any)
+  const event = useMemo(() => getEvent(router.query.eventId as any), [session, router.query.eventId, events])
 
   // effects
   useEffect(() => {
-    if (sessions?.user) findOne(router.query.eventId as any)
-  }, [sessions])
+    if (session?.user) findOne(router.query.eventId as any)
+  }, [session])
 
   return (
     <>

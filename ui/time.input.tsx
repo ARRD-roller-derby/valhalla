@@ -37,7 +37,14 @@ export function TimeInput({ time, setTime }: TimeInputProps) {
         onSelect={handleHourChange}
       />
       <div className=" text-center text-2xl font-bold">:</div>
-      <ListSelector options={minuteOptions} onSelect={handleMinuteChange} />
+      <ListSelector
+        defaultValue={{
+          label: minutes,
+          value: minutes,
+        }}
+        options={minuteOptions}
+        onSelect={handleMinuteChange}
+      />
     </div>
   )
 }

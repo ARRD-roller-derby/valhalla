@@ -1,5 +1,5 @@
 export * from './event-card'
-export * from './event-create.modal'
+export * from './event-form.modal'
 export * from './next-events'
 export * from './event-type.selector'
 export * from './event-details'

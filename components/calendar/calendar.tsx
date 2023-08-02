@@ -7,7 +7,7 @@ import { ROLES_CAN_CREATE_EVENT, TriggerTypes, useEvents, useSocketTrigger } fro
 import { useIsMobile, useCalendar } from '@/hooks'
 import { Button } from '@/ui'
 import { useEffect, useMemo } from 'react'
-import { CalDayDesktop, CalDayMobile, CalEventForDay, EventCreateModal } from '@/components'
+import { CalDayDesktop, CalDayMobile, CalEventForDay, EventFormModal } from '@/components'
 import { checkRoles, dc } from '@/utils'
 
 // Modèles
@@ -78,7 +78,7 @@ export function Calendar() {
         {isMobile && currentDay && (
           <div className="flex flex-col gap-4 py-4">
             {canSee && (
-              <EventCreateModal customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />} />
+              <EventFormModal customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />} />
             )}
             <CalEventForDay />
           </div>
