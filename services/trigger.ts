@@ -18,6 +18,7 @@ export function trigger(event: string, type: TriggerTypes, body: any) {
     secret: PUSHER_SECRET,
     cluster: PUSHER_REGION,
     useTLS: true,
+    timeout: 500,
   })
 
   pusher.trigger('valhalla', event, { ...body, type })
