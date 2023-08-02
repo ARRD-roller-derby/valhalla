@@ -57,7 +57,6 @@ export default async function event_participation(req: NextApiRequest, res: Next
     }
     if (form.participation.match(/absent/)) {
       participantEvt.status = 'absent.e'
-      participantEvt.type = form.participation
     } else {
       participantEvt.status = participantEvt.status === 'présent' ? 'à confirmer' : 'présent'
     }
@@ -70,7 +69,7 @@ export default async function event_participation(req: NextApiRequest, res: Next
       return p
     })
   }
-  event.save()
+  await event.save()
   const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
   const now = dayjs()
   const threeHoursBeforeStart = dayjs(event.start).subtract(3, 'hours')
