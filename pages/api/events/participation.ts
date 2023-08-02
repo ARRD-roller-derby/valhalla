@@ -93,10 +93,10 @@ Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
       confirmParticipantsNum > 1 ? 's' : ''
     } confirmé.e.${confirmParticipantsNum > 1 ? 's' : ''}** pour cet événement.\n---`
 
-    publishToDiscord('logs', msg)
+    await publishToDiscord('logs', msg)
   }
 
-  trigger('public', TriggerTypes.PARTICIPATION, {
+  await trigger('public', TriggerTypes.PARTICIPATION, {
     value: {
       eventId: event._id,
     },
