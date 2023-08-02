@@ -11,7 +11,7 @@ import { PUSHER_API_ID, PUSHER_KEY, PUSHER_REGION, PUSHER_SECRET } from '@/utils
  * @param type Wallet, event...
  * @param body des infos à passer ?
  */
-export function trigger(event: string, type: TriggerTypes, body: any) {
+export async function trigger(event: string, type: TriggerTypes, body: any) {
   const pusher = new Pusher({
     appId: PUSHER_API_ID,
     key: PUSHER_KEY,
@@ -20,5 +20,5 @@ export function trigger(event: string, type: TriggerTypes, body: any) {
     useTLS: true,
   })
 
-  pusher.trigger('valhalla', event, { ...body, type })
+  await pusher.trigger('valhalla', event, { ...body, type })
 }
