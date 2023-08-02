@@ -12,7 +12,7 @@ import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
 
 export function EventParticipation() {
   // stores
-  const { loadingEvent, changeMyParticipation, syncParticipation } = useEvents()
+  const { events, loadingEvent, changeMyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
 
@@ -56,7 +56,7 @@ export function EventParticipation() {
           participation.status === 'à confirmer' ? 'Je serai peut-être présent en tant que ' : 'Je serai en tant que',
       },
     }
-  }, [event])
+  }, [event, events])
 
   // render
   if (loadingEvent === event._id)
