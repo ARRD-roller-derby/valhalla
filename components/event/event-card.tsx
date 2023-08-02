@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 // Bibliothèques internes
 import { useEvent } from '@/entities'
-import { ReadEditor, EventOrgaDetails, EventParticipation } from '@/components'
+import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
 import { ArrowLeftIcon, CancelMsg } from '@/ui'
 
 export function EventCard() {
@@ -53,6 +53,7 @@ export function EventCard() {
             </div>
           </Link>
           {event?.address?.label && <div className="text-sm italic text-arrd-secondary">{event.address.label}</div>}
+          {event.address?.lat && event.address?.lon && <WeatherWidget />}
           <EventOrgaDetails />
           <div className="text-arrd-textSecondary text-sm">
             {event.description && <ReadEditor content={event.description} />}

@@ -16,6 +16,8 @@ export const DISCORD_EVENT_HOOK = process.env.DISCORD_EVENT_HOOK || ''
 export const DISCORD_NEWS_HOOK = process.env.DISCORD_NEWS_HOOK || ''
 export const DISCORD_ADMIN_HOOK = process.env.DISCORD_ADMIN_HOOK || ''
 
+export const WEATHER_API_URL = process.env.WEATHER_API_URL || ''
+
 export const DISCORD_LINKS = {
   event: DISCORD_EVENT_HOOK,
   news: DISCORD_NEWS_HOOK,
