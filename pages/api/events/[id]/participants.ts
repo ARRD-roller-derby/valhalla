@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { Event, Purchase } from '@/models'
+import { Event, Purchase, User } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
 import { PURCHASE_TYPES, ROLES, checkRoles } from '@/utils'
 process.env.TZ = 'Europe/Paris'
@@ -9,7 +9,7 @@ process.env.TZ = 'Europe/Paris'
 export default async function event_participants(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
-  const { user } = session
+  const user = await User.findOne({ _id: session.user.id })
   if (!user) return res.status(403).send('non autorisé')
 
   const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
