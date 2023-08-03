@@ -73,13 +73,12 @@ export function EventDetails() {
         <EventOrgaDetails />
 
         {event.description && <ReadEditor content={event.description} fullHeight />}
+        {event.address?.lat && event.address?.lon && <WeatherWidget />}
         {event.address?.lat && event.address?.lon && (
           <div className="h-60 w-full pr-8 sm:px-0">
             <Map {...event.address} />{' '}
           </div>
         )}
-        {event.address?.lat && event.address?.lon && <WeatherWidget />}
-
         {canEdit && (
           <DangerZone>
             <div className="flex w-full justify-between gap-2 text-xs">
