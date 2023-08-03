@@ -1,5 +1,6 @@
 // Bibliothèques externes
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
 import { MemberProvider, useMembers } from '@/entities'
@@ -7,11 +8,12 @@ import { Loader } from '@/ui'
 import { MemberCard } from '@/components'
 
 export function MemberList() {
+  const { data: session } = useSession()
   const { loading, members, getMembers } = useMembers()
 
   useEffect(() => {
     getMembers()
-  }, [])
+  }, [session])
 
   return (
     <>
