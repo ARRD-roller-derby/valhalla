@@ -9,6 +9,7 @@ import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
 import { QuestionIcon } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
+import { EventParticipationInfo } from './event-participation-info'
 
 export function EventParticipation() {
   // stores
@@ -70,6 +71,9 @@ export function EventParticipation() {
   return (
     <div className="mt-2 fill-arrd-highlight">
       <div className="flex justify-end gap-3 pr-1">
+        <div onClick={() => console.log('JE DOIS AFFICHER LES LABEL ET EXPLICATION POUR CLICK')}>
+          <EventParticipationInfo />
+        </div>
         {participationTypes
           .filter((pType) => pType?.roles?.some((role) => roles.includes(role)))
           .filter((pType) => pType?.type?.includes(event?.type))
