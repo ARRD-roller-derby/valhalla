@@ -59,8 +59,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
   const existingWeatherWithoutDate = await Weather.findOne({ lat, lon })
 
   if (existingWeatherWithoutDate) {
-    existingWeatherWithoutDate.updateAt(new Date())
-    await existingWeatherWithoutDate.save()
+    await Weather.updateOne({ lat, lon }, { updateAt: new Date() })
   } else {
     await Weather.create({ ...response, lat, lon, updatedAt: new Date() })
   }
