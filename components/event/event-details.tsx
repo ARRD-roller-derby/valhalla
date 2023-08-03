@@ -3,7 +3,14 @@ import { useEvent } from '@/entities'
 import dayjs from 'dayjs'
 
 // Bibliothèques internes
-import { ReadEditor, EventOrgaDetails, EventDeleteBtn, EventCancelBtn, EventFormModal } from '@/components'
+import {
+  ReadEditor,
+  EventOrgaDetails,
+  EventDeleteBtn,
+  EventCancelBtn,
+  EventFormModal,
+  WeatherWidget,
+} from '@/components'
 import dynamic from 'next/dynamic'
 import { DangerZone, EditIcon } from '@/ui'
 import { useSession } from 'next-auth/react'
@@ -71,6 +78,7 @@ export function EventDetails() {
             <Map {...event.address} />{' '}
           </div>
         )}
+        {event.address?.lat && event.address?.lon && <WeatherWidget />}
 
         {canEdit && (
           <DangerZone>

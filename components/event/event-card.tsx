@@ -52,7 +52,9 @@ export function EventCard() {
               {event.title}
             </div>
           </Link>
-          {event?.address?.label && <div className="text-sm italic text-arrd-secondary">{event.address.label}</div>}
+          {event?.address?.label && (
+            <div className="py-2 text-sm italic text-arrd-secondary">{event.address.label}</div>
+          )}
           {event.address?.lat && event.address?.lon && <WeatherWidget />}
           <EventOrgaDetails />
           <div className="text-arrd-textSecondary text-sm">
