@@ -1,5 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  safelist: [
+    {
+      pattern: /^bg-\[#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\]$/,
+    },
+  ],
   content: [
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
