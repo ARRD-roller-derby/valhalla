@@ -40,12 +40,9 @@ export const useMembers = create<IMemberStore>((set, get) => ({
 
   // GETTERS----------------------------------------------------------------
   async getMembers() {
-    set({ loading: true })
+    set({ loading: true, members: [] })
     try {
-      const res = await fetch('/api/members', {
-        method: 'GET',
-        body: JSON.stringify(event),
-      })
+      const res = await fetch('/api/members')
       const { members } = await res.json()
       set(() => ({ members, loading: false }))
     } catch (err: any) {

@@ -8,8 +8,8 @@ import { MemberList } from '@/components'
 export function Repertoire() {
   const { data: session } = useSession()
   const user = session?.user
-  if (!user) return null
 
+  if (!user) return <></>
   return (
     <AuthLayout title="Agenda">
       <MemberList />

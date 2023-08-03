@@ -12,17 +12,17 @@ export function MemberList() {
   const { loading, members, getMembers } = useMembers()
 
   useEffect(() => {
-    getMembers()
+    if (session?.user) getMembers()
   }, [session])
 
   return (
     <>
-      {loading && !members && (
+      {loading && members.length === 0 && (
         <div className="flex h-full items-center justify-center">
           <Loader />
         </div>
       )}
-      {!loading && members && (
+      {!loading && members.length > 0 && (
         <div className="flex flex-col gap-4 p-3 sm:grid sm:grid-cols-3 lg:grid-cols-4">
           {members.map((member) => (
             <MemberProvider member={member}>
@@ -31,7 +31,7 @@ export function MemberList() {
           ))}
         </div>
       )}
-      {!loading && !members && <div className="flex h-full items-center justify-center">non trouvé</div>}
+      {!loading && members.length === 0 && <div className="flex h-full items-center justify-center">non trouvé</div>}
     </>
   )
 }
