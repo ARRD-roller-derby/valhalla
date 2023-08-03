@@ -36,7 +36,7 @@ export function EventAttendees() {
   const { participants, fetchParticipation, spyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
-  const presentCount = participants.filter((p) => p.status !== 'absent').length
+  const presentCount = participants.filter((p) => p.status.match(/absent/)).length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
   const canSeeAttendees = useMemo(() => {
     if (!session?.user) return false
