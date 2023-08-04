@@ -56,7 +56,7 @@ export function EventCard() {
             <div className="py-2 text-sm italic text-arrd-secondary">{event.address.label}</div>
           )}
           <EventOrgaDetails />
-          <div className="text-arrd-textSecondary text-sm">
+          <div className="text-arrd-textSecondary pb-2 text-sm">
             {event.description && <ReadEditor content={event.description} />}
           </div>
           {event.address?.lat && event.address?.lon && <WeatherWidget />}
