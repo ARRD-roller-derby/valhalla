@@ -55,11 +55,11 @@ export function EventCard() {
           {event?.address?.label && (
             <div className="py-2 text-sm italic text-arrd-secondary">{event.address.label}</div>
           )}
-          {event.address?.lat && event.address?.lon && <WeatherWidget />}
           <EventOrgaDetails />
           <div className="text-arrd-textSecondary text-sm">
             {event.description && <ReadEditor content={event.description} />}
           </div>
+          {event.address?.lat && event.address?.lon && <WeatherWidget />}
         </div>
         {event.cancelled ? <CancelMsg /> : <EventParticipation />}
       </div>
