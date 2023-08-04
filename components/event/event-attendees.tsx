@@ -33,14 +33,15 @@ const compareParticipants = (participantA: IParticipant, participantB: IParticip
 
 export function EventAttendees() {
   const [loading, setLoading] = useState(false)
-  const { participants, fetchParticipation, spyParticipation, syncParticipation } = useEvents()
+  const { participants, fetchParticipation, spyParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
   const presentCount = participants.filter((p) => !p.status.match(/absent/)).length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
   const canSeeAttendees = useMemo(() => {
     if (!session?.user) return false
-    checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session?.user)
+    if (participants.length === 0) return checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session?.user)
+    return true
   }, [session])
 
   const handleFetch = async () => {
