@@ -11,7 +11,7 @@ export function Repertoire() {
 
   if (!user) return <></>
   return (
-    <AuthLayout title="Agenda">
+    <AuthLayout title="Répertoire">
       <MemberList />
     </AuthLayout>
   )

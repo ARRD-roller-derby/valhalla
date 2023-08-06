@@ -65,3 +65,24 @@ export const PARTICIPATION_TYPES = {
 export const PURCHASE_TYPES = {
   spyAttendees: 'spyAttendees',
 }
+
+export const SKILL_CATEGORIES = {
+  derby: 'derby',
+  patinage: 'patinage',
+}
+
+export const SKILL_SUB_CATEGORIES = {
+  fondamental: 'Fondamentaux',
+  stability: 'Stabilité et contrôle',
+  engagement: 'Engagement et retour à la stabilité',
+}
+
+export const SKILL_LEVELS = {
+  base: 'base',
+  intermediate: 'intermédiaire',
+  advanced: 'avancé',
+  master: 'maîtrise',
+}
+
+// utilisé pour les filtres, mais aussi pour définir l'ordre d'affichage des skills
+export const SKILL_LEVELS_LABELS = ['base', 'intermédiaire', 'avancé', 'maîtrise']
