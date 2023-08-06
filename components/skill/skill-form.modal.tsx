@@ -14,13 +14,22 @@ interface SkillCreateBtnProps {
 }
 export function SkillFormModal({ skill }: SkillCreateBtnProps) {
   //store
-  const { createSkill } = useSkills()
+  const { loadingCreate, createSkill } = useSkills()
 
   // const
   const actionType = skill ? 'Modifier' : 'Créer' // ou modifier
   const descaler = skill ? 'la' : 'une' // ou modifier
 
-  const formInit = {
+  const formInit: {
+    name: string
+    msp: boolean
+    description: any
+    category: {
+      label: string
+      value: string
+    }
+    tags: string[]
+  } = {
     name: '',
     msp: false,
     description: {},
@@ -28,10 +37,23 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
       label: SKILL_CATEGORIES.derby,
       value: SKILL_CATEGORIES.derby,
     },
+    tags: [],
   }
 
   // state
   const [form, setForm] = useState(formInit)
+
+  // Functions
+
+  const handleCreate = async () => {
+    const newSkill = {
+      ...form,
+      category: form.category.value,
+    }
+
+    createSkill(newSkill)
+    setForm(formInit)
+  }
 
   return (
     <Modal
@@ -40,9 +62,9 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
       footer={(close) => (
         <FooterModal
           closeModal={close}
-          loading={false}
+          loading={loadingCreate}
           txtConfirm="Créer la compétence"
-          onConfirm={async () => console.log('Créer la compétence')}
+          onConfirm={handleCreate}
         />
       )}
     >
@@ -76,7 +98,7 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
           </LabelBlock>
 
           <LabelBlock label="Tags">
-            <TagLevelSelector onSelect={(type) => setForm((prev) => ({ ...prev, type }))} type="skill" />
+            <TagLevelSelector onSelect={(tags) => setForm((prev) => ({ ...prev, tags }))} type="skill" />
           </LabelBlock>
         </div>
       )}

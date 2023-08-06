@@ -14,6 +14,7 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
+import { ROLES_CAN_CREATE_EVENT } from '@/entities'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -30,7 +31,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
-  const isCanView = checkRoles(['bureau', 'dev', 'evénements', 'coach'], user)
+  const isCanView = checkRoles(ROLES_CAN_CREATE_EVENT, user)
   if (!isCanView) return res.status(403).send('non autorisé')
   const form = JSON.parse(req.body || '{}')
   await MongoDb()

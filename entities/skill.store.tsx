@@ -19,11 +19,23 @@ interface IGetSkill {
   error: string | null
 }
 
-interface ISetSkill {
-  createSkill: (skill: ISkill) => void
+interface IFetchSkill {
+  fetchSkills: (category: string) => Promise<void>
 }
 
-export type ISkillStore = ISetSkill & IGetSkill
+export interface ISkillCreate {
+  name: string
+  msp: boolean
+  description: any
+  category: string
+  tags: string[]
+}
+
+interface ISetSkill {
+  createSkill: (skill: ISkillCreate) => void
+}
+
+export type ISkillStore = ISetSkill & IGetSkill & IFetchSkill
 
 // STORE --------------------------------------------------------------------
 
@@ -37,6 +49,18 @@ export const useSkills = create<ISkillStore>((set, get) => ({
 
   // GETTERS----------------------------------------------------------------
 
+  // FETCHERS----------------------------------------------------------------
+  async fetchSkills(category) {
+    set({ loading: true, error: null, skills: [] })
+    try {
+      const res = await fetch(`/api/skills/${category}`)
+      const { skills } = await res.json()
+      set({ skills, loading: false })
+    } catch (err: any) {
+      set({ loading: false, error: 'impossible de récupérer les compétences' })
+    }
+  },
+
   // SETTERS----------------------------------------------------------------
 
   async createSkill(skill) {
@@ -46,8 +70,8 @@ export const useSkills = create<ISkillStore>((set, get) => ({
         method: 'POST',
         body: JSON.stringify(skill),
       })
-      const { skills: newSkills } = await res.json()
-      set((state) => ({ skills: [...state.skills, ...newSkills], loadingCreate: false }))
+      const { skill: newSkill } = await res.json()
+      set((state) => ({ skills: [...state.skills, newSkill], loadingCreate: false }))
     } catch (err: any) {
       set({ loadingCreate: false, error: 'impossible de créer la compétence' })
     }

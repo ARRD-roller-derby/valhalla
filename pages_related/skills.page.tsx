@@ -1,17 +1,15 @@
 // Bibliothèques externes
 import { useSession } from 'next-auth/react'
+import { useMemo } from 'react'
 
 // Bibliothèques internes
 import { AuthLayout } from '@/layout'
 import { PageTabs } from '@/ui'
-import { useMemo } from 'react'
-import { ROLES, checkRoles } from '@/utils'
-import { SkillFormModal } from '@/components'
-
+import { ROLES, SKILL_CATEGORIES, checkRoles } from '@/utils'
+import { SkillFormModal, SkillList } from '@/components'
 export function Skills() {
   // Stores
   const { data: session } = useSession()
-  const user = session?.user
 
   // const
   const canSee = useMemo(() => {
@@ -26,7 +24,7 @@ export function Skills() {
           tabs={[
             {
               title: 'Derby',
-              tab: 'derby',
+              tab: SKILL_CATEGORIES.derby,
               element: (
                 <div className="flex flex-col gap-3 p-2">
                   {canSee && (
@@ -35,13 +33,13 @@ export function Skills() {
                     </div>
                   )}
 
-                  <div>Contenu derby</div>
+                  <SkillList category={SKILL_CATEGORIES.derby} />
                 </div>
               ),
             },
             {
               title: 'Patinage',
-              tab: 'patin',
+              tab: SKILL_CATEGORIES.patinage,
               element: (
                 <div className="flex flex-col gap-3 p-2">
                   {canSee && (
@@ -50,7 +48,7 @@ export function Skills() {
                     </div>
                   )}
 
-                  <div>Contenu Patinage</div>
+                  <SkillList category={SKILL_CATEGORIES.patinage} />
                 </div>
               ),
             },

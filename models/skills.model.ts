@@ -9,7 +9,7 @@ interface ISkillMedia {
 type TSkillCategory = 'derby' | 'patinage'
 type TSkillLevel = 'base' | 'intermédiaire' | 'avancé' | 'maîtrise'
 
-interface IUserSkill {
+export interface IUserSkill {
   userId: string
   notAcquired: Date | null
   learned: Date | null
