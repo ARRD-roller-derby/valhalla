@@ -89,5 +89,5 @@ export function SkillProvider({ children, skill }: SkillProviderProps) {
 export function useSkill() {
   const ctx = useContext(SkillCtx)
   if (!ctx) throw new Error('useSkill must be used within a SkillProvider')
-  return { event: ctx }
+  return { skill: ctx }
 }

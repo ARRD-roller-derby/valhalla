@@ -30,7 +30,6 @@ export default async function skills_by_cat(req: NextApiRequest, res: NextApiRes
 
   const category = req.query.category as string
 
-  console.log(category)
   await MongoDb()
   const skills = await Skill.find({ category })
 

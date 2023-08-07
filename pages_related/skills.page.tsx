@@ -23,6 +23,15 @@ export function Skills() {
         <PageTabs
           tabs={[
             {
+              title: 'Stats',
+              tab: 'stats',
+              element: (
+                <div className="flex flex-col gap-3 p-2">
+                  <p>ICI des stats</p>
+                </div>
+              ),
+            },
+            {
               title: 'Derby',
               tab: SKILL_CATEGORIES.derby,
               element: (
