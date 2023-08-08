@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { Skill } from '@/models'
+import { IUserSkill, Skill } from '@/models'
 import { authOptions } from '../auth/[...nextauth]'
 import { publicSkillUser } from '@/utils'
 process.env.TZ = 'Europe/Paris'
@@ -31,6 +31,23 @@ export default async function skills_by_cat(req: NextApiRequest, res: NextApiRes
   const category = req.query.category as string
 
   await MongoDb()
+
+  // Ajout de l'utilisateur à tous les skills de la catégorie, s'il n'y est pas déjà
+  await Skill.updateMany(
+    {
+      category,
+      'users.userId': { $ne: session.user.id },
+    },
+    {
+      $push: {
+        users: {
+          userId: session.user.id,
+          notAcquired: dayjs().toDate(),
+        },
+      },
+    }
+  )
+
   const skills = await Skill.find({ category })
 
   const skillsFiltered = skills.map((skill) => {

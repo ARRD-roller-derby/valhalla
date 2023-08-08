@@ -1,7 +1,7 @@
 import { ISkill } from '@/models'
 import { Button, Checkbox, FooterModal, LabelBlock, Modal, TextInput } from '@/ui'
 import { SkillCategorySelector } from './skill-category.selector'
-import { SKILL_CATEGORIES } from '@/utils'
+import { SKILL_CATEGORIES, SKILL_LEVELS } from '@/utils'
 import { useState } from 'react'
 import { useSkills } from '@/entities'
 import { SkillLevelSelector } from './skill-level.selector'
@@ -24,20 +24,16 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
     name: string
     msp: boolean
     description: any
-    category: {
-      label: string
-      value: string
-    }
+    category: string
     tags: string[]
+    level: string
   } = {
     name: '',
     msp: false,
     description: {},
-    category: {
-      label: SKILL_CATEGORIES.derby,
-      value: SKILL_CATEGORIES.derby,
-    },
+    category: SKILL_CATEGORIES.derby,
     tags: [],
+    level: SKILL_LEVELS.base,
   }
 
   // state
@@ -46,12 +42,7 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
   // Functions
 
   const handleCreate = async () => {
-    const newSkill = {
-      ...form,
-      category: form.category.value,
-    }
-
-    createSkill(newSkill)
+    createSkill(form)
     setForm(formInit)
   }
 
@@ -75,11 +66,11 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
           </LabelBlock>
 
           <LabelBlock label="Catégorie">
-            <SkillCategorySelector onSelect={(type) => setForm((prev) => ({ ...prev, type }))} />
+            <SkillCategorySelector onSelect={(category) => setForm((prev) => ({ ...prev, category }))} />
           </LabelBlock>
 
           <LabelBlock label="Niveau">
-            <SkillLevelSelector onSelect={(type) => setForm((prev) => ({ ...prev, type }))} />
+            <SkillLevelSelector onSelect={(level) => setForm((prev) => ({ ...prev, level }))} />
           </LabelBlock>
 
           <div className="my-2">
