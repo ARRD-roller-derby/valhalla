@@ -23,7 +23,7 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-export default async function skills_by_cat(req: NextApiRequest, res: NextApiResponse) {
+export default async function skills(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session

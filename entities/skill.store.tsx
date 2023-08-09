@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 
 // Bibliothèques internes
-import { ISkill } from '@/models'
+import { ISkill, TSkillCategory, TSkillLevel } from '@/models'
 import { useContext, createContext } from 'react'
 
 // TYPES --------------------------------------------------------------------
@@ -17,10 +17,12 @@ interface IGetSkill {
   loadingCreate: boolean
   skills: ISkill[]
   error: string | null
+  score: ISkillScore[]
 }
 
 interface IFetchSkill {
-  fetchSkills: (category: string) => Promise<void>
+  fetchSkills: (category?: string) => Promise<void>
+  fetchSkillScore: () => Promise<void>
 }
 
 export interface ISkillCreate {
@@ -35,6 +37,15 @@ interface ISetSkill {
   createSkill: (skill: ISkillCreate) => void
 }
 
+export interface ISkillScore {
+  notAcquiredCount: number
+  learnedCount: number
+  masterCount: number
+  category: TSkillCategory
+  level: TSkillLevel
+  total: number
+}
+
 export type ISkillStore = ISetSkill & IGetSkill & IFetchSkill
 
 // STORE --------------------------------------------------------------------
@@ -46,6 +57,7 @@ export const useSkills = create<ISkillStore>((set, get) => ({
   loadingCreate: false,
   skills: [],
   error: null,
+  score: [],
 
   // GETTERS----------------------------------------------------------------
 
@@ -53,9 +65,19 @@ export const useSkills = create<ISkillStore>((set, get) => ({
   async fetchSkills(category) {
     set({ loading: true, error: null, skills: [] })
     try {
-      const res = await fetch(`/api/skills/${category}`)
+      const res = await fetch(category ? `/api/skills/${category}` : '/api/skills')
       const { skills } = await res.json()
       set({ skills, loading: false })
+    } catch (err: any) {
+      set({ loading: false, error: 'impossible de récupérer les compétences' })
+    }
+  },
+  async fetchSkillScore() {
+    set({ loading: true, error: null, score: [] })
+    try {
+      const res = await fetch('/api/skills/score')
+      const { score } = await res.json()
+      set({ score, loading: false })
     } catch (err: any) {
       set({ loading: false, error: 'impossible de récupérer les compétences' })
     }
@@ -89,5 +111,6 @@ export function SkillProvider({ children, skill }: SkillProviderProps) {
 export function useSkill() {
   const ctx = useContext(SkillCtx)
   if (!ctx) throw new Error('useSkill must be used within a SkillProvider')
+
   return { skill: ctx }
 }

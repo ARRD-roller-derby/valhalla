@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { AuthLayout } from '@/layout'
 import { PageTabs } from '@/ui'
 import { ROLES, SKILL_CATEGORIES, checkRoles } from '@/utils'
-import { SkillFormModal, SkillList } from '@/components'
+import { SkillFormModal, SkillList, SkillMemberStats } from '@/components'
 export function Skills() {
   // Stores
   const { data: session } = useSession()
@@ -27,7 +27,7 @@ export function Skills() {
               tab: 'stats',
               element: (
                 <div className="flex flex-col gap-3 p-2">
-                  <p>ICI des stats</p>
+                  <SkillMemberStats />
                 </div>
               ),
             },

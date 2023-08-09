@@ -6,8 +6,8 @@ interface ISkillMedia {
   url: string
 }
 
-type TSkillCategory = 'derby' | 'patinage'
-type TSkillLevel = 'base' | 'intermédiaire' | 'avancé' | 'maîtrise'
+export type TSkillCategory = 'derby' | 'patinage'
+export type TSkillLevel = 'base' | 'intermédiaire' | 'avancé' | 'maîtrise'
 
 export interface IUserSkill {
   userId: string
