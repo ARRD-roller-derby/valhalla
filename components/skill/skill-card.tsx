@@ -12,7 +12,7 @@ export function SkillCard() {
 
   return (
     <Card>
-      <div className="flex flex-col  justify-between gap-3">
+      <div className="flex h-full flex-col  justify-between gap-3">
         <div className="flex flex-col gap-1">
           <Link href={`/skills/${skill._id}`}>
             <div className="text-md w-full rounded border border-arrd-secondary p-2 text-center  uppercase text-arrd-textExtraLight">
@@ -34,7 +34,14 @@ export function SkillCard() {
         <div className="text-arrd-textSecondary pb-2 text-sm">
           {skill.description && <ReadEditor content={skill.description} />}
         </div>
-        tags Mon Level ?<p>Barre pour mon level ? </p>
+        <div className="flex flex-wrap gap-1">
+          {skill.tags.map((tag) => (
+            <div className="text-sm text-arrd-secondary">
+              {'#'}
+              {tag}
+            </div>
+          ))}
+        </div>
         <div className="text-arrd-textSecondary mb-2 text-sm">{myLevel && <SkillLevelBar userLevel={myLevel} />}</div>
       </div>
     </Card>
