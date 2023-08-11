@@ -16,7 +16,7 @@ export function EventCard() {
 
   return (
     <Card>
-      <div className="grid grid-cols-[auto_1fr] gap-3">
+      <div className="grid h-full grid-cols-[auto_1fr] gap-3">
         <div className="flex flex-col items-center ">
           <div className="text-xs">{dayjs(event.start).format('dddd')}</div>
           <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.start).format('DD')}</div>
