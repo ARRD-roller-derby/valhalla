@@ -30,7 +30,7 @@ export function WeatherWidget() {
   // effects
   useEffect(() => {
     handleForecast()
-  }, [event, forecast])
+  }, [event])
 
   const handleForecast = () => {
     if (!event || !event?.address) return
