@@ -38,7 +38,7 @@ export function WeatherWidget() {
     const eventDate = dayjs(event.start)
     const today = dayjs()
     // il n'y aura pas de prévision à plus de 20 jours
-    if (eventDate.isAfter(today) && eventDate.diff(today, 'day') > 20) return
+    if (eventDate.isAfter(today) && eventDate.diff(today, 'day') < 20) return
 
     const { lon, lat } = event.address
     if (!lon || !lat) return
