@@ -30,21 +30,17 @@ export function WeatherWidget() {
   // effects
   useEffect(() => {
     handleForecast()
-  }, [event])
+  }, [event, forecast])
 
-  const handleForecast = async () => {
+  const handleForecast = () => {
     if (!event || !event?.address) return
-
-    const eventDate = dayjs(event.start)
-    const today = dayjs()
-    // il n'y aura pas de prévision à plus de 20 jours
-    if (eventDate.isAfter(today) && eventDate.diff(today, 'day') > 20) return
 
     const { lon, lat } = event.address
     if (!lon || !lat) return
     const dateFormatted = dayjs(event.start).set('minute', 0).set('second', 0).set('millisecond', 0).toDate()
 
-    const forecast = await getForecast(lon, lat)
+    const forecast = getForecast(lon, lat)
+    if (!forecast) return
     const idx = forecast.hourly.time.findIndex((h: string) => dayjs(`${h}Z`).isSame(dateFormatted, 'hour'))
 
     if (idx === -1) return

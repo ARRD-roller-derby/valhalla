@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 
 // Bibliothèques internes
-import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
+import { EventProvider, TriggerTypes, useEvents, useSocketTrigger, useWeather } from '@/entities'
 import { Loader } from '@/ui/Loader'
 import { EventCard } from '@/components'
 import { useSession } from 'next-auth/react'
@@ -14,13 +14,17 @@ export function NextEvents() {
   // stores
   const { data: session } = useSession()
   const { events, loading, fetchForNext, socketEvt } = useEvents()
+  const { getForecasts } = useWeather()
 
   // hooks
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
 
   // effects
   useEffect(() => {
-    if (session?.user) fetchForNext()
+    if (session?.user) {
+      fetchForNext()
+      getForecasts()
+    }
   }, [session])
 
   // render
