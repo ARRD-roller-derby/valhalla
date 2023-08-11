@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
-import { Weather } from '@/models'
+import { Address, Weather } from '@/models'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -27,42 +27,82 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
 
-  const latQuery = req.query.lat as string
-  const lonQuery = req.query.lon as string
+  const addresses = await Address.find()
+  const forecastsToCreate = []
+  const forecastsToUpdate = []
 
-  if (!latQuery || !lonQuery) return res.status(400).send('lat et lon sont obligatoires')
-
-  const lat = Number(latQuery).toFixed(2).toString()
-  const lon = Number(lonQuery).toFixed(2).toString()
-
-  const existingWeather = await Weather.findOne({
-    lat,
-    lon,
-    updatedAt: { $gte: dayjs().subtract(5, 'hour').toISOString() },
+  // Recherche des prévisions météo existantes pour les adresses
+  const existingForecasts = await Weather.find({
+    $or: addresses.map((address) => ({ lat: address.lat, lon: address.lon })),
   })
 
-  if (existingWeather) return res.status(200).json(existingWeather)
+  // Filtrage des adresses avec et sans prévisions
+  const addressesWithForecast = existingForecasts.map((forecast) => ({
+    lat: forecast.lat,
+    lon: forecast.lon,
+  }))
 
-  const resApi = await fetch(`${WEATHER_API_URL}&latitude=${lat}&longitude=${lon}`)
-  const resJson = await resApi.json()
-  const response = {
-    lat: resJson.latitude,
-    lon: resJson.longitude,
-    timezone: resJson.timezone,
-    hourly: {
-      ...resJson.hourly,
-      time: resJson.hourly.time.filter((hour: string) => dayjs(hour + 'Z').isAfter(dayjs())),
-    },
-    hourlyUnits: resJson.hourly_units,
+  const addressesWithoutForecast = addresses.filter(
+    (address) => !addressesWithForecast.some((forecast) => forecast.lat === address.lat && forecast.lon === address.lon)
+  )
+
+  // Création des prévisions manquantes
+  for (const address of addressesWithoutForecast) {
+    try {
+      const resApi = await fetch(
+        `${WEATHER_API_URL}&latitude=${address.lat.toFixed(2)}&longitude=${address.lon.toFixed(2)}`
+      )
+      const resJson = await resApi.json()
+      const newForecast = {
+        lat: address.lat,
+        lon: address.lon,
+        timezone: resJson.timezone,
+        hourly: {
+          ...resJson.hourly,
+          time: resJson.hourly.time.filter((hour: string) => dayjs(hour + 'Z').isAfter(dayjs())),
+        },
+        hourlyUnits: resJson.hourly_units,
+      }
+      forecastsToCreate.push(newForecast)
+    } catch (error) {
+      console.error(`Failed to create forecast for address ${address.lat}, ${address.lon}`, error)
+    }
   }
 
-  const existingWeatherWithoutDate = await Weather.findOne({ lat, lon })
-
-  if (existingWeatherWithoutDate) {
-    await Weather.updateOne({ lat, lon }, { updateAt: new Date() })
-  } else {
-    await Weather.create({ ...response, lat, lon, updatedAt: new Date() })
+  // Mise à jour des prévisions obsolètes
+  for (const forecast of existingForecasts) {
+    if (forecast.updatedAt <= dayjs().subtract(3, 'hour').toISOString()) {
+      try {
+        const resApi = await fetch(`${WEATHER_API_URL}&latitude=${forecast.lat}&longitude=${forecast.lon}`)
+        const resJson = await resApi.json()
+        const updatedForecast = {
+          lat: forecast.lat,
+          lon: forecast.lon,
+          timezone: resJson.timezone,
+          hourly: {
+            ...resJson.hourly,
+            time: resJson.hourly.time.filter((hour: string) => dayjs(hour + 'Z').isAfter(dayjs())),
+          },
+          hourlyUnits: resJson.hourly_units,
+        }
+        forecastsToUpdate.push({ id: forecast._id, forecast: updatedForecast })
+      } catch (error) {
+        console.error(`Failed to update forecast for address ${forecast.lat}, ${forecast.lon}:`, error)
+      }
+    }
   }
 
-  return res.status(200).json(response)
+  // Création des prévisions manquantes en une seule opération
+  if (forecastsToCreate.length > 0) {
+    await Weather.create(forecastsToCreate)
+  }
+
+  await Weather.updateMany(
+    { _id: { $in: forecastsToUpdate.map((forecast) => forecast.id) } },
+    forecastsToUpdate.map((forecast) => forecast.forecast)
+  )
+
+  const forecasts = await Weather.find()
+
+  return res.status(200).json({ forecasts })
 }
