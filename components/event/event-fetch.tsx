@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
-import { EventProvider, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
+import { EventProvider, TriggerTypes, useEvents, useSocketTrigger, useWeather } from '@/entities'
 import { Loader } from '@/ui/Loader'
 import { Event } from '@/components'
 
@@ -15,7 +15,7 @@ export function EventFetch() {
   // stores
   const { data: session } = useSession()
   const { loading, events, findOne, setEvent, getEvent } = useEvents()
-
+  const { getForecasts } = useWeather()
   // hooks
   const router = useRouter()
   useSocketTrigger<{ event: IEvent; userId: string }>(TriggerTypes.EVENT, (msg) => {
@@ -28,7 +28,10 @@ export function EventFetch() {
 
   // effects
   useEffect(() => {
-    if (session?.user) findOne(router.query.eventId as any)
+    if (session?.user) {
+      getForecasts()
+      findOne(router.query.eventId as any)
+    }
   }, [session])
 
   return (
