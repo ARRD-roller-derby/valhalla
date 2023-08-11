@@ -82,7 +82,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
     }
   }
 
-  events.forEach((event) => {
+  events.slice(0, 5).forEach((event) => {
     let markdown = `# ${event.title}\n\n`
     if (event.start) {
       markdown += `*Date: ${dayjs(event.start).format('LLLL')}*\n`
