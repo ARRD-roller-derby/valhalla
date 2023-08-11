@@ -40,7 +40,13 @@ export const participationTypes: IParticipationType[] = [
     roles: [ROLES.membre],
     type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match'],
   },
-
+  {
+    label: 'invité.e',
+    key: PARTICIPATION_TYPES.invite,
+    icon: <HandIcon className="h-6 w-6" />,
+    roles: [ROLES.invite, ROLES.membre],
+    type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale'],
+  },
   {
     label: 'organisateur·euse',
     key: PARTICIPATION_TYPES.organizer,
