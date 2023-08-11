@@ -69,7 +69,7 @@ export function EventParticipation() {
 
   if (dayjs(event.end).isBefore(dayjs())) return <></>
   return (
-    <div className="mt-2 fill-arrd-highlight">
+    <div className="mr-1 mt-2 fill-arrd-highlight">
       <div className="flex justify-end gap-3 pr-1">
         <div onClick={() => console.log('JE DOIS AFFICHER LES LABEL ET EXPLICATION POUR CLICK')}>
           <EventParticipationInfo />

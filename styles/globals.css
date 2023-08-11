@@ -84,6 +84,7 @@
     box-sizing: border-box;
     scrollbar-color: theme('colors.arrd.secondary') theme('colors.arrd.bgLight');
     scrollbar-width: thin;
+    outline: none;
   }
 
   ::-webkit-scrollbar {
