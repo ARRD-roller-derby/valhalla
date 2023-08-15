@@ -8,12 +8,13 @@ import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from 
 import { ArrowLeftIcon, CancelMsg, Card } from '@/ui'
 
 export function EventCard() {
-  // stores
+  // Stores -------------------------------------------------------------------
   const { event } = useEvent()
 
-  // const
+  // Constantes ----------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
 
+  // Rendu ---------------------------------------------------------------------
   return (
     <Card>
       <div className="grid h-full grid-cols-[auto_1fr] gap-3">

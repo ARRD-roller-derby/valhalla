@@ -29,7 +29,6 @@ export default async function event_participation(req: NextApiRequest, res: Next
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
-  //const isCanView = checkRoles(['bureau', 'dev', 'evénements', 'coach'], user)
   const form = JSON.parse(req.body || '{}')
   if (!form.eventId || !form.participation) return res.status(400).send('Il manque des informations')
   await MongoDb()

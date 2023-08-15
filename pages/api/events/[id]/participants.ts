@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event, Purchase, User } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { PURCHASE_TYPES, ROLES, checkRoles } from '@/utils'
+import { PURCHASE_TYPES, ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_participants(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +12,7 @@ export default async function event_participants(req: NextApiRequest, res: NextA
   const { user } = session
   if (!user) return res.status(403).send('non autorisé')
 
-  const canSee = checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], user)
+  const canSee = checkRoles(ROLES_CAN_MANAGE_EVENT, user)
 
   if (!canSee) {
     // rechercher un purchase de type spyAttendees dans l'heure

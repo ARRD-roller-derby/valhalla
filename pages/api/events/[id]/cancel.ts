@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { ROLES, checkRoles, publicParticipants } from '@/utils'
+import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, publicParticipants } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
 process.env.TZ = 'Europe/Paris'
@@ -31,7 +31,7 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
   const { user } = session
   if (!user) return res.status(403).send('non autorisé')
 
-  const canCancel = checkRoles([ROLES.coach, ROLES.evenement, ROLES.bureau, ROLES.dev], user)
+  const canCancel = checkRoles(ROLES_CAN_MANAGE_EVENT, user)
   if (!canCancel) return res.status(403).send('non autorisé')
 
   await MongoDb()

@@ -5,8 +5,10 @@ import { CancelMsg, PageTabs } from '@/ui'
 import { dc } from '@/utils'
 
 export function Event() {
+  // Stores -------------------------------------------------------------------
   const { event } = useEvent()
 
+  // Rendu --------------------------------------------------------------------
   return (
     <div className="grid h-full grid-rows-[auto_auto_1fr_auto] items-start gap-1 p-2">
       <div>

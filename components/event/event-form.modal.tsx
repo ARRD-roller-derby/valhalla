@@ -17,10 +17,10 @@ interface EventModalProps {
 }
 
 export function EventFormModal({ day, eventToUpdate, customButton }: EventModalProps) {
-  // stores
+  // Stores -----------------------------------------------------------------------------
   const { loading, currentDay, updateEvent, createEvent } = useEvents()
 
-  // const
+  // Constantes -------------------------------------------------------------------------
 
   const formInit = {
     type: EVENT_TYPES[0],
@@ -52,10 +52,10 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     } as TOption,
   }
 
-  // state
+  // States ------------------------------------------------------------------------------
   const [form, setForm] = useState(formInit)
 
-  // functions
+  // Fonctions ---------------------------------------------------------------------------
   const handleSubmit = async () => {
     const { description, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
@@ -95,12 +95,13 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     }
   }
 
-  // effect
+  // Effets ------------------------------------------------------------------------------
   useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
     if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
   }, [form.type])
 
+  // Render ------------------------------------------------------------------------------
   return (
     <Modal
       onOpen={() => setForm(formInit)}

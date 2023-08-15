@@ -1,11 +1,17 @@
-import { useSkills } from '@/entities'
-import { Card } from '@/ui'
-import { LevelBar } from '@/ui/level-bar'
-import { SKILL_CATEGORIES, SKILL_LEVELS_LABELS } from '@/utils'
+// Bibliothèques externes
 import { useEffect } from 'react'
 
+// Bibliothèques internes
+import { useSkills } from '@/entities'
+import { Card, Loader } from '@/ui'
+import { LevelBar } from '@/ui/level-bar'
+import { SKILL_LEVELS_LABELS } from '@/utils'
+
 export function SkillMemberStats() {
-  const { score, fetchSkillScore } = useSkills()
+  //Stores --------------------------------------------------
+  const { loading, score, fetchSkillScore } = useSkills()
+
+  // Constantes --------------------------------------------------
   const scoreByCategoryAndLevel = score.reduce(
     (
       acc: {
@@ -69,10 +75,21 @@ export function SkillMemberStats() {
     []
   )
 
-  console.log(scoreByCategoryAndLevel)
+  // Effets --------------------------------------------------
   useEffect(() => {
     fetchSkillScore()
   }, [])
+
+  // Rendu --------------------------------------------------
+  if (loading)
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Loader />
+      </div>
+    )
+
+  if (!loading && scoreByCategoryAndLevel.length === 0)
+    return <div className="flex h-full items-center justify-center">Aucune stats trouvée</div>
 
   return (
     <div className="flex flex-col items-center gap-4">

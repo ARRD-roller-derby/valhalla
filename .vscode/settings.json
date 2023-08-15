@@ -3,7 +3,7 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["arrd", "evenement", "goback", "headlessui", "localstate", "nextauth", "valhalla"],
+  "cSpell.words": ["arrd", "DOLAPIKEY", "evenement", "goback", "headlessui", "localstate", "nextauth", "valhalla"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }

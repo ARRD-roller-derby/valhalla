@@ -4,6 +4,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 
 // Bibliothèques internes
 import { dc } from '@/utils'
@@ -36,62 +37,17 @@ export function Avatar() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="divide-second-100 absolute right-0 z-30 m-3 w-56 origin-top-right divide-y rounded-md border border-arrd-bgLight bg-arrd-bgDark shadow-lg ring-opacity-5 focus:outline-none">
-          <div className="px-1 py-1 ">
-            <Menu.Item>{({ active }) => <button>Edit</button>}</Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={dc('group flex w-full items-center rounded-md px-2 py-2 text-sm', [
-                    active,
-                    'bg-violet-500 text-white',
-                    'text-gray-900',
-                  ])}
-                >
-                  Duplicate
-                </button>
-              )}
-            </Menu.Item>
-          </div>
-          <div className="px-1 py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={dc('group flex w-full items-center rounded-md px-2 py-2 text-sm', [
-                    active,
-                    'bg-violet-500 text-white',
-                    'text-gray-900',
-                  ])}
-                >
-                  Archive
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${
-                    active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                  } group  flex  w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  Move
-                </button>
-              )}
-            </Menu.Item>
-          </div>
-          <div className="px-1 py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${
-                    active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  Delete
-                </button>
-              )}
-            </Menu.Item>
-          </div>
+        <Menu.Items className="input divide-second-100 absolute right-0 z-30 m-3 flex w-56 origin-top-right flex-col divide-y">
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={dc('p-1 text-left text-sm text-arrd-textLight', [active, 'bg-arrd-secondary'])}
+                onClick={() => signOut()}
+              >
+                Déconnexion
+              </button>
+            )}
+          </Menu.Item>
         </Menu.Items>
       </Transition>
     </Menu>

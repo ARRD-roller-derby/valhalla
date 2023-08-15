@@ -1,12 +1,13 @@
 // Bibliothèques externes
 import { useEffect, useMemo, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
 import { useEvent, useEvents } from '@/entities'
 import { Button, DragonIcon, FooterModal, HandIcon, Modal } from '@/ui'
 import { Loader } from '@/ui/Loader'
-import { ROLES, checkRoles, dc, participationTypes } from '@/utils'
-import { useSession } from 'next-auth/react'
+import { dc, participationTypes } from '@/utils'
+import { useCanSee } from '@/hooks'
 
 // Modèles
 import { IParticipant } from '@/models'
@@ -32,31 +33,43 @@ const compareParticipants = (participantA: IParticipant, participantB: IParticip
 }
 
 export function EventAttendees() {
-  const [loading, setLoading] = useState(false)
-  const { participants, fetchParticipation, spyParticipation } = useEvents()
-  const { event } = useEvent()
+  // Stores --------------------------------------------------------------------
   const { data: session } = useSession()
+  const { participants, fetchParticipation, spyParticipation } = useEvents()
+
+  // States --------------------------------------------------------------------
+  const [loading, setLoading] = useState(false)
+
+  // Hooks ---------------------------------------------------------------------
+  const { event } = useEvent()
+
+  // Constantes ---------------------------------------------------------------
   const presentCount = participants.filter((p) => !p.status.match(/absent/)).length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
+  const { justEventManager } = useCanSee()
   const canSeeAttendees = useMemo(() => {
     if (!session?.user) return false
-    if (participants.length === 0) return checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session?.user)
+    if (participants.length === 0) return justEventManager
     return true
   }, [session])
 
+  // Fonctions ----------------------------------------------------------------
   const handleFetch = async () => {
     setLoading(true)
     await fetchParticipation(event._id)
     setLoading(false)
   }
-  useEffect(() => {
-    if (session?.user) handleFetch()
-  }, [session])
 
   const handleSpy = async () => {
     await spyParticipation(event._id)
   }
 
+  // Effets -------------------------------------------------------------------
+  useEffect(() => {
+    if (session?.user) handleFetch()
+  }, [session])
+
+  // Rendu --------------------------------------------------------------------
   return (
     <div className="mt-2 flex flex-col gap-2">
       <div className="flex justify-between">

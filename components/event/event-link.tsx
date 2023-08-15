@@ -10,9 +10,10 @@ interface EventLinkProps {
   small?: boolean
 }
 export function EventLink({ small = false }: EventLinkProps) {
-  // stores
+  // Stores -----------------------------------------------------------------
   const { event } = useEvent()
 
+  // Rendu ------------------------------------------------------------------
   return (
     <Link
       href={`/agenda/${event._id}`}

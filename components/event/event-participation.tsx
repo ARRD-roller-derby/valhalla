@@ -12,18 +12,18 @@ import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
 import { EventParticipationInfo } from './event-participation-info'
 
 export function EventParticipation() {
-  // stores
+  // Stores -----------------------------------------------------
   const { events, loadingEvent, changeMyParticipation, syncParticipation } = useEvents()
   const { event } = useEvent()
   const { data: session } = useSession()
 
-  // hooks
+  // Hooks ------------------------------------------------------
   useSocketTrigger<{ eventId: ObjectId }>(TriggerTypes.PARTICIPATION, ({ eventId }) => {
     if (!session?.user) return
     if (event?._id === eventId) syncParticipation(event._id)
   })
 
-  // const
+  // Constantes -------------------------------------------------
   const roles = useMemo(() => {
     if (!session?.user) return ['membre']
     return session?.user?.roles.map((role) => role.name.toLocaleLowerCase()) || []
@@ -59,7 +59,7 @@ export function EventParticipation() {
     }
   }, [event, events])
 
-  // render
+  // Rendu ------------------------------------------------------
   if (loadingEvent === event._id)
     return (
       <div className="flex justify-center">
@@ -71,7 +71,7 @@ export function EventParticipation() {
   return (
     <div className="mr-1 mt-2 fill-arrd-highlight">
       <div className="flex justify-end gap-3 pr-1">
-        <div onClick={() => console.log('JE DOIS AFFICHER LES LABEL ET EXPLICATION POUR CLICK')}>
+        <div>
           <EventParticipationInfo />
         </div>
         {participationTypes

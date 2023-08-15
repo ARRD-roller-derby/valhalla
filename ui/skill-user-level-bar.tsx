@@ -1,12 +1,17 @@
 import { dc } from '@/utils'
 import { CaretDownIcon } from '@/ui'
 import { IUserSkill } from '@/models'
+import { useSkill, useSkills } from '@/entities'
 
 interface SkillLevelBarProps {
-  userLevel: IUserSkill
+  providerAccountId: string
 }
 
-export function SkillLevelBar({ userLevel }: SkillLevelBarProps) {
+export function SkillUserLevelBar({ providerAccountId }: SkillLevelBarProps) {
+  const { skill } = useSkill()
+  const { mySkill } = useSkills()
+
+  const member = mySkill(skill._id, providerAccountId)
   const levelStr = [
     {
       label: 'Non acquis',
@@ -26,24 +31,25 @@ export function SkillLevelBar({ userLevel }: SkillLevelBarProps) {
   }>
 
   // renvoi le niveau de la compétence, en fonction de l'objet userSkill
-  const getSkillLevel = (userSkill: IUserSkill): string => {
-    if (userSkill.master) {
+  const getSkillLevel = (): string => {
+    if (!member) return 'notAcquired'
+    if (member.master) {
       return 'master'
-    } else if (userSkill.learned) {
+    } else if (member.learned) {
       return 'learned'
-    } else if (userSkill.notAcquired) {
+    } else if (member.notAcquired) {
       return 'notAcquired'
     } else {
       return 'notAcquired'
     }
   }
 
-  const level = getSkillLevel(userLevel)
+  const level = getSkillLevel()
 
   return (
     <div className="grid h-8 grid-cols-3 items-end">
       {levelStr.map((lvl) => (
-        <div className="relative">
+        <div className="relative" key={lvl.key}>
           {level === lvl.key && (
             <div
               className={dc(

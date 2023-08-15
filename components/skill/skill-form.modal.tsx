@@ -14,12 +14,11 @@ interface SkillCreateBtnProps {
 }
 export function SkillFormModal({ skill }: SkillCreateBtnProps) {
   //store
-  const { loadingCreate, createSkill } = useSkills()
+  const { loadingCreate, createSkill, updateSkill } = useSkills()
 
   // const
   const actionType = skill ? 'Modifier' : 'Créer' // ou modifier
   const descaler = skill ? 'la' : 'une' // ou modifier
-
   const formInit: {
     name: string
     msp: boolean
@@ -28,12 +27,12 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
     tags: string[]
     level: string
   } = {
-    name: '',
-    msp: false,
-    description: {},
-    category: SKILL_CATEGORIES.derby,
-    tags: [],
-    level: SKILL_LEVELS.base,
+    name: skill?.name || '',
+    msp: skill?.msp || false,
+    description: skill?.description || {},
+    category: skill?.category || SKILL_CATEGORIES.derby,
+    tags: skill?.tags || [],
+    level: skill?.level || SKILL_LEVELS.base,
   }
 
   // state
@@ -42,7 +41,11 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
   // Functions
 
   const handleCreate = async () => {
-    createSkill(form)
+    if (skill) {
+      updateSkill({ ...skill, ...form })
+    } else {
+      createSkill(form)
+    }
     setForm(formInit)
   }
 
@@ -54,7 +57,7 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
         <FooterModal
           closeModal={close}
           loading={loadingCreate}
-          txtConfirm="Créer la compétence"
+          txtConfirm={`${actionType} ${descaler} compétence`}
           onConfirm={handleCreate}
         />
       )}
@@ -66,11 +69,17 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
           </LabelBlock>
 
           <LabelBlock label="Catégorie">
-            <SkillCategorySelector onSelect={(category) => setForm((prev) => ({ ...prev, category }))} />
+            <SkillCategorySelector
+              defaultValue={skill?.category}
+              onSelect={(category) => setForm((prev) => ({ ...prev, category }))}
+            />
           </LabelBlock>
 
           <LabelBlock label="Niveau">
-            <SkillLevelSelector onSelect={(level) => setForm((prev) => ({ ...prev, level }))} />
+            <SkillLevelSelector
+              defaultValue={skill?.level}
+              onSelect={(level) => setForm((prev) => ({ ...prev, level }))}
+            />
           </LabelBlock>
 
           <div className="my-2">

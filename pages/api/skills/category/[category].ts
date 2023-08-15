@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { IUserSkill, Skill } from '@/models'
-import { authOptions } from '../auth/[...nextauth]'
+import { authOptions } from '../../auth/[...nextauth]'
 import { publicSkillUser } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 

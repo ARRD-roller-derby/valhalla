@@ -3,25 +3,28 @@ import { useSession } from 'next-auth/react'
 import dayjs from 'dayjs'
 
 // Bibliothèques internes
-import { ROLES_CAN_CREATE_EVENT, TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
-import { useIsMobile, useCalendar } from '@/hooks'
+import { TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
+import { useIsMobile, useCalendar, useCanSee } from '@/hooks'
 import { Button } from '@/ui'
 import { useEffect, useMemo } from 'react'
 import { CalDayDesktop, CalDayMobile, CalEventForDay, EventFormModal } from '@/components'
-import { checkRoles, dc } from '@/utils'
+import { dc } from '@/utils'
 
 // Modèles
 import { IEvent } from '@/models'
 
 export function Calendar() {
-  // stores
+  // Stores -----------------------------------------------------------------
   const { data: session } = useSession()
   const { events, currentDay, socketEvt, fetchForCal } = useEvents()
-  const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } = useCalendar()
 
-  // hooks
+  // Hooks ------------------------------------------------------------------
+  const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } = useCalendar()
   const isMobile = useIsMobile()
+  const { justEventManager } = useCanSee()
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
+
+  // Constantes -------------------------------------------------------------
   const calWithEvents = useMemo(() => {
     return cal.map((day) => {
       const dayEvents = events.filter((event) => {
@@ -32,18 +35,12 @@ export function Calendar() {
     })
   }, [cal, events])
 
-  // memo
-  const canSee = useMemo(() => {
-    if (!session?.user) return false
-    return checkRoles(ROLES_CAN_CREATE_EVENT, session.user)
-  }, [session])
-
-  // effects
+  // Effets -----------------------------------------------------------------
   useEffect(() => {
     fetchForCal(currentMonthNum)
   }, [fetchForCal, currentMonthNum])
 
-  // render
+  // Rendu ------------------------------------------------------------------
   if (!session?.user) return <></>
 
   return (
@@ -77,7 +74,7 @@ export function Calendar() {
 
         {isMobile && currentDay && (
           <div className="flex flex-col gap-4 py-4">
-            {canSee && (
+            {justEventManager && (
               <EventFormModal customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />} />
             )}
             <CalEventForDay />

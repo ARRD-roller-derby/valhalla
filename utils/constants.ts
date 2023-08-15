@@ -15,6 +15,7 @@ export const PUSHER_REGION = process.env.NEXT_PUBLIC_PUSHER_REGION || ''
 export const DISCORD_EVENT_HOOK = process.env.DISCORD_EVENT_HOOK || ''
 export const DISCORD_NEWS_HOOK = process.env.DISCORD_NEWS_HOOK || ''
 export const DISCORD_ADMIN_HOOK = process.env.DISCORD_ADMIN_HOOK || ''
+export const DOLAPIKEY = process.env.DOLAPIKEY || ''
 
 export const WEATHER_API_URL = process.env.WEATHER_API_URL || ''
 
@@ -51,6 +52,8 @@ export const ROLES = {
   com: 'com',
   fresh: 'fresh',
 }
+
+export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenement]
 
 export const PARTICIPATION_TYPES = {
   coach: 'coach',

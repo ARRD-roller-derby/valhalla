@@ -22,7 +22,7 @@ interface IForecastWidget {
 export function WeatherWidget() {
   // store
   const { event } = useEvent()
-  const { getForecast } = useWeather()
+  const { forecasts, getForecast } = useWeather()
 
   // state
   const [forecast, setForecast] = useState<IForecastWidget | null>(null)
@@ -30,7 +30,7 @@ export function WeatherWidget() {
   // effects
   useEffect(() => {
     handleForecast()
-  }, [event])
+  }, [forecasts])
 
   const handleForecast = () => {
     if (!event || !event?.address) return

@@ -7,6 +7,7 @@ interface IMember {
   id: string
   username: string
   avatar: string
+  providerAccountId: string
   roles: {
     id: string
     name: string
@@ -26,12 +27,17 @@ interface IStateMembers {
 }
 
 interface IGetMembers {
-  getMembers: () => Promise<void>
+  getMember: (providerAccountId: string) => IMember
+}
+
+interface IFetchMembers {
+  fetchMembers: () => Promise<void>
+  fetchMember: (providerAccountId: string) => Promise<void>
 }
 
 interface ISetMembers {}
 
-export type IMemberStore = IStateMembers & IGetMembers & ISetMembers
+export type IMemberStore = IStateMembers & IGetMembers & ISetMembers & IFetchMembers
 
 // STORE --------------------------------------------------------------------
 export const useMembers = create<IMemberStore>((set, get) => ({
@@ -39,20 +45,37 @@ export const useMembers = create<IMemberStore>((set, get) => ({
   loading: false,
 
   // GETTERS----------------------------------------------------------------
-  async getMembers() {
+  getMember(providerAccountId: string) {
+    const { members } = get()
+    return members.find((member) => member.providerAccountId === providerAccountId) as IMember
+  },
+
+  // FETCHES----------------------------------------------------------------
+  async fetchMembers() {
     set({ loading: true, members: [] })
     try {
       const res = await fetch('/api/members')
       const { members } = await res.json()
       set(() => ({ members, loading: false }))
     } catch (err: any) {
-      set({ loading: false, error: "impossible de créer l'événement" })
+      set({ loading: false, error: 'impossible de trouver les membres' })
+    }
+  },
+  async fetchMember(providerAccountId: string) {
+    set({ loading: true, members: [] })
+    try {
+      const res = await fetch(`/api/members/${providerAccountId}`)
+      const { member } = await res.json()
+      set({
+        members: [member],
+        loading: false,
+      })
+    } catch (err: any) {
+      set({ loading: false, error: 'impossible de trouve le membre' })
     }
   },
 
   // SETTERS----------------------------------------------------------------
-
-  // FETCHES----------------------------------------------------------------
 }))
 
 // CONTEXT ------------------------------------------------------------------

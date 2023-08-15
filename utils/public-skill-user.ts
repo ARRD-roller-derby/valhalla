@@ -9,6 +9,6 @@ export function publicSkillUser(skill: ISkill, user: IUser): IUserSkill[] {
 
   const users = skill?.users || []
   return users.filter((member: IUserSkill) => {
-    if (user.id === member.userId) return true
+    if (user.id === member.providerAccountId) return true
   })
 }

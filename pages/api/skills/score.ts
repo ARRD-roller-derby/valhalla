@@ -31,12 +31,12 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
   // Ajout de l'utilisateur à tous les skills, s'il n'y est pas déjà
   await Skill.updateMany(
     {
-      'users.userId': { $ne: session.user.id },
+      'users.providerAccountId': { $ne: session.user.providerAccountId },
     },
     {
       $push: {
         users: {
-          userId: session.user.id,
+          providerAccountId: session.user.providerAccountId,
           notAcquired: dayjs().toDate(),
           learned: null,
           master: null,
@@ -45,7 +45,7 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
     }
   )
 
-  const userId = session.user.id
+  const providerAccountId = session.user.providerAccountId
 
   const pipeline = [
     {
@@ -53,7 +53,7 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
     },
     {
       $match: {
-        'users.userId': userId,
+        'users.providerAccountId': providerAccountId,
       },
     },
     {
