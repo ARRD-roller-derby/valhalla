@@ -37,7 +37,8 @@ interface IStateWeather {
 }
 
 interface IGetWeather {
-  getForecast: (lat: number, lon: number) => Promise<IForecast>
+  getForecasts: () => Promise<IForecast[]>
+  getForecast: (lat: number, lon: number) => IForecast | undefined
 }
 
 interface ISetWeather {}
@@ -51,22 +52,16 @@ export const useWeather = create<IWeatherStore>((set, get) => ({
   loading: false,
   forecasts: [],
   // GETTERS----------------------------------------------------------------
-  async getForecast(lat, lon) {
+  async getForecasts() {
     set({ loading: true })
-    //je recherche d'abord si j'ai déjà les données dans le store
-    const { forecasts } = get()
-
-    const forecast = forecasts.find((f) => f.lat === lat && f.lon === lon)
-
-    if (forecast) {
-      set({ loading: false })
-      return forecast
-    }
-    const params = new URLSearchParams({ lat: lat.toString(), lon: lon.toString() })
-    const res = await fetch(`/api/weather?${params.toString()}`)
+    const res = await fetch('/api/weather')
     const resJson = await res.json()
-    set({ forecasts: [...forecasts, resJson], loading: false })
-    return resJson
+    set({ forecasts: resJson.forecasts, loading: false })
+    return resJson.forecasts
+  },
+  getForecast(lon, lat) {
+    const { forecasts } = get()
+    return forecasts.find((f) => f.lat === lat && f.lon === lon)
   },
 
   // SETTERS----------------------------------------------------------------
