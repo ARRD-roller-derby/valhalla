@@ -3,14 +3,19 @@ import { useEvent, useEvents } from '@/entities'
 import { Button, FooterModal, Modal } from '@/ui'
 
 export function EventCancelBtn() {
+  // Hooks -----------------------------------------------------------------------------------------------
   const { loadingEvent, cancel } = useEvents()
   const { event } = useEvent()
+
+  // Constantes -----------------------------------------------------------------------------------------------
   const actionType = event.cancelled ? 'Rétablir' : 'Annuler'
 
+  // Functions -----------------------------------------------------------------------------------------------
   const handleSubmit = async () => {
     await cancel(event._id)
   }
 
+  // Rendu -----------------------------------------------------------------------------------------------
   return (
     <Modal
       title={`${actionType} l'événement`}

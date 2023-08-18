@@ -13,7 +13,7 @@ import fr from 'dayjs/locale/fr'
 import { authOptions } from '../../auth/[...nextauth]'
 import { MongoDb } from '@/db'
 import { Address, Event } from '@/models'
-import { ROLES, checkRoles, publicParticipants, tiptapJsonToMd } from '@/utils'
+import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, publicParticipants, tiptapJsonToMd } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
 
@@ -34,7 +34,7 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
   const { user } = session
   if (!user) return res.status(403).send('non autorisé')
 
-  const canCancel = checkRoles([ROLES.coach, ROLES.evenement, ROLES.bureau, ROLES.dev], user)
+  const canCancel = checkRoles(ROLES_CAN_MANAGE_EVENT, user)
   if (!canCancel) return res.status(403).send('non autorisé')
 
   await MongoDb()

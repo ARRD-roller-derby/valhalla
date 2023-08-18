@@ -5,10 +5,10 @@ import { useMemo } from 'react'
 import { useEvent } from '@/entities'
 
 export function EventOrgaDetails() {
-  // stores
+  // Stores -------------------------------------------------------------------
   const { event } = useEvent()
 
-  // const
+  // Constantes ----------------------------------------------------------------
   const coachAndAssistCoach = useMemo(() => {
     return {
       coach: event.participants.find((part) => part.type === 'coach'),
@@ -16,6 +16,7 @@ export function EventOrgaDetails() {
     }
   }, [event.participants])
 
+  // Rendu ---------------------------------------------------------------------
   return (
     <>
       {(coachAndAssistCoach.coach || coachAndAssistCoach.assistCoach) && (

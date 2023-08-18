@@ -1,13 +1,11 @@
 // Bibliothèques externes
-import { useMemo } from 'react'
 import dayjs from 'dayjs'
-import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
 import { EventFormModal, EventLink } from '@/components'
-import { EventProvider, ROLES_CAN_CREATE_EVENT, useEvents } from '@/entities'
-import { ICallDay } from '@/hooks'
-import { checkRoles, dc } from '@/utils'
+import { EventProvider, useEvents } from '@/entities'
+import { ICallDay, useCanSee } from '@/hooks'
+import { dc } from '@/utils'
 import { Modal } from '@/ui'
 
 interface CalDayDesktopProps {
@@ -15,17 +13,15 @@ interface CalDayDesktopProps {
 }
 
 export function CalDayDesktop({ day }: CalDayDesktopProps) {
-  // stores
-  const { data: session } = useSession()
+  // Stores -----------------------------------------------------------------------------
   const { getEventForDay } = useEvents()
 
-  // const
+  // Hooks -----------------------------------------------------------------------------
+  const { justEventManager } = useCanSee()
+
+  // Constantes -----------------------------------------------------------------------------
   const events = getEventForDay(day.date)
   const noEvent = events.length === 0
-  const canSee = useMemo(() => {
-    if (!session?.user) return false
-    return checkRoles(ROLES_CAN_CREATE_EVENT, session.user)
-  }, [session])
 
   return (
     <div
@@ -40,7 +36,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
         customButton={(onClick) => (
           <div
             className="absolute right-0 top-1 w-full cursor-pointer pr-1 text-right text-xs font-semibold"
-            onClick={canSee ? onClick : undefined}
+            onClick={justEventManager ? onClick : undefined}
           >
             {day.date.format('DD')}
           </div>
@@ -48,7 +44,7 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
       />
 
       <div className="flex h-full flex-col pt-6 text-xs">
-        {noEvent && canSee && (
+        {noEvent && justEventManager && (
           <EventFormModal
             day={day.date}
             customButton={(onClick) => (

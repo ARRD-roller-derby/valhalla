@@ -6,22 +6,23 @@ import { useEvent, useEvents } from '@/entities'
 import { Button, FooterModal, Modal } from '@/ui'
 
 export function EventDeleteBtn() {
-  // stores
+  // Stores -----------------------------------------------------------------
   const { loadingEvent, del } = useEvents()
   const { event } = useEvent()
 
-  // hooks
+  // Hooks ------------------------------------------------------------------
   const router = useRouter()
 
-  // const
+  // Const ------------------------------------------------------------------
   const txt = "Supprimer l'événement"
 
-  // functions
+  // Fonctions --------------------------------------------------------------
   const handleSubmit = async () => {
     del(event._id)
     router.push('/agenda')
   }
 
+  //Rendu ------------------------------------------------------------------
   return (
     <Modal
       title={txt}

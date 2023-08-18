@@ -9,17 +9,18 @@ interface EventTypeSelectorProps {
 }
 
 export function EventTypeSelector({ onSelect, defaultValue }: EventTypeSelectorProps) {
-  // const
+  // Constantes --------------------------------------------------------------
   const eventTypes = EVENT_TYPES.map((eventType) => ({
     label: eventType,
     value: eventType,
   }))
   const val = defaultValue ? { label: defaultValue, value: defaultValue } : eventTypes[0]
 
-  // functions
+  // Fonctions ---------------------------------------------------------------
   const handleSelect = (option: TOption) => {
     onSelect(option.value as string)
   }
 
+  // Rendu -------------------------------------------------------------------
   return <ListSelector options={eventTypes} onSelect={handleSelect} defaultValue={val} />
 }

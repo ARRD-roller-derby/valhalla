@@ -12,7 +12,7 @@ import { authOptions } from '../auth/[...nextauth]'
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
-export default async function eventsNext(req: NextApiRequest, res: NextApiResponse) {
+export default async function members(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
 
@@ -36,6 +36,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
       return {
         ...member.user,
         roles,
+        providerAccountId: member.user.id,
         username: member?.nick || member.user.username,
         avatar: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`

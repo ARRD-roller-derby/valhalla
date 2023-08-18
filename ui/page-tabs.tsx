@@ -30,7 +30,7 @@ export function PageTabs({ tabs }: { tabs: ITab[] }) {
 
   return (
     <Tab.Group defaultIndex={defaultTab}>
-      <Tab.List className="sticky -top-1 z-10 flex justify-center gap-4 bg-arrd-bg p-1 text-arrd-primary">
+      <Tab.List className="sticky -top-1 z-10 flex flex-wrap justify-center gap-4 bg-arrd-bg p-1 text-arrd-primary">
         {tabs.map((tab) => (
           <Tab key={tab.title} className="p-0 hover:shadow-none" onClick={() => handleClick(tab)}>
             {({ selected }) => (

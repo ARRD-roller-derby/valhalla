@@ -1,5 +1,4 @@
 import { Schema, model, models } from 'mongoose'
-import { ITag, Tag } from './tag.model'
 
 interface ISkillMedia {
   type: 'image' | 'video'
@@ -10,15 +9,17 @@ export type TSkillCategory = 'derby' | 'patinage'
 export type TSkillLevel = 'base' | 'intermédiaire' | 'avancé' | 'maîtrise'
 
 export interface IUserSkill {
-  userId: string
+  providerAccountId: string
   notAcquired: Date | null
   learned: Date | null
   master: Date | null
+  username: string
+  avatar: string
 }
 
 // On garde la date ou on l'efface pour pouvoir faire des stats sur les skills
 const UserSkillsSchema = new Schema<IUserSkill>({
-  userId: String,
+  providerAccountId: String,
   notAcquired: Date,
   learned: Date,
   master: Date,

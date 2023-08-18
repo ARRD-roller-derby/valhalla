@@ -11,15 +11,15 @@ import { useSession } from 'next-auth/react'
 import { IEvent } from '@/models'
 
 export function NextEvents() {
-  // stores
+  // Stores -------------------------------------------------------------------
   const { data: session } = useSession()
   const { events, loading, fetchForNext, socketEvt } = useEvents()
-  const { getForecasts } = useWeather()
 
-  // hooks
+  // Hooks --------------------------------------------------------------------
+  const { getForecasts } = useWeather()
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
 
-  // effects
+  // Effets ------------------------------------------------------------------
   useEffect(() => {
     if (session?.user) {
       fetchForNext()
@@ -27,7 +27,7 @@ export function NextEvents() {
     }
   }, [session])
 
-  // render
+  // Rendu --------------------------------------------------------------------
   if (loading)
     return (
       <div className="flex items-center justify-center">
@@ -36,7 +36,7 @@ export function NextEvents() {
     )
 
   return (
-    <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+    <div className="flex flex-col gap-4 md:grid lg:grid-cols-2 xl:grid-cols-3">
       {events.map((event) => (
         <EventProvider event={event} key={event._id.toString()}>
           <EventCard />

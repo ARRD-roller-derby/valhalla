@@ -1,15 +1,24 @@
-import { useSkill } from '@/entities'
+import { useMember, useSkill } from '@/entities'
 import Link from 'next/link'
 import { ReadEditor } from '../editor'
-import { Card, SkillLevelBar } from '@/ui'
+import { Card, SkillUserLevelBar } from '@/ui'
 import { SKILL_LEVELS_LABELS, dc } from '@/utils'
 import { useSession } from 'next-auth/react'
+import { SkillEditModal } from './skill-edit-member.modal'
 
-export function SkillCard() {
+interface ISkillCardProps {
+  editable?: boolean
+}
+export function SkillCard({ editable }: ISkillCardProps) {
+  // Stores -----------------------------------
   const { data: session } = useSession()
+  const { member } = useMember()
   const { skill } = useSkill()
-  const myLevel = skill.users.find((user) => user.userId === session?.user?.id)
 
+  // Constantes -----------------------------------
+  const myLevel = skill.users.find((user) => user.providerAccountId === session?.user?.providerAccountId)
+
+  // Rendu -----------------------------------
   return (
     <Card>
       <div className="flex h-full flex-col  justify-between gap-3">
@@ -34,15 +43,31 @@ export function SkillCard() {
         <div className="text-arrd-textSecondary pb-2 text-sm">
           {skill.description && <ReadEditor content={skill.description} />}
         </div>
+
         <div className="flex flex-wrap gap-1">
           {skill.tags.map((tag) => (
-            <div className="text-sm text-arrd-secondary">
+            <div className="text-sm text-arrd-secondary" key={tag}>
               {'#'}
               {tag}
             </div>
           ))}
         </div>
-        <div className="text-arrd-textSecondary mb-2 text-sm">{myLevel && <SkillLevelBar userLevel={myLevel} />}</div>
+        {editable && (
+          <div className="flex items-center justify-between gap-2">
+            Modifier le niveau:
+            <SkillEditModal providerAccountId={member.providerAccountId} />
+          </div>
+        )}
+        <div className="text-arrd-textSecondary  flex flex-col gap-2 text-sm">
+          {myLevel && <SkillUserLevelBar providerAccountId={member.providerAccountId} />}
+          {
+            <div
+              className={dc('text-center text-xs', [skill.msp, 'text-arrd-primary', 'text-arrd-textError opacity-50'])}
+            >
+              {skill.msp ? 'Inclus' : 'Non inclus'} dans les MSP
+            </div>
+          }
+        </div>
       </div>
     </Card>
   )

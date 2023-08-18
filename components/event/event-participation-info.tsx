@@ -2,6 +2,7 @@ import { InfoIcon, Modal } from '@/ui'
 import { participationTypes } from '@/utils'
 
 export function EventParticipationInfo() {
+  // Rendu ------------------------------------------------------------------
   return (
     <Modal
       title="Signification des Icônes de Présence"

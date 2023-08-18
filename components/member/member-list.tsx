@@ -8,13 +8,13 @@ import { Loader } from '@/ui'
 import { MemberCard } from '@/components'
 
 export function MemberList() {
-  // Store
+  // Stores -------------------------------------------------------------------
   const { data: session } = useSession()
-  const { loading, members, getMembers } = useMembers()
+  const { loading, members, fetchMembers } = useMembers()
 
-  // Effets
+  // Effets -------------------------------------------------------------------
   useEffect(() => {
-    if (session?.user) getMembers()
+    if (session?.user) fetchMembers()
   }, [session])
 
   return (

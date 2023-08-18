@@ -13,23 +13,17 @@ import {
 } from '@/components'
 import dynamic from 'next/dynamic'
 import { DangerZone, EditIcon } from '@/ui'
-import { useSession } from 'next-auth/react'
-import { useMemo } from 'react'
-import { ROLES, checkRoles } from '@/utils'
+import { useCanSee } from '@/hooks'
 
 // Importation dynamique
 const Map = dynamic(() => import('../../ui/map').then((mod) => mod.Map), { ssr: false })
 
 export function EventDetails() {
-  // stores
+  // Stores -----------------------------------------------------------------
   const { event } = useEvent()
-  const { data: session } = useSession()
+  const { justEventManager } = useCanSee()
 
-  // const
-  const canEdit = useMemo(() => {
-    if (!session?.user) return false
-    return checkRoles([ROLES.bureau, ROLES.coach, ROLES.evenement], session.user)
-  }, [session])
+  // Constantes -------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
 
   return (
@@ -59,7 +53,7 @@ export function EventDetails() {
               </div>
             </div>
           )}
-          {canEdit && (
+          {justEventManager && (
             <EventFormModal
               eventToUpdate={event}
               customButton={(onClick) => (
@@ -79,7 +73,7 @@ export function EventDetails() {
             <Map {...event.address} />{' '}
           </div>
         )}
-        {canEdit && (
+        {justEventManager && (
           <DangerZone>
             <div className="flex w-full justify-between gap-2 text-xs">
               <EventDeleteBtn />

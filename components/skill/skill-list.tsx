@@ -10,9 +10,10 @@ import { ISkill } from '@/models'
 
 interface SkillListProps {
   category?: string
+  editable?: boolean
 }
 
-export function SkillList({ category }: SkillListProps) {
+export function SkillList({ category, editable }: SkillListProps) {
   // Store -----------------------------------
   const { loading, skills, fetchSkills } = useSkills()
 
@@ -36,12 +37,20 @@ export function SkillList({ category }: SkillListProps) {
     fetchSkills(category || SKILL_CATEGORIES.derby)
   }, [])
 
-  if (loading) return <Loader />
+  if (loading)
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Loader />
+      </div>
+    )
+
+  if (!loading && skills.length === 0)
+    return <div className="flex h-full items-center justify-center">Aucune compétence trouvée</div>
   return (
     <div className="flex flex-col gap-4 p-3 sm:grid sm:grid-cols-3 lg:grid-cols-4">
       {skills.sort(sortedSkills).map((skill) => (
         <SkillProvider skill={skill} key={skill._id.toString()}>
-          <SkillCard />
+          <SkillCard editable={editable} />
         </SkillProvider>
       ))}
     </div>

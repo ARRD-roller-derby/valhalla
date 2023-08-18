@@ -12,11 +12,12 @@ import { Event } from '@/components'
 import { IEvent } from '@/models'
 
 export function EventFetch() {
-  // stores
+  // Stores -------------------------------------------------------------
   const { data: session } = useSession()
   const { loading, events, findOne, setEvent, getEvent } = useEvents()
+
+  // Hooks --------------------------------------------------------------
   const { getForecasts } = useWeather()
-  // hooks
   const router = useRouter()
   useSocketTrigger<{ event: IEvent; userId: string }>(TriggerTypes.EVENT, (msg) => {
     if (!msg || !msg.event) return
@@ -24,9 +25,10 @@ export function EventFetch() {
     if (isThisEvent && msg.userId !== session?.user._id) setEvent(msg.event)
   })
 
+  // Constantes ---------------------------------------------------------
   const event = useMemo(() => getEvent(router.query.eventId as any), [session, router.query.eventId, events])
 
-  // effects
+  // Effets -------------------------------------------------------------
   useEffect(() => {
     if (session?.user) {
       getForecasts()
@@ -34,6 +36,7 @@ export function EventFetch() {
     }
   }, [session])
 
+  // Rendu --------------------------------------------------------------
   return (
     <>
       {loading && !event && (
