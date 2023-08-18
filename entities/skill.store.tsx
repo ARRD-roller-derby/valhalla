@@ -111,7 +111,7 @@ export const useSkills = create<ISkillStore>((set, get) => ({
     }
   },
   async fetchSkillByMembers(id) {
-    set({ loadingMember: true, error: null, members: [] })
+    set({ loadingMember: true, error: null })
     try {
       const res = await fetch(`/api/skills/${id}/members`)
       const { members } = await res.json()

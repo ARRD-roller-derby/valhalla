@@ -53,7 +53,7 @@ export function Skill() {
   // Effets --------------------------------------------------
   useSocketTrigger<{ event: ISkill }>(TriggerTypes.SKILLS, socketEvt)
   useEffect(() => {
-    if (!skill) fetchSkill(query.id as string)
+    fetchSkill(query.id as string)
   }, [query.id])
 
   // Render --------------------------------------------------
