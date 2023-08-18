@@ -101,7 +101,7 @@ export const useSkills = create<ISkillStore>((set, get) => ({
 
   // FETCHERS----------------------------------------------------------------
   async fetchSkill(id) {
-    set({ loading: true, error: null, skills: [] })
+    set({ loading: true, error: null, skills: [], score: [] })
     try {
       const res = await fetch(`/api/skills/${id}`)
       const { skill } = await res.json()
@@ -111,7 +111,7 @@ export const useSkills = create<ISkillStore>((set, get) => ({
     }
   },
   async fetchSkillByMembers(id) {
-    set({ loadingMember: true, error: null })
+    set({ loadingMember: true, error: null, score: [] })
     try {
       const res = await fetch(`/api/skills/${id}/members`)
       const { members } = await res.json()
@@ -121,7 +121,7 @@ export const useSkills = create<ISkillStore>((set, get) => ({
     }
   },
   async fetchSkills(category) {
-    set({ loading: true, error: null, skills: [] })
+    set({ loading: true, error: null, skills: [], score: [] })
     try {
       const res = await fetch(category ? `/api/skills/category/${category}` : '/api/skills')
       const { skills } = await res.json()
