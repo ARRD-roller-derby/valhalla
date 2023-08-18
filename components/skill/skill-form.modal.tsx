@@ -7,16 +7,20 @@ import { useSkills } from '@/entities'
 import { SkillLevelSelector } from './skill-level.selector'
 import { Editor } from '../editor'
 import { TagLevelSelector } from '../tag'
+import { useRouter } from 'next/router'
 
 interface SkillCreateBtnProps {
   onClick?: () => void
   skill?: ISkill
 }
 export function SkillFormModal({ skill }: SkillCreateBtnProps) {
-  //store
+  //Store ------------------------------------------------------
   const { loadingCreate, createSkill, updateSkill } = useSkills()
 
-  // const
+  // hooks ------------------------------------------------------
+  const router = useRouter()
+
+  // Constante ------------------------------------------------------
   const actionType = skill ? 'Modifier' : 'Créer' // ou modifier
   const descaler = skill ? 'la' : 'une' // ou modifier
   const formInit: {
@@ -46,7 +50,11 @@ export function SkillFormModal({ skill }: SkillCreateBtnProps) {
     } else {
       createSkill(form)
     }
+
     setForm(formInit)
+    router.push({
+      query: { tab: form.category },
+    })
   }
 
   return (

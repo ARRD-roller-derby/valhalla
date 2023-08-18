@@ -156,7 +156,12 @@ export const useSkills = create<ISkillStore>((set, get) => ({
         body: JSON.stringify(skill),
       })
       const { skill: newSkill } = await res.json()
-      set((state) => ({ skills: [...state.skills, newSkill], loadingCreate: false }))
+      const currentCat = get().skills[0]?.category
+
+      set((state) => ({
+        skills: newSkill.category === currentCat ? [...state.skills, newSkill] : [...state.skills],
+        loadingCreate: false,
+      }))
     } catch (err: any) {
       set({ loadingCreate: false, error: 'impossible de créer la compétence' })
     }
