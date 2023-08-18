@@ -14,21 +14,22 @@ export function SkillEditModal({ providerAccountId }: SkillEditModalProps) {
   const { skill } = useSkill()
   const { getMember } = useSkills()
   const member = getMember(providerAccountId)
+  const memberInSkill = skill.users.find((user) => user.providerAccountId === providerAccountId)
   const { loadingUpdateUserLevel, updateSkillUserLevel } = useSkills()
 
   // Constantes -----------------------------------
   const initialLevel = () => {
-    if (!member) return 'Non acquis'
-    if (member.master) return 'Maîtrisé'
-    if (member.learned) return 'Appris'
-    if (member.notAcquired) return 'Non acquis'
+    if (!memberInSkill) return 'Non acquis'
+    if (memberInSkill.master) return 'Maîtrisé'
+    if (memberInSkill.learned) return 'Appris'
+    if (memberInSkill.notAcquired) return 'Non acquis'
     return 'Non acquis'
   }
 
   // States -----------------------------------
   const [level, setLevel] = useState(initialLevel())
 
-  if (!member) return <></>
+  if (!memberInSkill || !member) return <></>
   return (
     <Modal
       title={`modifier le niveau de ${member.username} pour ${member.username}`}

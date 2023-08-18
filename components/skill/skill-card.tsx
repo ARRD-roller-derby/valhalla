@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { ReadEditor } from '../editor'
 import { Card, SkillUserLevelBar } from '@/ui'
 import { SKILL_LEVELS_LABELS, dc } from '@/utils'
-import { useSession } from 'next-auth/react'
 import { SkillEditModal } from './skill-edit-member.modal'
 
 interface ISkillCardProps {
@@ -11,12 +10,10 @@ interface ISkillCardProps {
 }
 export function SkillCard({ editable }: ISkillCardProps) {
   // Stores -----------------------------------
-  const { data: session } = useSession()
   const { member } = useMember()
   const { skill } = useSkill()
 
   // Constantes -----------------------------------
-  const myLevel = skill.users.find((user) => user.providerAccountId === session?.user?.providerAccountId)
 
   // Rendu -----------------------------------
   return (
@@ -59,7 +56,7 @@ export function SkillCard({ editable }: ISkillCardProps) {
           </div>
         )}
         <div className="text-arrd-textSecondary  flex flex-col gap-2 text-sm">
-          {myLevel && <SkillUserLevelBar providerAccountId={member.providerAccountId} />}
+          <SkillUserLevelBar providerAccountId={member.providerAccountId} />
           {
             <div
               className={dc('text-center text-xs', [skill.msp, 'text-arrd-primary', 'text-arrd-textError opacity-50'])}
