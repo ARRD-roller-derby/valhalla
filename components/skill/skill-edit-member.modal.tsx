@@ -29,7 +29,7 @@ export function SkillEditModal({ providerAccountId }: SkillEditModalProps) {
   // States -----------------------------------
   const [level, setLevel] = useState(initialLevel())
 
-  if (!memberInSkill || !member) return <></>
+  if (!member) return <></>
   return (
     <Modal
       title={`modifier le niveau de ${member.username} pour ${member.username}`}

@@ -18,7 +18,7 @@ export function Skill() {
 
   // Stores --------------------------------------------------
   const { data: session } = useSession()
-  const { getSkill, fetchSkill, socketEvt } = useSkills()
+  const { getSkill, fetchSkill, socketEvt, fetchSkillByMembers } = useSkills()
 
   // Const --------------------------------------------------
   const skill = getSkill(query.id as string)
@@ -55,6 +55,10 @@ export function Skill() {
   useEffect(() => {
     fetchSkill(query.id as string)
   }, [query.id])
+
+  useEffect(() => {
+    fetchSkillByMembers(skill?._id as string)
+  }, [skill])
 
   // Render --------------------------------------------------
   if (!user) return <></>

@@ -1,5 +1,4 @@
 import { useSkill, useSkills } from '@/entities'
-import { useEffect } from 'react'
 import { ReadEditor } from '../editor'
 import { Card, Loader, SkillUserLevelBar } from '@/ui'
 import { IUserSkill } from '@/models'
@@ -7,11 +6,7 @@ import { SkillEditModal } from '@/components'
 
 export function SkillByMembers() {
   const { skill } = useSkill()
-  const { loadingMember, members, fetchSkillByMembers } = useSkills()
-
-  useEffect(() => {
-    if (skill) fetchSkillByMembers(skill._id)
-  }, [])
+  const { loadingMember, members } = useSkills()
 
   if (!skill) return <></>
   return (
