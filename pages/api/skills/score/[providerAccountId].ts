@@ -29,6 +29,17 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
   const providerAccountId = req.query.providerAccountId as string
   await MongoDb()
 
+  await Skill.updateMany(
+    {},
+    {
+      $pull: {
+        users: {
+          providerAccountId: { $ne: session.user.providerAccountId },
+        },
+      },
+    }
+  )
+
   // Ajout de l'utilisateur à tous les skills, s'il n'y est pas déjà
   await Skill.updateMany(
     {
@@ -121,5 +132,6 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
   ]
 
   const score = await Skill.aggregate(pipeline)
+  console.log(score)
   return res.status(200).json({ score })
 }

@@ -53,7 +53,6 @@ export function SkillMemberStats() {
           percentage: Math.round((existingCategory.AcquiredCount / curr.total) * 100),
         })
       } else {
-        console.log(curr.total)
         acc.push({
           category: curr.category,
           total: curr.total,
@@ -78,6 +77,8 @@ export function SkillMemberStats() {
     },
     []
   )
+
+  console.log(scoreByCategoryAndLevel)
 
   // Effets --------------------------------------------------
   useEffect(() => {
