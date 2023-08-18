@@ -2,14 +2,17 @@
 import { useEffect } from 'react'
 
 // Bibliothèques internes
-import { useSkills } from '@/entities'
+import { useMember, useSkills } from '@/entities'
 import { Card, Loader } from '@/ui'
 import { LevelBar } from '@/ui/level-bar'
 import { SKILL_LEVELS_LABELS } from '@/utils'
+import { useSession } from 'next-auth/react'
 
 export function SkillMemberStats() {
   //Stores --------------------------------------------------
   const { loading, score, fetchSkillScore } = useSkills()
+  const { data: session } = useSession()
+  const { member } = useMember()
 
   // Constantes --------------------------------------------------
   const scoreByCategoryAndLevel = score.reduce(
@@ -47,9 +50,10 @@ export function SkillMemberStats() {
           learnedCount: curr.learnedCount,
           masterCount: curr.masterCount,
           AcquiredCount: curr.learnedCount + curr.masterCount,
-          percentage: Math.round(((curr.learnedCount + curr.masterCount) / curr.total) * 100),
+          percentage: Math.round((existingCategory.AcquiredCount / curr.total) * 100),
         })
       } else {
+        console.log(curr.total)
         acc.push({
           category: curr.category,
           total: curr.total,
@@ -77,7 +81,8 @@ export function SkillMemberStats() {
 
   // Effets --------------------------------------------------
   useEffect(() => {
-    fetchSkillScore()
+    const providerAccountId = member?.providerAccountId || session?.user?.providerAccountId
+    fetchSkillScore(providerAccountId as string)
   }, [])
 
   // Rendu --------------------------------------------------

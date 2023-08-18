@@ -40,7 +40,7 @@ interface IGetSkill {
 interface IFetchSkill {
   fetchSkills: (category?: string) => Promise<void>
   fetchSkill: (id: string) => Promise<void>
-  fetchSkillScore: () => Promise<void>
+  fetchSkillScore: (providerAccountId: string) => Promise<void>
   fetchSkillByMembers: (id: string) => Promise<void>
 }
 
@@ -130,10 +130,10 @@ export const useSkills = create<ISkillStore>((set, get) => ({
       set({ loading: false, error: 'impossible de récupérer les compétences' })
     }
   },
-  async fetchSkillScore() {
+  async fetchSkillScore(providerAccountId) {
     set({ loading: true, error: null, score: [] })
     try {
-      const res = await fetch('/api/skills/score')
+      const res = await fetch(`/api/skills/score/${providerAccountId}`)
       const { score } = await res.json()
       set({ score, loading: false })
     } catch (err: any) {

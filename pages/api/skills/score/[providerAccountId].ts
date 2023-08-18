@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Skill } from '@/models'
-import { authOptions } from '../auth/[...nextauth]'
+import { authOptions } from '../../auth/[...nextauth]'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -26,17 +26,18 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
 
+  const providerAccountId = req.query.providerAccountId as string
   await MongoDb()
 
   // Ajout de l'utilisateur à tous les skills, s'il n'y est pas déjà
   await Skill.updateMany(
     {
-      'users.providerAccountId': { $ne: session.user.providerAccountId },
+      'users.providerAccountId': { $ne: providerAccountId },
     },
     {
       $push: {
         users: {
-          providerAccountId: session.user.providerAccountId,
+          providerAccountId,
           notAcquired: dayjs().toDate(),
           learned: null,
           master: null,
@@ -44,8 +45,6 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
       },
     }
   )
-
-  const providerAccountId = session.user.providerAccountId
 
   const pipeline = [
     {
@@ -66,7 +65,7 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
           $sum: {
             $cond: [
               {
-                $and: [{ $ne: ['$users.notAcquired', null] }],
+                $and: [{ $eq: ['$users.learned', null] }, { $eq: ['$users.master', null] }],
               },
               1,
               0,
@@ -77,7 +76,7 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
           $sum: {
             $cond: [
               {
-                $and: [{ $ne: ['$users.learned', null] }],
+                $and: [{ $ne: ['$users.learned', null] }, { $eq: ['$users.master', null] }],
               },
               1,
               0,
@@ -88,7 +87,18 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
           $sum: {
             $cond: [
               {
-                $ne: ['$users.master', null],
+                $and: [{ $eq: ['$users.learned', null] }, { $ne: ['$users.master', null] }],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        total: {
+          $sum: {
+            $cond: [
+              {
+                $ne: ['$users.providerAccountId', null],
               },
               1,
               0,
@@ -102,15 +112,14 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
         _id: 0,
         category: '$_id.category',
         level: '$_id.level',
+        masterCount: 1,
         notAcquiredCount: 1,
         learnedCount: 1,
-        masterCount: 1,
-        total: {
-          $add: ['$notAcquiredCount', '$learnedCount', '$masterCount'],
-        },
+        total: 1,
       },
     },
   ]
+
   const score = await Skill.aggregate(pipeline)
   return res.status(200).json({ score })
 }
