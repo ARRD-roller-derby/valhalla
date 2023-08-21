@@ -6,8 +6,17 @@ import { Routes } from 'discord-api-types/v10'
 import { TRole, User } from '@/models'
 
 // Bibliothèque interne
-import { DISCORD_GUILD_ID, DISCORD_TOKEN, hexToTailwind } from '@/utils'
+import {
+  DISCORD_GUILD_ID,
+  DISCORD_TOKEN,
+  DOLAPIKEY,
+  DOL_URL,
+  ROLES_CAN_MANAGE_EVENT,
+  checkRoles,
+  hexToTailwind,
+} from '@/utils'
 import { authOptions } from '../../auth/[...nextauth]'
+import { IDolibarrMember } from '@/entities'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
@@ -33,10 +42,56 @@ export default async function member(req: NextApiRequest, res: NextApiResponse) 
       color: hexToTailwind(role.color),
     }))
 
+  const params = new URLSearchParams({
+    DOLAPIKEY: DOLAPIKEY,
+    limit: '1',
+    sqlfilters: `(t.note_private:like:%${providerAccountId}%)`,
+  })
+
+  const dolibarrRes = await fetch(`${DOL_URL}members?${params.toString()}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const dolibarrData = await dolibarrRes.json()
+
+  const dolibarrInfos: Partial<IDolibarrMember> = {}
+  if (dolibarrData.length > 0) {
+    const dolibarrMember = dolibarrData[0]
+    const canSeePrivateInfos = checkRoles(ROLES_CAN_MANAGE_EVENT, session.user) || session.user.id === providerAccountId
+
+    if (dolibarrMember) {
+      dolibarrInfos.type = dolibarrMember.type
+      dolibarrInfos.birth = dolibarrMember.birth
+      dolibarrInfos.gender = dolibarrMember.gender
+      dolibarrInfos.options_derbyname = dolibarrMember.array_options.options_derbyname
+      dolibarrInfos.options_nroster = dolibarrMember.array_options.options_nroster
+    }
+
+    if (canSeePrivateInfos) {
+      dolibarrInfos.datefin = dolibarrMember.datefin
+      dolibarrInfos.options_nlicence = dolibarrMember.array_options.options_nlicence
+      dolibarrInfos.options_allergies = dolibarrMember.array_options.options_allergies
+      dolibarrInfos.options_rgimealimentaire = dolibarrMember.array_options.options_rgimealimentaire
+      dolibarrInfos.first_subscription_date_start = dolibarrMember.first_subscription_date_start
+      dolibarrInfos.first_subscription_date_end = dolibarrMember.first_subscription_date_end
+      dolibarrInfos.first_subscription_date = dolibarrMember.first_subscription_date
+      dolibarrInfos.first_subscription_amount = dolibarrMember.first_subscription_amount
+      dolibarrInfos.last_subscription_amount = dolibarrMember.last_subscription_amount
+      dolibarrInfos.phone_perso = dolibarrMember.phone_perso
+      dolibarrInfos.town = dolibarrMember.town
+      dolibarrInfos.zip = dolibarrMember.zip
+      dolibarrInfos.address = dolibarrMember.address
+    }
+  }
+
   return res.status(200).json({
     member: {
-      ...user,
+      ...user.toJSON(),
       ...providerMember.user,
+      ...dolibarrInfos,
       roles,
       providerAccountId,
       username: providerMember?.nick || providerMember.user.username,

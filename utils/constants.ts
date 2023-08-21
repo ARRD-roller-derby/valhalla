@@ -16,6 +16,7 @@ export const DISCORD_EVENT_HOOK = process.env.DISCORD_EVENT_HOOK || ''
 export const DISCORD_NEWS_HOOK = process.env.DISCORD_NEWS_HOOK || ''
 export const DISCORD_ADMIN_HOOK = process.env.DISCORD_ADMIN_HOOK || ''
 export const DOLAPIKEY = process.env.DOLAPIKEY || ''
+export const DOL_URL = process.env.DOL_URL || ''
 
 export const WEATHER_API_URL = process.env.WEATHER_API_URL || ''
 
@@ -89,3 +90,14 @@ export const SKILL_LEVELS = {
 
 // utilisé pour les filtres, mais aussi pour définir l'ordre d'affichage des skills
 export const SKILL_LEVELS_LABELS = ['base', 'intermédiaire', 'avancé', 'maîtrise']
+
+//regimes Alimentaire, ref à dolibarr
+export const DIET = [
+  { label: 'Omnivore', value: '1' },
+  { label: 'Végétarien', value: '2' },
+  { label: 'Végétalien', value: '3' },
+  { label: 'Pescotarien', value: '4' },
+  { label: 'Crudivore', value: '5' },
+  { label: 'Paléo', value: '6' },
+  { label: 'Sans Gluten', value: '8' },
+]
