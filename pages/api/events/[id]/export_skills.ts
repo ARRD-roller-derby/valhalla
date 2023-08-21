@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { Event, IParticipant, IUser, Skill, User } from '@/models'
+import { Event, IParticipant, IUser, IUserSkill, Skill, User } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
 import { ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
 import { ObjectId } from 'mongodb'
@@ -47,29 +47,21 @@ export default async function event_export_skills(req: NextApiRequest, res: Next
     users.map((u) => u.providerAccountId)
   )
   // recherche des skills non acquis par les participants
-  const skills = await Skill.find({
-    $or: [
-      {
-        'users.providerAccountId': {
-          $in: users.map((u) => u.providerAccountId),
-        },
-        'users.learned': {
-          $eq: null,
-        },
-        category: eventType,
-      },
-      {
-        'users.providerAccountId': {
-          $nin: users.map((u) => u.providerAccountId),
-        },
-        category: eventType,
-      },
-    ],
-  }).select('name category users level msp')
+  const skills = await Skill.find({ category: eventType }).select('name category users level msp')
 
   const csvSkills = skills.map((s) => `${s.name.toUpperCase()}${s.msp ? '(msp)' : ''}`).join(',')
   const csvHeader = `NOM,${csvSkills},OBSERVATIONS`
-  const csvBody = users.map((p: IUser) => `${p.name},${skills.map((_) => '')},`).join('\n')
+  const csvBody = users
+    .map(
+      (p: IUser) =>
+        `${p.name},${skills.map((skills) => {
+          const userSkill = skills.users.find((u: IUserSkill) => u.providerAccountId === p.providerAccountId)
+          if (!userSkill) return ''
+          if (userSkill.learned) return 'X'
+          if (userSkill.master) return 'XX'
+        })},`
+    )
+    .join('\n')
   return res.status(200).json({
     csv: `${csvHeader}\n${csvBody}`,
   })
