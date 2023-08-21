@@ -14,6 +14,7 @@ interface EventProviderProps {
 interface IStateEvents {
   events: IEvent[]
   loading: boolean
+  loadingExport: boolean
   loadingEvent: ObjectId | null
   error?: string
   currentDay?: dayjs.Dayjs
@@ -42,6 +43,7 @@ interface ISetEvents {
   cancel(eventId: ObjectId): Promise<void>
   del(eventId: ObjectId): Promise<void>
   socketEvt: (msg: any) => void
+  exportEventSkills: (eventId: ObjectId) => Promise<string>
 }
 
 export interface IEventForm {
@@ -80,6 +82,7 @@ export type IEventStore = IStateEvents & IGetEvents & ISetEvents
 export const useEvents = create<IEventStore>((set, get) => ({
   events: [],
   loading: false,
+  loadingExport: false,
   loadingEvent: null,
   participants: [],
   // GETTERS----------------------------------------------------------------
@@ -131,6 +134,17 @@ export const useEvents = create<IEventStore>((set, get) => ({
       }))
     } catch (err: any) {
       set({ loading: false, error: "impossible de récupérer l' événement" })
+    }
+  },
+
+  async exportEventSkills(eventId) {
+    set({ loadingExport: true })
+    try {
+      const res = await fetch(`/api/events/${eventId}/export_skills`)
+      const { csv } = await res.json()
+      return csv
+    } catch (err: any) {
+      set({ loadingExport: false, error: "impossible de récupérer l' événement" })
     }
   },
   async fetchForCal(month) {

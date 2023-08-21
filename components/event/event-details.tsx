@@ -14,6 +14,7 @@ import {
 import dynamic from 'next/dynamic'
 import { DangerZone, EditIcon } from '@/ui'
 import { useCanSee } from '@/hooks'
+import { EventExportSkillsBtn } from './event-export-skills.button'
 
 // Importation dynamique
 const Map = dynamic(() => import('../../ui/map').then((mod) => mod.Map), { ssr: false })
@@ -29,6 +30,11 @@ export function EventDetails() {
   return (
     <div className="relative grid h-full grid-rows-[1fr]">
       <div className="absolute bottom-0 left-0 right-0 top-0 m-auto flex w-full flex-col items-start gap-3 overflow-auto p-2 sm:min-w-[500px] sm:max-w-[600px]">
+        {justEventManager && event.type.match(/derby|patinage/) && (
+          <div className="my-1 flex w-full justify-center">
+            <EventExportSkillsBtn />
+          </div>
+        )}
         <div className="flex items-center gap-3">
           {isOneDay ? (
             <div className="flex flex-wrap justify-between gap-2">
@@ -53,6 +59,7 @@ export function EventDetails() {
               </div>
             </div>
           )}
+
           {justEventManager && (
             <EventFormModal
               eventToUpdate={event}
