@@ -54,7 +54,7 @@ export default async function event_export_skills(req: NextApiRequest, res: Next
   const csvBody = users
     .map(
       (p: IUser) =>
-        `${p.name},${skills.map((skills) => {
+        `${p.name.split(' ').join('_')},${skills.map((skills) => {
           const userSkill = skills.users.find((u: IUserSkill) => u.providerAccountId === p.providerAccountId)
           if (!userSkill) return ''
           if (userSkill.learned) return 'X'
