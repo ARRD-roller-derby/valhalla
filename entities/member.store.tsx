@@ -3,7 +3,29 @@ import { ReactNode, createContext, useContext } from 'react'
 import { create } from 'zustand'
 
 // TYPES --------------------------------------------------------------------
-interface IMember {
+
+export interface IDolibarrMember {
+  first_subscription_date_start: number
+  first_subscription_date_end: number
+  first_subscription_date: number
+  first_subscription_amount: string
+  last_subscription_amount: string
+  phone_perso?: string
+  datefin?: number
+  town?: string
+  zip?: string
+  address?: string
+  type: string // type de souscription de licence
+  birth?: string
+  options_allergies: string
+  options_derbyname: string
+  options_nroster: string
+  options_nlicence: string
+  options_rgimealimentaire?: string
+  gender: 'man' | 'woman' | 'other' | undefined
+}
+
+interface IMember extends IDolibarrMember {
   id: string
   username: string
   avatar: string
