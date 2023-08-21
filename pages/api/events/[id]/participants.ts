@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { Event, Purchase, User } from '@/models'
+import { Event, Purchase } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { PURCHASE_TYPES, ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
+import { PURCHASE_TYPES, ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_participants(req: NextApiRequest, res: NextApiResponse) {
