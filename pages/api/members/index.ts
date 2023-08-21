@@ -6,7 +6,7 @@ import { Routes } from 'discord-api-types/v10'
 import { TRole } from '@/models'
 
 // Bibliothèque interne
-import { DISCORD_GUILD_ID, DISCORD_TOKEN, hexToTailwind } from '@/utils'
+import { DISCORD_GUILD_ID, DISCORD_TOKEN, DOLAPIKEY, DOL_URL, dolibarrMemberParser, hexToTailwind } from '@/utils'
 import { authOptions } from '../auth/[...nextauth]'
 
 // Initialiser le fuseau horaire
@@ -24,6 +24,20 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
   const membersRes: any = await rest.get(Routes.guildMembers(DISCORD_GUILD_ID), { query })
   const guildRoles = (await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))) as TRole[]
 
+  const params = new URLSearchParams({
+    DOLAPIKEY: DOLAPIKEY,
+    limit: '1000', //TODO, voir à faire un filtre sur les membres actifs avec sqlfiters sans casser la limite URL
+  })
+
+  const dolibarrRes = await fetch(`${DOL_URL}members?${params.toString()}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const dolibarrData = await dolibarrRes.json()
+
   const members = membersRes
     .map((member: any) => {
       const roles = guildRoles
@@ -33,8 +47,16 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
           name: role.name,
           color: hexToTailwind(role.color),
         }))
+
+      const dolibarrMember = dolibarrData.find((dolibarrMember: any) =>
+        dolibarrMember.note_private.includes(member.user.id)
+      )
+
+      const dolibarrInfos = dolibarrMember ? dolibarrMemberParser([dolibarrMember], session.user, member.user.id) : {}
+
       return {
         ...member.user,
+        ...dolibarrInfos,
         roles,
         providerAccountId: member.user.id,
         username: member?.nick || member.user.username,

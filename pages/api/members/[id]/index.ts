@@ -17,6 +17,7 @@ import {
 } from '@/utils'
 import { authOptions } from '../../auth/[...nextauth]'
 import { IDolibarrMember } from '@/entities'
+import { dolibarrMemberParser } from '../../../../utils/dolibarr-member-parser'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
@@ -57,35 +58,7 @@ export default async function member(req: NextApiRequest, res: NextApiResponse) 
 
   const dolibarrData = await dolibarrRes.json()
 
-  const dolibarrInfos: Partial<IDolibarrMember> = {}
-  if (dolibarrData.length > 0) {
-    const dolibarrMember = dolibarrData[0]
-    const canSeePrivateInfos = checkRoles(ROLES_CAN_MANAGE_EVENT, session.user) || session.user.id === providerAccountId
-
-    if (dolibarrMember) {
-      dolibarrInfos.type = dolibarrMember.type
-      dolibarrInfos.birth = dolibarrMember.birth
-      dolibarrInfos.gender = dolibarrMember.gender
-      dolibarrInfos.options_derbyname = dolibarrMember.array_options.options_derbyname
-      dolibarrInfos.options_nroster = dolibarrMember.array_options.options_nroster
-    }
-
-    if (canSeePrivateInfos) {
-      dolibarrInfos.datefin = dolibarrMember.datefin
-      dolibarrInfos.options_nlicence = dolibarrMember.array_options.options_nlicence
-      dolibarrInfos.options_allergies = dolibarrMember.array_options.options_allergies
-      dolibarrInfos.options_rgimealimentaire = dolibarrMember.array_options.options_rgimealimentaire
-      dolibarrInfos.first_subscription_date_start = dolibarrMember.first_subscription_date_start
-      dolibarrInfos.first_subscription_date_end = dolibarrMember.first_subscription_date_end
-      dolibarrInfos.first_subscription_date = dolibarrMember.first_subscription_date
-      dolibarrInfos.first_subscription_amount = dolibarrMember.first_subscription_amount
-      dolibarrInfos.last_subscription_amount = dolibarrMember.last_subscription_amount
-      dolibarrInfos.phone_perso = dolibarrMember.phone_perso
-      dolibarrInfos.town = dolibarrMember.town
-      dolibarrInfos.zip = dolibarrMember.zip
-      dolibarrInfos.address = dolibarrMember.address
-    }
-  }
+  const dolibarrInfos = dolibarrMemberParser(dolibarrData, user, providerAccountId)
 
   return res.status(200).json({
     member: {

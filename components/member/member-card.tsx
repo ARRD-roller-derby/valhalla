@@ -16,6 +16,7 @@ export function MemberCard() {
           <Link href={`/repertoire/${member.id}`}>
             <div className="text-md uppercase text-arrd-primary">{member.username}</div>
           </Link>
+          {member.type && <div className="text-sm text-arrd-highlight first-letter:uppercase">{member.type}</div>}
           <div className="flex items-end">
             <MemberRoles />
           </div>
