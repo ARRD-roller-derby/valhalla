@@ -26,23 +26,25 @@ export function MemberDetails() {
             Type de licence: <span className="text-arrd-highlight">{member.type}</span>
           </div>
         )}
-        <div className="rounded border border-arrd-border p-2">
-          {member.options_nlicence && (
-            <div>
-              N° de licence: <span className="text-arrd-highlight">{member.options_nlicence}</span>
-            </div>
-          )}
-          {member.options_nroster && (
-            <div>
-              N° de roster: <span className="text-arrd-highlight">{member.options_nroster}</span>
-            </div>
-          )}
-          {member.options_derbyname && (
-            <div>
-              Derby name: <span className="text-arrd-highlight">{member.options_derbyname}</span>
-            </div>
-          )}
-        </div>
+        {(member.options_nlicence || member.options_nroster || member.options_derbyname) && (
+          <div className="rounded border border-arrd-border p-2">
+            {member.options_nlicence && (
+              <div>
+                N° de licence: <span className="text-arrd-highlight">{member.options_nlicence}</span>
+              </div>
+            )}
+            {member.options_nroster && (
+              <div>
+                N° de roster: <span className="text-arrd-highlight">{member.options_nroster}</span>
+              </div>
+            )}
+            {member.options_derbyname && (
+              <div>
+                Derby name: <span className="text-arrd-highlight">{member.options_derbyname}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {diet && (
           <div>
