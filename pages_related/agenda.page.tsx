@@ -8,6 +8,7 @@ import { AuthLayout } from '@/layout'
 import { Button, PageTabs } from '@/ui'
 import { ROLES, checkRoles } from '@/utils'
 import { useMemo } from 'react'
+import { EventSExportIcsBtn } from '@/components/event/events-export-ics.button'
 
 export function Agenda() {
   // Stores
@@ -31,14 +32,15 @@ export function Agenda() {
               tab: 'events',
               element: (
                 <div className="flex flex-col gap-3 p-2">
-                  {canSee && (
-                    <div className="flex justify-end">
+                  <div className="flex justify-end gap-2">
+                    <EventSExportIcsBtn />
+                    {canSee && (
                       <EventFormModal
                         day={dayjs()}
                         customButton={(onClick) => <Button text="Créer un évènement" onClick={onClick} />}
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   <NextEvents />
                 </div>

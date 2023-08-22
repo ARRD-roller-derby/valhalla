@@ -44,6 +44,7 @@ interface ISetEvents {
   del(eventId: ObjectId): Promise<void>
   socketEvt: (msg: any) => void
   exportEventSkills: (eventId: ObjectId) => Promise<string>
+  exportEventsIcs: () => Promise<string>
 }
 
 export interface IEventForm {
@@ -143,6 +144,16 @@ export const useEvents = create<IEventStore>((set, get) => ({
       const res = await fetch(`/api/events/${eventId}/export_skills`)
       const { csv } = await res.json()
       return csv
+    } catch (err: any) {
+      set({ loadingExport: false, error: "impossible de récupérer l' événement" })
+    }
+  },
+  async exportEventsIcs() {
+    set({ loadingExport: true })
+    try {
+      const res = await fetch(`/api/events/export`)
+      const { ics } = await res.json()
+      return ics
     } catch (err: any) {
       set({ loadingExport: false, error: "impossible de récupérer l' événement" })
     }
