@@ -84,11 +84,13 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
 
       const durationValue = dayjs(event.end).diff(dayjs(event.start), 'minute')
       const duration = { minutes: durationValue }
-
+      const protocol = req.headers['x-forwarded-proto'] || 'https'
+      const baseUrl = `${protocol}://${req.headers.host}`
       return {
         title: event?.title || event.type,
         start,
         duration,
+        url: `${baseUrl}/events/${event._id}`,
       }
     })
   )
