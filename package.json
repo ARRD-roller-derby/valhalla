@@ -26,6 +26,7 @@
     "discord-api-types": "^0.37.43",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.5",
+    "ics": "^3.4.0",
     "leaflet": "^1.9.4",
     "mongodb": "^5.6.0",
     "mongoose": "^7.2.4",
