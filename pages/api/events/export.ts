@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
-import { Event } from '@/models'
+import { EEventType, Event } from '@/models'
 import { authOptions } from '../auth/[...nextauth]'
 import { createEvents } from 'ics'
 process.env.TZ = 'Europe/Paris'
@@ -84,11 +84,14 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
 
       const durationValue = dayjs(event.end).diff(dayjs(event.start), 'minute')
       const duration = { minutes: durationValue }
-
+      const protocol = req.headers['x-forwarded-proto'] || 'https'
+      const baseUrl = `${protocol}://${req.headers.host}`
       return {
         title: event?.title || event.type,
         start,
         duration,
+        url: `${baseUrl}/events/${event._id}`,
+        description: event.type === EEventType.online ? 'En ligne' : event?.address?.label || '',
       }
     })
   )

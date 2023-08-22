@@ -121,6 +121,5 @@ export default async function skills_score(req: NextApiRequest, res: NextApiResp
   ]
 
   const score = await Skill.aggregate(pipeline)
-  console.log(score)
   return res.status(200).json({ score })
 }
