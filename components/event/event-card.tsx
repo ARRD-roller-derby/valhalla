@@ -3,13 +3,14 @@ import dayjs from 'dayjs'
 import Link from 'next/link'
 
 // Bibliothèques internes
-import { useEvent } from '@/entities'
+import { useEvent, useWeather } from '@/entities'
 import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
 import { ArrowLeftIcon, CancelMsg, Card } from '@/ui'
 
 export function EventCard() {
   // Stores -------------------------------------------------------------------
   const { event } = useEvent()
+  const { loading } = useWeather()
 
   // Constantes ----------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
@@ -61,7 +62,7 @@ export function EventCard() {
             <div className="text-arrd-textSecondary pb-2 text-sm">
               {event.description && <ReadEditor content={event.description} />}
             </div>
-            {event.address?.lat && event.address?.lon && <WeatherWidget />}
+            {event.address?.lat && event.address?.lon && !loading && <WeatherWidget />}
           </div>
           {event.cancelled ? <CancelMsg /> : <EventParticipation />}
         </div>
