@@ -22,7 +22,7 @@ interface IForecastWidget {
 export function WeatherWidget() {
   // store
   const { event } = useEvent()
-  const { forecasts, getForecast } = useWeather()
+  const { getForecast } = useWeather()
 
   // state
   const [forecast, setForecast] = useState<IForecastWidget | null>(null)
@@ -30,22 +30,26 @@ export function WeatherWidget() {
   // effects
   useEffect(() => {
     handleForecast()
-  }, [forecasts])
+  }, [])
 
   const handleForecast = () => {
     if (!event || !event?.address) return
 
     const { lon, lat } = event.address
     if (!lon || !lat) return
-    const dateFormatted = dayjs(event.start).set('minute', 0).set('second', 0).set('millisecond', 0).toDate()
+    const dateFormatted = dayjs(event.start)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .format('YYYY-MM-DDTHH:00')
 
-    const forecast = getForecast(lon, lat)
-    if (!forecast) return
-    const idx = forecast.hourly.time.findIndex((h: string) => dayjs(`${h}Z`).isSame(dateFormatted, 'hour'))
+    const forecastSt = getForecast(lon, lat)
+    if (!forecastSt) return
+    const idx = forecastSt.hourly.time.findIndex((h: string) => h === dateFormatted)
 
     if (idx === -1) return
     const { apparent_temperature, temperature_2m, precipitation_probability, precipitation, rain, snowfall, is_day } =
-      forecast.hourly
+      forecastSt.hourly
     const forecastForEvent: IForecastWidget = {
       apparent_temperature: apparent_temperature[idx],
       temperature_2m: temperature_2m[idx],
@@ -54,7 +58,7 @@ export function WeatherWidget() {
       rain: rain[idx],
       snowfall: snowfall[idx],
       is_day: is_day[idx],
-      hourlyUnits: forecast.hourlyUnits,
+      hourlyUnits: forecastSt.hourlyUnits,
     }
     setForecast(forecastForEvent)
   }

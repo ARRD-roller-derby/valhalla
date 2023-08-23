@@ -71,13 +71,12 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
 
   // Mise à jour des prévisions obsolètes
   for (const forecast of existingForecasts) {
-    if (forecast.updatedAt <= dayjs().subtract(3, 'hour').toISOString()) {
+    if (dayjs(forecast.hourly.time[0] + 'Z').isBefore(dayjs().subtract(3, 'hour'))) {
       try {
         const resApi = await fetch(`${WEATHER_API_URL}&latitude=${forecast.lat}&longitude=${forecast.lon}`)
         const resJson = await resApi.json()
+
         const updatedForecast = {
-          lat: forecast.lat,
-          lon: forecast.lon,
           timezone: resJson.timezone,
           hourly: {
             ...resJson.hourly,
@@ -86,6 +85,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
           hourlyUnits: resJson.hourly_units,
         }
         forecastsToUpdate.push({ id: forecast._id, forecast: updatedForecast })
+        await Weather.updateOne({ _id: forecast._id }, updatedForecast)
       } catch (error) {
         console.error(`Failed to update forecast for address ${forecast.lat}, ${forecast.lon}:`, error)
       }
@@ -96,11 +96,6 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
   if (forecastsToCreate.length > 0) {
     await Weather.create(forecastsToCreate)
   }
-
-  await Weather.updateMany(
-    { _id: { $in: forecastsToUpdate.map((forecast) => forecast.id) } },
-    forecastsToUpdate.map((forecast) => forecast.forecast)
-  )
 
   const forecasts = await Weather.find()
 
