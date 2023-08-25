@@ -41,7 +41,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
   const members = membersRes
     .map((member: any) => {
       const roles = guildRoles
-        .filter((role) => member.roles.includes(role.id))
+        .filter((role) => member?.roles?.includes(role.id))
         .map((role) => ({
           id: role.id,
           name: role.name,
@@ -49,7 +49,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
         }))
 
       const dolibarrMember = dolibarrData.find((dolibarrMember: any) =>
-        dolibarrMember.note_private.includes(member.user.id)
+        dolibarrMember?.note_private ? dolibarrMember.note_private.includes(member.user.id) : false
       )
 
       const dolibarrInfos = dolibarrMember ? dolibarrMemberParser([dolibarrMember], session.user, member.user.id) : {}
