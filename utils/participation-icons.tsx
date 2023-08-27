@@ -23,7 +23,7 @@ export const participationTypes: IParticipationType[] = [
     label: 'assist coach',
     key: PARTICIPATION_TYPES['assist-coach'],
     icon: <HelpIcon className="h-6 w-6" />,
-    roles: [ROLES.coach],
+    roles: [ROLES.membre],
     type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match'],
   },
   {

@@ -44,7 +44,7 @@ export function EventAttendees() {
   const { event } = useEvent()
 
   // Constantes ---------------------------------------------------------------
-  const presentCount = participants.filter((p) => !p.status.match(/absent/)).length
+  const presentCount = participants.filter((p) => !p.type.match(/absent/)).length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
   const { justEventManager } = useCanSee()
   const canSeeAttendees = useMemo(() => {
@@ -131,7 +131,7 @@ export function EventAttendees() {
               <div
                 key={p.name}
                 className={dc('flex items-center  gap-2 rounded border border-arrd-bgLight p-2', [
-                  !!p.status.match(/absent/),
+                  !!p.type.match(/absent/),
                   'opacity-50',
                 ])}
               >
