@@ -49,6 +49,10 @@ export function EventAttendees() {
   const { justEventManager } = useCanSee()
   const canSeeAttendees = useMemo(() => {
     if (!session?.user) return false
+    if (participants.length === 1) {
+      if (participants[0].userId === session.user.id) return justEventManager
+      return false
+    }
     if (participants.length === 0) return justEventManager
     return true
   }, [session])
