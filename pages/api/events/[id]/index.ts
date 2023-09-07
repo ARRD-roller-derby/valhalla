@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { ROLES, checkRoles, publicParticipants } from '@/utils'
+import { ROLES, checkRoles } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 export default async function event_findOne(req: NextApiRequest, res: NextApiResponse) {
@@ -33,9 +33,6 @@ export default async function event_findOne(req: NextApiRequest, res: NextApiRes
   }
 
   return res.status(200).json({
-    event: {
-      ...event.toJSON(),
-      participants: publicParticipants(event, user),
-    },
+    event,
   })
 }

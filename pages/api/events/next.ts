@@ -4,7 +4,6 @@ import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { Event } from '@/models'
 import { authOptions } from '../auth/[...nextauth]'
-import { publicParticipants } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -61,13 +60,5 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
 
   await MongoDb()
   const events = await Event.find({ $or: or }).sort({ start: 1 })
-
-  const eventsWithoutParticipants = events.map((event) => {
-    const { participants, ...rest } = event.toObject()
-    return {
-      ...rest,
-      participants: publicParticipants(event, user),
-    }
-  })
-  return res.status(200).json({ events: eventsWithoutParticipants })
+  return res.status(200).json({ events })
 }

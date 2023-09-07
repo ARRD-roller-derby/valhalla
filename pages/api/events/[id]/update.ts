@@ -13,7 +13,7 @@ import fr from 'dayjs/locale/fr'
 import { authOptions } from '../../auth/[...nextauth]'
 import { MongoDb } from '@/db'
 import { Address, Event } from '@/models'
-import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, publicParticipants, tiptapJsonToMd } from '@/utils'
+import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, tiptapJsonToMd } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
 
@@ -65,11 +65,7 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
   await trigger('public', TriggerTypes.EVENT, {
     value: {
       userId: user.id,
-      event: {
-        ...newEvent.toJSON(),
-
-        participants: publicParticipants(event, user),
-      },
+      event,
     },
   })
 
@@ -91,9 +87,6 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
   await publishToDiscord('event', markdown)
 
   return res.status(200).json({
-    event: {
-      ...newEvent.toJSON(),
-      participants: publicParticipants(event, user),
-    },
+    event,
   })
 }

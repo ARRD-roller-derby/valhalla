@@ -16,7 +16,7 @@ export const participationTypes: IParticipationType[] = [
     label: 'coach',
     key: PARTICIPATION_TYPES.coach,
     icon: <WhistleIcon className="h-6 w-6" />,
-    roles: [ROLES.coach],
+    roles: [ROLES.membre],
     type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match'],
   },
   {
@@ -45,7 +45,7 @@ export const participationTypes: IParticipationType[] = [
     label: 'organisateur·euse',
     key: PARTICIPATION_TYPES.organizer,
     icon: <OrganizerIcon className="h-6 w-6" />,
-    roles: [ROLES.coach, ROLES.bureau, ROLES.evenement],
+    roles: [ROLES.membre],
     type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale'],
   },
   {
