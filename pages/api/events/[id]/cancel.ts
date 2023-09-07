@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
-import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, publicParticipants } from '@/utils'
+import { ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
 process.env.TZ = 'Europe/Paris'
@@ -43,10 +43,7 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
 
   await trigger('public', TriggerTypes.EVENT, {
     value: {
-      event: {
-        ...event.toJSON(),
-        participants: publicParticipants(event, user),
-      },
+      event,
     },
   })
 
@@ -58,9 +55,6 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
   }
 
   return res.status(200).json({
-    event: {
-      ...event.toJSON(),
-      participants: publicParticipants(event, user),
-    },
+    event,
   })
 }

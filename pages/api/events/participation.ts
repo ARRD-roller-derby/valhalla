@@ -3,7 +3,7 @@ import { MongoDb } from '@/db'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../auth/[...nextauth]'
 import { Event, IParticipant } from '@/models'
-import { capitalizeFirstLetter, publicParticipants } from '@/utils'
+import { capitalizeFirstLetter } from '@/utils'
 import { bank, publishToDiscord, trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
 process.env.TZ = 'Europe/Paris'
@@ -102,10 +102,7 @@ Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
   })
 
   return res.status(200).json({
-    event: {
-      ...event.toJSON(),
-      participants: publicParticipants(event, user),
-    },
+    event,
     participant,
   })
 }

@@ -1,13 +1,12 @@
 // Bibliothèques externes
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
 import { useEvent, useEvents } from '@/entities'
-import { Button, DragonIcon, FooterModal, HandIcon, Modal } from '@/ui'
+import { HandIcon } from '@/ui'
 import { Loader } from '@/ui/Loader'
 import { dc, participationTypes } from '@/utils'
-import { useCanSee } from '@/hooks'
 
 // Modèles
 import { IParticipant } from '@/models'
@@ -35,7 +34,7 @@ const compareParticipants = (participantA: IParticipant, participantB: IParticip
 export function EventAttendees() {
   // Stores --------------------------------------------------------------------
   const { data: session } = useSession()
-  const { participants, fetchParticipation, spyParticipation } = useEvents()
+  const { participants, fetchParticipation } = useEvents()
 
   // States --------------------------------------------------------------------
   const [loading, setLoading] = useState(false)
@@ -46,26 +45,12 @@ export function EventAttendees() {
   // Constantes ---------------------------------------------------------------
   const presentCount = participants.filter((p) => !p.type.match(/absent/)).length
   const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
-  const { justEventManager } = useCanSee()
-  const canSeeAttendees = useMemo(() => {
-    if (!session?.user) return false
-    if (participants.length === 1) {
-      if (participants[0].userId === session.user.id) return justEventManager
-      return false
-    }
-    if (participants.length === 0) return justEventManager
-    return true
-  }, [session])
 
   // Fonctions ----------------------------------------------------------------
   const handleFetch = async () => {
     setLoading(true)
     await fetchParticipation(event._id)
     setLoading(false)
-  }
-
-  const handleSpy = async () => {
-    await spyParticipation(event._id)
   }
 
   // Effets -------------------------------------------------------------------
@@ -85,42 +70,7 @@ export function EventAttendees() {
             </div>
           )}
         </div>
-        <div>
-          {!canSeeAttendees && (
-            <Modal
-              title={`Voir les participants`}
-              button={(onClick) => (
-                <Button
-                  onClick={onClick}
-                  text={participants.length === 0 ? 'Espionner' : 'rafraîchir'}
-                  type="secondary"
-                />
-              )}
-              footer={(close) => (
-                <FooterModal
-                  closeModal={close}
-                  loading={loading}
-                  txtConfirm={`Espionner pour 35 dr.`}
-                  onConfirm={() => handleSpy()}
-                />
-              )}
-            >
-              {() => (
-                <div className="p-4">
-                  <p>Cette action vous permet de voir les participants à l'événement.</p>
-                  <p>
-                    Êtes-vous sûr de vouloir <span className="font-bold">Espionner</span>{' '}
-                    <span className="text-arrd-highlight">{event.title}</span> ?
-                  </p>
-                  <div className="flex w-full flex-wrap gap-1 text-center italic">
-                    Cette action vous coûtera <span className="font-bold text-arrd-highlight"> 35 </span>
-                    <DragonIcon className="fill-arrd-highlight" />
-                  </div>
-                </div>
-              )}
-            </Modal>
-          )}
-        </div>
+        <div></div>
       </div>
       {loading && (
         <div className="flex justify-center">

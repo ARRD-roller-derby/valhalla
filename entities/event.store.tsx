@@ -35,7 +35,6 @@ interface ISetEvents {
   fetchForNext: () => Promise<void>
   fetchParticipation: (eventId: ObjectId) => Promise<void>
   syncParticipation: (eventId: ObjectId) => Promise<void>
-  spyParticipation(eventId: ObjectId): Promise<void>
   setCurrentDay: (day: dayjs.Dayjs) => void
   createEvent: (event: IEventForm) => Promise<void>
   updateEvent: (id: ObjectId, event: IEventForm) => Promise<void>
@@ -188,16 +187,6 @@ export const useEvents = create<IEventStore>((set, get) => ({
         loadingEvent: null,
         events: get().events.map((e) => (e._id === eventId ? { ...e, participants } : e)),
       })
-    } catch (err: any) {
-      set({ loadingEvent: null, error: 'impossible de récupérer les participants' })
-    }
-  },
-  async spyParticipation(id) {
-    set({ loadingEvent: id })
-    try {
-      const res = await fetch(`/api/events/${id}/spy`)
-      const { participants } = await res.json()
-      set({ participants, loadingEvent: null })
     } catch (err: any) {
       set({ loadingEvent: null, error: 'impossible de récupérer les participants' })
     }
