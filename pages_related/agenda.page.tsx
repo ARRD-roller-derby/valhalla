@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
-import { Calendar, NextEvents, EventFormModal } from '@/components'
+import { Calendar, NextEvents, EventFormModal, EventFilterButton } from '@/components'
 import { AuthLayout } from '@/layout'
 import { Button, PageTabs } from '@/ui'
 import { ROLES, checkRoles } from '@/utils'
@@ -32,7 +32,7 @@ export function Agenda() {
               tab: 'events',
               element: (
                 <div className="flex flex-col gap-3 p-2">
-                  <div className="flex justify-end gap-2">
+                  <div className="flex  items-center justify-end gap-2">
                     <EventSExportIcsBtn />
                     {canSee && (
                       <EventFormModal
@@ -41,7 +41,7 @@ export function Agenda() {
                       />
                     )}
                   </div>
-
+                  <EventFilterButton />
                   <NextEvents />
                 </div>
               ),

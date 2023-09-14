@@ -12,10 +12,10 @@ interface CalDayMobileProps {
 
 export function CalDayMobile({ day }: CalDayMobileProps) {
   // Stores -------------------------------------------------------------------
-  const { getEventForDay, currentDay, setCurrentDay } = useEvents()
+  const { currentDay, getEventForDay, eventFilter, setCurrentDay } = useEvents()
 
   // Constantes --------------------------------------------------------------
-  const events = getEventForDay(day.date)
+  const events = getEventForDay(day.date).filter(eventFilter)
 
   // Rendu -------------------------------------------------------------------
   return (

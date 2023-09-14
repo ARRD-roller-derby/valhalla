@@ -13,7 +13,7 @@ import { IEvent } from '@/models'
 export function NextEvents() {
   // Stores -------------------------------------------------------------------
   const { data: session } = useSession()
-  const { events, loading, fetchForNext, socketEvt } = useEvents()
+  const { events, eventsTypesFilters, loading, eventFilter, fetchForNext, socketEvt } = useEvents()
 
   // Hooks --------------------------------------------------------------------
   const { getForecasts } = useWeather()
@@ -37,7 +37,7 @@ export function NextEvents() {
 
   return (
     <div className="flex flex-col gap-4 md:grid lg:grid-cols-2 xl:grid-cols-3">
-      {events.map((event) => (
+      {events.filter(eventFilter).map((event) => (
         <EventProvider event={event} key={event._id.toString()}>
           <EventCard />
         </EventProvider>

@@ -25,16 +25,17 @@ export interface IDolibarrMember {
   gender: 'man' | 'woman' | 'other' | undefined
 }
 
+interface TRole {
+  id: string
+  name: string
+  color: string
+}
 interface IMember extends IDolibarrMember {
   id: string
   username: string
   avatar: string
   providerAccountId: string
-  roles: {
-    id: string
-    name: string
-    color: string
-  }[]
+  roles: TRole[]
 }
 
 interface MemberProviderProps {
@@ -44,6 +45,7 @@ interface MemberProviderProps {
 
 interface IStateMembers {
   members: IMember[]
+  roles: TRole[]
   loading: boolean
   error?: string
 }
@@ -55,6 +57,7 @@ interface IGetMembers {
 interface IFetchMembers {
   fetchMembers: () => Promise<void>
   fetchMember: (providerAccountId: string) => Promise<void>
+  fetchProfiles: () => Promise<void>
 }
 
 interface ISetMembers {}
@@ -65,6 +68,7 @@ export type IMemberStore = IStateMembers & IGetMembers & ISetMembers & IFetchMem
 export const useMembers = create<IMemberStore>((set, get) => ({
   members: [],
   loading: false,
+  roles: [],
 
   // GETTERS----------------------------------------------------------------
   getMember(providerAccountId: string) {
@@ -94,6 +98,17 @@ export const useMembers = create<IMemberStore>((set, get) => ({
       })
     } catch (err: any) {
       set({ loading: false, error: 'impossible de trouve le membre' })
+    }
+  },
+  async fetchProfiles() {
+    set({ loading: true, roles: [] })
+    try {
+      const res = await fetch('/api/members/profiles')
+
+      const { roles } = await res.json()
+      set({ roles, loading: false })
+    } catch (err: any) {
+      set({ loading: false, error: 'impossible de trouver les profils' })
     }
   },
 

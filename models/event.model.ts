@@ -5,6 +5,7 @@ export enum EEventType {
   derbyTraining = 'Entraînement de derby',
   skateTraining = 'Cours de patinage',
   generalAssembly = 'Assemblée générale',
+  ride = 'Randonnée / Balade',
   scrimmage = 'Scrimmage',
   match = 'Match',
   bootcamp = 'Bootcamp',
