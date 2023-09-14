@@ -147,3 +147,7 @@
 .leaflet-container {
   z-index: 1;
 }
+
+.ProseMirror h1 {
+  margin: 1rem auto !important;
+}
