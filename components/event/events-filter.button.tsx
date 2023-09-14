@@ -60,7 +60,7 @@ export function EventFilterButton() {
 
   // Rendu --------------------------------------------------------------------
   return (
-    <div className="m-auto max-w-[500px] flex-grow">
+    <div className="m-auto flex-grow md:w-[300px]">
       <ListSelector options={options} onSelect={handleSelect} defaultValue={val} />
     </div>
   )
