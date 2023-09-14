@@ -7,7 +7,7 @@ import { TriggerTypes, useEvents, useSocketTrigger } from '@/entities'
 import { useIsMobile, useCalendar, useCanSee } from '@/hooks'
 import { Button } from '@/ui'
 import { useEffect, useMemo } from 'react'
-import { CalDayDesktop, CalDayMobile, CalEventForDay, EventFormModal } from '@/components'
+import { CalDayDesktop, CalDayMobile, CalEventForDay, EventFilterButton, EventFormModal } from '@/components'
 import { dc } from '@/utils'
 
 // Modèles
@@ -44,7 +44,8 @@ export function Calendar() {
   if (!session?.user) return <></>
 
   return (
-    <div className="rounded-lg p-4">
+    <div className="flex flex-col gap-2 rounded-lg p-2 md:gap-1">
+      <EventFilterButton />
       <div className="mb-4 grid grid-cols-[auto_1fr_auto] items-center justify-center">
         <Button text="Précédent" onClick={previousMonth} />
         <div className="text-center font-bold text-arrd-highlight first-letter:uppercase md:text-xl">

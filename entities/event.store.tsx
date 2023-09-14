@@ -11,6 +11,8 @@ interface EventProviderProps {
   event: IEvent
 }
 
+export type TEventTypeFilter = 'tous' | 'derby' | 'patin' | 'pieds'
+
 interface IStateEvents {
   events: IEvent[]
   loading: boolean
@@ -19,12 +21,14 @@ interface IStateEvents {
   error?: string
   currentDay?: dayjs.Dayjs
   participants: IParticipant[]
+  eventsTypesFilters: TEventTypeFilter[]
 }
 
 interface IGetEvents {
   getEvent: (id: ObjectId) => IEvent | undefined
   getEventForDay: (date: dayjs.Dayjs) => IEvent[]
   getEventForCurrentDay(): IEvent[] | undefined
+  eventFilter: (event: IEvent) => boolean
 }
 
 interface ISetEvents {
@@ -44,6 +48,7 @@ interface ISetEvents {
   socketEvt: (msg: any) => void
   exportEventSkills: (eventId: ObjectId) => Promise<string>
   exportEventsIcs: () => Promise<string>
+  setEventsTypesFilters: (filters: TEventTypeFilter[]) => void
 }
 
 export interface IEventForm {
@@ -65,6 +70,7 @@ export const ROLES_CAN_CREATE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenemen
 export const EVENT_TYPES = [
   'Entraînement de derby',
   'Cours de patinage',
+  'Randonnée / Balade',
   'Assemblée générale',
   'Scrimmage',
   'Match',
@@ -85,6 +91,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
   loadingExport: false,
   loadingEvent: null,
   participants: [],
+  eventsTypesFilters: ['tous'],
   // GETTERS----------------------------------------------------------------
   getEvent(id) {
     const { events } = get()
@@ -98,6 +105,15 @@ export const useEvents = create<IEventStore>((set, get) => ({
     const { events, currentDay } = get()
     if (!currentDay) return
     return events.filter((event) => dayjs(event.start).isSame(currentDay, 'day'))
+  },
+  eventFilter(event) {
+    const { eventsTypesFilters } = get()
+    if (eventsTypesFilters.includes('tous')) return true
+    if (eventsTypesFilters.includes('patin') && event.type.match(/patin|balade/i)) return true
+    if (eventsTypesFilters.includes('derby') && event.type.match(/derby|scrimmage|match|bootcamp/i)) return true
+    if (eventsTypesFilters.includes('pieds') && !event.type.match(/derby|scrimmage|match|bootcamp|patin|balade/i))
+      return true
+    return false
   },
 
   // SETTERS----------------------------------------------------------------
@@ -120,6 +136,9 @@ export const useEvents = create<IEventStore>((set, get) => ({
     if (!msg) return
     if (msg.delete) set((state) => ({ events: state.events.filter((e) => e._id !== msg.delete) }))
     if (msg.event) setEvent(msg.event)
+  },
+  setEventsTypesFilters(filters) {
+    set({ eventsTypesFilters: filters })
   },
   // FETCHES----------------------------------------------------------------
   // utilisé pour une page unique, voir si on fait le fetch en SSR

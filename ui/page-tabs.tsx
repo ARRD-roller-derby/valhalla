@@ -36,10 +36,11 @@ export function PageTabs({ tabs }: { tabs: ITab[] }) {
             {({ selected }) => (
               /* Use the `selected` state to conditionally style the selected tab. */
               <div
-                className={dc(
-                  'border-b-2  text-lg transition duration-200 ease-in-out first-letter:uppercase md:text-sm',
-                  [selected, 'border-arrd-highlight', 'border-arrd-primary']
-                )}
+                className={dc('text-md  border-b-2 transition duration-200 ease-in-out first-letter:uppercase', [
+                  selected,
+                  'border-arrd-highlight',
+                  'border-arrd-primary',
+                ])}
               >
                 {tab.title}
               </div>

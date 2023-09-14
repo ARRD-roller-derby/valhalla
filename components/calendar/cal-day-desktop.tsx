@@ -14,13 +14,13 @@ interface CalDayDesktopProps {
 
 export function CalDayDesktop({ day }: CalDayDesktopProps) {
   // Stores -----------------------------------------------------------------------------
-  const { getEventForDay } = useEvents()
+  const { eventFilter, getEventForDay } = useEvents()
 
   // Hooks -----------------------------------------------------------------------------
   const { justEventManager } = useCanSee()
 
   // Constantes -----------------------------------------------------------------------------
-  const events = getEventForDay(day.date)
+  const events = getEventForDay(day.date).filter(eventFilter)
   const noEvent = events.length === 0
 
   return (
