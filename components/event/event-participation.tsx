@@ -43,7 +43,13 @@ export function EventParticipation() {
       }))
       .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.count }), {})
 
-    if (!participation || participation?.type === 'absent.e')
+    if (!participation)
+      return {
+        participationTypesCount,
+        myParticipation: { label: "Je n'ai pas encore", status: 'répondu.e', type: 'répondu.e' },
+      }
+
+    if (participation?.type === 'absent.e')
       return {
         participationTypesCount,
         myParticipation: { label: 'Je serais ', status: 'absent.e', type: 'absent.e' },
