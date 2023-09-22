@@ -5,12 +5,17 @@ import Link from 'next/link'
 // Bibliothèques internes
 import { useEvent, useWeather } from '@/entities'
 import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
-import { ArrowLeftIcon, CancelMsg, Card } from '@/ui'
+import { ArrowLeftIcon, CancelMsg, Card, Modal } from '@/ui'
+import { EventAttendeesModal } from './event-attendees.modal'
+import { useState } from 'react'
 
 export function EventCard() {
   // Stores -------------------------------------------------------------------
   const { event } = useEvent()
   const { loading } = useWeather()
+
+  // States -------------------------------------------------------------------
+  const [modal, setModal] = useState(false)
 
   // Constantes ----------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
@@ -19,34 +24,42 @@ export function EventCard() {
   return (
     <Card>
       <div className="grid h-full grid-cols-[auto_1fr] gap-3">
-        <div className="flex flex-col items-center ">
-          <div className="text-xs">{dayjs(event.start).format('dddd')}</div>
-          <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.start).format('DD')}</div>
-          <div className="text-xs">{dayjs(event.start).format('MMMM')}</div>
-
-          <div className="flex flex-col items-center text-sm text-arrd-highlight">
-            {dayjs(event.start).format('HH:mm')}
-            {isOneDay && (
-              <>
-                <ArrowLeftIcon className="-rotate-90 fill-arrd-primary" />
-                {dayjs(event.end).format('HH:mm')}
-              </>
-            )}
-          </div>
-
-          {!isOneDay && (
-            <div className="mt-2 flex flex-col items-center">
-              <ArrowLeftIcon className="mb-2 h-4 w-4 -rotate-90 fill-arrd-primary" />
-              <div className="text-xs">{dayjs(event.end).format('dddd')}</div>
-              <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.end).format('DD')}</div>
-              <div className="text-xs">{dayjs(event.end).format('MMMM')}</div>
+        <Modal
+          title="Liste des participants"
+          onOpen={() => setModal(true)}
+          button={(onClick) => (
+            <div className="flex cursor-pointer flex-col items-center" onClick={onClick}>
+              <div className="text-xs">{dayjs(event.start).format('dddd')}</div>
+              <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.start).format('DD')}</div>
+              <div className="text-xs">{dayjs(event.start).format('MMMM')}</div>
 
               <div className="flex flex-col items-center text-sm text-arrd-highlight">
-                {dayjs(event.end).format('HH:mm')}
+                {dayjs(event.start).format('HH:mm')}
+                {isOneDay && (
+                  <>
+                    <ArrowLeftIcon className="-rotate-90 fill-arrd-primary" />
+                    {dayjs(event.end).format('HH:mm')}
+                  </>
+                )}
               </div>
+
+              {!isOneDay && (
+                <div className="mt-2 flex flex-col items-center">
+                  <ArrowLeftIcon className="mb-2 h-4 w-4 -rotate-90 fill-arrd-primary" />
+                  <div className="text-xs">{dayjs(event.end).format('dddd')}</div>
+                  <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.end).format('DD')}</div>
+                  <div className="text-xs">{dayjs(event.end).format('MMMM')}</div>
+
+                  <div className="flex flex-col items-center text-sm text-arrd-highlight">
+                    {dayjs(event.end).format('HH:mm')}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        >
+          {() => <EventAttendeesModal />}
+        </Modal>
 
         <div className="grid grid-rows-[1fr_auto] gap-3">
           <div>
@@ -64,6 +77,7 @@ export function EventCard() {
             </div>
             {event.address?.lat && event.address?.lon && !loading && <WeatherWidget />}
           </div>
+
           {event.cancelled ? <CancelMsg /> : <EventParticipation />}
         </div>
       </div>
