@@ -42,7 +42,7 @@ export default async function event_participation(req: NextApiRequest, res: Next
     event.participants.push({
       userId: user.id,
       status: 'présent',
-      name: user.name,
+      name: user.nickname || user.name,
       type: form.participation,
       createdAt: dayjs().toDate(),
       updatedAt: dayjs().toDate(),
@@ -51,9 +51,8 @@ export default async function event_participation(req: NextApiRequest, res: Next
 
     bank(user.id, 15, 1)
   } else {
-    if (!participantEvt.name) {
-      participantEvt.name = user.name
-    }
+    participantEvt.name = user.nickname || user.name
+
     if (form.participation.match(/absent/)) {
       participantEvt.status = 'absent.e'
     } else {

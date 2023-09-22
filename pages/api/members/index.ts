@@ -53,7 +53,6 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
       )
 
       const dolibarrInfos = dolibarrMember ? dolibarrMemberParser([dolibarrMember], session.user, member.user.id) : {}
-
       return {
         ...member.user,
         ...dolibarrInfos,
