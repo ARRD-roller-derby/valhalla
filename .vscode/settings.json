@@ -11,6 +11,7 @@
     "goback",
     "headlessui",
     "localstate",
+    "midgard",
     "nextauth",
     "sqlfilters",
     "valhalla"
