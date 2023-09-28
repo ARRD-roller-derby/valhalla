@@ -5,10 +5,11 @@ import dayjs from 'dayjs'
 // Bibliothèques internes
 import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
 import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
-import { frequencyOpts, visibilityOpts } from '@/utils'
+import { frequencyOpts } from '@/utils'
 import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { TOption } from '@/types'
 import { IEvent } from '@/models'
+import { RolesSelector } from '@/ui/roles-selector'
 
 interface EventModalProps {
   day?: dayjs.Dayjs
@@ -32,12 +33,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     frequencyCount: 1,
 
     ...eventToUpdate,
-    visibility: eventToUpdate?.visibility
-      ? {
-          label: visibilityOpts.find((opt) => opt.value === eventToUpdate.visibility)?.label || '',
-          value: eventToUpdate.visibility,
-        }
-      : visibilityOpts[0],
+    visibility: eventToUpdate?.visibility || 'Membre',
     start: eventToUpdate?.start ? dayjs(eventToUpdate.start) : day || currentDay || dayjs(),
     end: eventToUpdate?.end ? dayjs(eventToUpdate.end) : day || currentDay || dayjs(),
     startHour: eventToUpdate?.start
@@ -73,7 +69,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
       title: title || type,
       type,
       description,
-      visibility: visibility.value as string,
+      visibility: visibility || 'Membre',
       start: start.toISOString(),
       end: end.toISOString(),
     }
@@ -93,6 +89,14 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     } else {
       await createEvent(event)
     }
+  }
+
+  const handleSetType = (type: string) => {
+    setForm((prev) => {
+      if (prev.visibility === '@everyone' && type.match(/derby|patinage|scrimmage|match|bootcamp/i))
+        prev.visibility = 'Membres'
+      return { ...prev, type }
+    })
   }
 
   // Effets ------------------------------------------------------------------------------
@@ -118,7 +122,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
       {() => (
         <div className="flex flex-col gap-2 overflow-auto p-2">
           <LabelBlock label="Type">
-            <EventTypeSelector onSelect={(type) => setForm((prev) => ({ ...prev, type }))} />
+            <EventTypeSelector onSelect={handleSetType} />
           </LabelBlock>
 
           <LabelBlock label="Titre (facultatif)">
@@ -180,9 +184,13 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
           )}
 
           <LabelBlock label="Visibilité" col>
-            <ListSelector
-              options={visibilityOpts}
-              onSelect={(visibility) => setForm((prev) => ({ ...prev, visibility }))}
+            <RolesSelector
+              key={form.visibility}
+              defaultValue={{
+                label: form.visibility,
+                value: form.visibility,
+              }}
+              onSelect={(visibility) => setForm((prev) => ({ ...prev, visibility: visibility.value as string }))}
             />
           </LabelBlock>
         </div>

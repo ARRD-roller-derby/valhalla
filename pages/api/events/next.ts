@@ -27,6 +27,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
+  const roles = user.roles.map((role: any) => role.name)
 
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
@@ -38,6 +39,14 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
   }
   const or = []
 
+  if (roles.length > 0) {
+    or.push({
+      ...between,
+      visibility: {
+        $in: roles,
+      },
+    })
+  }
   if (!isMember) {
     or.push({
       ...between,

@@ -27,6 +27,7 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
+  const roles = user.roles.map((role: any) => role.name)
   const month = parseInt(req.query.month as string)
 
   const startOfMonth = dayjs().month(month).startOf('month').toISOString()
@@ -40,6 +41,15 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
     },
   }
   const or = []
+
+  if (roles.length > 0) {
+    or.push({
+      ...between,
+      visibility: {
+        $in: roles,
+      },
+    })
+  }
 
   if (!isMember) {
     or.push({
