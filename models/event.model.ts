@@ -28,7 +28,7 @@ export interface IParticipant {
 
 export interface IEvent {
   _id: ObjectId
-  visibility: 'public' | 'membre' | 'admin' | 'bureau'
+  visibility: string
   cancelled: boolean
   recurrenceId?: string
   type: EEventType

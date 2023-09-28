@@ -33,13 +33,6 @@ export const frequencyOpts: TOption[] = [
   { label: 'Tous les ans', value: 'year' },
 ]
 
-export const visibilityOpts: TOption[] = [
-  { label: 'Membres', value: 'membre' },
-  { label: 'Public', value: 'public' },
-  { label: 'Admins', value: 'admin' },
-  { label: 'Bureau', value: 'bureau' },
-]
-
 export const ROLES = {
   invite: 'invité',
   membre: 'membre',
