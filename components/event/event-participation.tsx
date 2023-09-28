@@ -46,7 +46,7 @@ export function EventParticipation() {
     if (!participation)
       return {
         participationTypesCount,
-        myParticipation: { label: "Je n'ai pas encore", status: 'répondu.e', type: 'répondu.e' },
+        myParticipation: { label: "Je n'ai pas encore", status: 'répondu', type: 'répondu' },
       }
 
     if (participation?.type === 'absent.e')
