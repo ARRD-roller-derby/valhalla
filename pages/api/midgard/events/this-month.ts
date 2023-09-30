@@ -32,6 +32,8 @@ async function thisMonth(_req: NextApiRequest, res: NextApiResponse, user: IUser
   const start = dayjs().toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
+
+  const roles = user.roles.map((role: any) => role.name)
   const between = {
     start: {
       $gte: start,
@@ -39,6 +41,15 @@ async function thisMonth(_req: NextApiRequest, res: NextApiResponse, user: IUser
     },
   }
   const or = []
+
+  if (roles.length > 0) {
+    or.push({
+      ...between,
+      visibility: {
+        $in: roles,
+      },
+    })
+  }
 
   if (!isMember) {
     or.push({
