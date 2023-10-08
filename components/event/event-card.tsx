@@ -7,7 +7,7 @@ import { useEvent, useWeather } from '@/entities'
 import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
 import { ArrowLeftIcon, CancelMsg, Card, Modal } from '@/ui'
 import { EventAttendeesModal } from './event-attendees.modal'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export function EventCard() {
   // Stores -------------------------------------------------------------------
@@ -15,10 +15,14 @@ export function EventCard() {
   const { loading } = useWeather()
 
   // States -------------------------------------------------------------------
-  const [modal, setModal] = useState(false)
+  const [_modal, setModal] = useState(false)
 
   // Constantes ----------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
+  const start = useMemo(() => dayjs(event.start), [event.start])
+  //TODO renvoyer un objet de chaine de caractère, avec tous les formats utilisé
+  const end = useMemo(() => dayjs(event.end), [event.end])
+  //TODO implementer le calcul de la durée de l'event, et l'afficher dans le composant
 
   // Rendu ---------------------------------------------------------------------
   return (
@@ -29,16 +33,16 @@ export function EventCard() {
           onOpen={() => setModal(true)}
           button={(onClick) => (
             <div className="flex cursor-pointer flex-col items-center" onClick={onClick}>
-              <div className="text-xs">{dayjs(event.start).format('dddd')}</div>
-              <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.start).format('DD')}</div>
-              <div className="text-xs">{dayjs(event.start).format('MMMM')}</div>
+              <div className="text-xs">{start.format('dddd')}</div>
+              <div className="text-4xl font-bold text-arrd-highlight">{start.format('DD')}</div>
+              <div className="text-xs">{start.format('MMMM')}</div>
 
               <div className="flex flex-col items-center text-sm text-arrd-highlight">
-                {dayjs(event.start).format('HH:mm')}
+                {start.format('HH:mm')}
                 {isOneDay && (
                   <>
                     <ArrowLeftIcon className="-rotate-90 fill-arrd-primary" />
-                    {dayjs(event.end).format('HH:mm')}
+                    {end.format('HH:mm')}
                   </>
                 )}
               </div>
@@ -46,13 +50,11 @@ export function EventCard() {
               {!isOneDay && (
                 <div className="mt-2 flex flex-col items-center">
                   <ArrowLeftIcon className="mb-2 h-4 w-4 -rotate-90 fill-arrd-primary" />
-                  <div className="text-xs">{dayjs(event.end).format('dddd')}</div>
-                  <div className="text-4xl font-bold text-arrd-highlight">{dayjs(event.end).format('DD')}</div>
-                  <div className="text-xs">{dayjs(event.end).format('MMMM')}</div>
+                  <div className="text-xs">{end.format('dddd')}</div>
+                  <div className="text-4xl font-bold text-arrd-highlight">{end.format('DD')}</div>
+                  <div className="text-xs">{end.format('MMMM')}</div>
 
-                  <div className="flex flex-col items-center text-sm text-arrd-highlight">
-                    {dayjs(event.end).format('HH:mm')}
-                  </div>
+                  <div className="flex flex-col items-center text-sm text-arrd-highlight">{end.format('HH:mm')}</div>
                 </div>
               )}
             </div>

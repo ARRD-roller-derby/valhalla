@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
 // Bibliothèques internes
+import { HandIcon, Loader } from '@/ui'
 import { useEvent, useEvents } from '@/entities'
-import { HandIcon } from '@/ui'
-import { Loader } from '@/ui/Loader'
 import { dc, participationTypes } from '@/utils'
 
 // Modèles

@@ -31,14 +31,14 @@ export const participationTypes: IParticipationType[] = [
     key: PARTICIPATION_TYPES.skater,
     icon: <SkaterIcon className="h-6 w-6" />,
     roles: [ROLES.membre],
-    type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match'],
+    type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match', 'Randonnée / Balade'],
   },
   {
     label: 'visiteur·euse / NSO',
     key: PARTICIPATION_TYPES.visitor,
     icon: <WalkIcon className="h-6 w-6" />,
     roles: [ROLES.membre],
-    type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match'],
+    type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match', 'Randonnée / Balade'],
   },
 
   {
@@ -46,14 +46,14 @@ export const participationTypes: IParticipationType[] = [
     key: PARTICIPATION_TYPES.organizer,
     icon: <OrganizerIcon className="h-6 w-6" />,
     roles: [ROLES.membre],
-    type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale'],
+    type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale', 'Randonnée / Balade'],
   },
   {
     label: 'invité.e',
     key: PARTICIPATION_TYPES.invite,
     icon: <HandIcon className="h-6 w-6" />,
     roles: [ROLES.invite, ROLES.membre],
-    type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale'],
+    type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale', 'Randonnée / Balade'],
   },
   {
     label: 'absent·e',

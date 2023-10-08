@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 // Bibliothèques internes
-import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
-import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
-import { frequencyOpts } from '@/utils'
-import { Editor, AddressSelector, EventTypeSelector } from '@/components'
-import { TOption } from '@/types'
 import { IEvent } from '@/models'
+import { TOption } from '@/types'
+import { frequencyOpts } from '@/utils'
 import { RolesSelector } from '@/ui/roles-selector'
+import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
+import { Editor, AddressSelector, EventTypeSelector } from '@/components'
+import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
 
 interface EventModalProps {
   day?: dayjs.Dayjs
@@ -122,7 +122,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
       {() => (
         <div className="flex flex-col gap-2 overflow-auto p-2">
           <LabelBlock label="Type">
-            <EventTypeSelector onSelect={handleSetType} />
+            <EventTypeSelector onSelect={handleSetType} defaultValue={form.type} />
           </LabelBlock>
 
           <LabelBlock label="Titre (facultatif)">
