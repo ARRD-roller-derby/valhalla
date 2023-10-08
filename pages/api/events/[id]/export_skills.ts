@@ -41,11 +41,6 @@ export default async function event_export_skills(req: NextApiRequest, res: Next
   const participants = event.participants || []
   const presents = participants.filter((p: IParticipant) => p.status === 'présent').map((p: IParticipant) => p.userId)
   const users = await User.find({ _id: { $in: presents } }).select('providerAccountId name')
-  console.log(
-    'users',
-    users,
-    users.map((u) => u.providerAccountId)
-  )
   // recherche des skills non acquis par les participants
   const skills = await Skill.find({ category: eventType }).select('name category users level msp')
 

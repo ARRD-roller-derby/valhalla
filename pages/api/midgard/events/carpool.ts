@@ -1,7 +1,5 @@
 // Bibliothèque externe
 import { NextApiRequest, NextApiResponse } from 'next'
-import { MongoDb } from '@/db'
-import { checkRoles } from '@/utils/check-roles'
 import { Event } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
