@@ -151,3 +151,7 @@
 .ProseMirror h1 {
   margin: 1rem auto !important;
 }
+
+.ProseMirror a {
+  word-break: break-all;
+}
