@@ -45,10 +45,8 @@ async function me(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
   const dolibarrInfos = dolibarrMemberParser(dolibarrData, user, user.providerAccountId)
 
   return res.status(200).json({
-    member: {
-      ...user,
-      ...dolibarrInfos,
-    },
+    ...user,
+    ...dolibarrInfos,
   })
 }
 

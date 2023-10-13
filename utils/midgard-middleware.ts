@@ -13,5 +13,5 @@ export async function midgardMiddleWare(request: NextApiRequest, response: NextA
 
   await MongoDb()
   const user = await User.findOne({ providerAccountId: provider_id })
-  return helper(request, response, user)
+  return helper(request, response, user.toJSON())
 }
