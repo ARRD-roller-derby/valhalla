@@ -21,12 +21,35 @@ dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
 import { IUser } from '@/models'
+import { DOLAPIKEY, DOL_URL, dolibarrMemberParser } from '@/utils'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
 async function me(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
-  return res.status(200).json(user)
+  const params = new URLSearchParams({
+    DOLAPIKEY: DOLAPIKEY,
+    limit: '1',
+    sqlfilters: `(t.note_private:like:%${user.providerAccountId}%)`,
+  })
+
+  const dolibarrRes = await fetch(`${DOL_URL}members?${params.toString()}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const dolibarrData = await dolibarrRes.json()
+
+  const dolibarrInfos = dolibarrMemberParser(dolibarrData, user, user.providerAccountId)
+
+  return res.status(200).json({
+    member: {
+      ...user,
+      ...dolibarrInfos,
+    },
+  })
 }
 
 const helper = (request: NextApiRequest, response: NextApiResponse) => midgardMiddleWare(request, response, me)
