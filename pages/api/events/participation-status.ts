@@ -25,12 +25,12 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-export default async function event_participation(req: NextApiRequest, res: NextApiResponse) {
+export default async function event_participation_status(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
   const form = JSON.parse(req.body || '{}')
-  if (!form.eventId || !form.participation) return res.status(400).send('Il manque des informations')
+  if (!form.eventId || !form.status) return res.status(400).send('Il manque des informations')
   await MongoDb()
   const event = await Event.findOne({ _id: form.eventId })
 
@@ -38,32 +38,16 @@ export default async function event_participation(req: NextApiRequest, res: Next
   if (!event.participants) event.participants = []
   const participantEvt = event.participants.find((p: IParticipant) => p.userId === user.id)
 
-  if (!participantEvt) {
-    event.participants.push({
-      userId: user.id,
-      status: 'présent',
-      name: user.nickname || user.name,
-      type: form.participation,
-      createdAt: dayjs().toDate(),
-      updatedAt: dayjs().toDate(),
-      guestsNumber: form.guestsNumber || 0,
-    })
-    bank(user.id, 15, 1)
-  } else {
-    participantEvt.name = user.nickname || user.name
+  if (!participantEvt) return res.status(404).send('Participant non trouvé')
 
-    if (form.participation.match(/absent/)) {
-      participantEvt.status = 'absent.e'
-    }
-    participantEvt.type = form.participation
-    participantEvt.guestsNumber = form.guestsNumber || 0
-    participantEvt.updatedAt = dayjs().toDate()
+  participantEvt.status = form.status.match(/confirm/) ? 'présent' : 'à confirmer'
+  participantEvt.updatedAt = dayjs().toDate()
 
-    event.participants = event.participants.map((p: IParticipant) => {
-      if (p.userId === user.id) return participantEvt
-      return p
-    })
-  }
+  event.participants = event.participants.map((p: IParticipant) => {
+    if (p.userId === user.id) return participantEvt
+    return p
+  })
+
   await event.save()
   const participant = event.participants.find((p: IParticipant) => p.userId === user.id)
   const now = dayjs()

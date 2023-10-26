@@ -43,6 +43,7 @@ interface ISetEvents {
   createEvent: (event: IEventForm) => Promise<void>
   updateEvent: (id: ObjectId, event: IEventForm) => Promise<void>
   changeMyParticipation: (eventId: ObjectId, participation: string) => Promise<void>
+  changeMyParticipationStatus: (eventId: ObjectId, status: 'confirm' | 'maybe') => Promise<void>
   cancel(eventId: ObjectId): Promise<void>
   del(eventId: ObjectId): Promise<void>
   socketEvt: (msg: any) => void
@@ -261,6 +262,29 @@ export const useEvents = create<IEventStore>((set, get) => ({
       const res = await fetch('/api/events/participation', {
         method: 'POST',
         body: JSON.stringify({ participation, eventId }),
+      })
+      const { event, participant } = await res.json()
+
+      set((state) => {
+        const events = state.events.map((e) => (e._id === event._id ? event : e))
+        const participants = state.participants.map((p) => (p._id === participant._id ? participant : p))
+        return { events, participants, loadingEvent: null }
+      })
+    } catch (err: any) {
+      set({ loadingEvent: null, error: "impossible de créer l'événement" })
+    }
+  },
+  async changeMyParticipationStatus(eventId, status) {
+    const { events } = get()
+    const event = events.find((e) => e._id === eventId)
+    if (!event) return
+
+    set({ loadingEvent: eventId, error: undefined })
+
+    try {
+      const res = await fetch('/api/events/participation-status', {
+        method: 'POST',
+        body: JSON.stringify({ status, eventId }),
       })
       const { event, participant } = await res.json()
 

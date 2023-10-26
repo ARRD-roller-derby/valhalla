@@ -60,7 +60,6 @@ export const useWeather = create<IWeatherStore>((set, get) => ({
     return resJson.forecasts
   },
   getForecast(lat, lon) {
-    console.log('getForecast', lat, lon)
     const { forecasts } = get()
     return forecasts.find((f) => f.lat === lat && f.lon === lon)
   },
