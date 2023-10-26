@@ -36,10 +36,11 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
     $or: addresses.map((address) => ({ lat: address.lat, lon: address.lon })),
   })
 
+  // TODO revoir les adresses, inversion des lat et lon
   // Filtrage des adresses avec et sans prévisions
   const addressesWithForecast = existingForecasts.map((forecast) => ({
-    lat: forecast.lat,
-    lon: forecast.lon,
+    lat: forecast.lon,
+    lon: forecast.lat,
   }))
 
   const addressesWithoutForecast = addresses.filter(
@@ -54,8 +55,8 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
       )
       const resJson = await resApi.json()
       const newForecast = {
-        lat: address.lat,
-        lon: address.lon,
+        lat: address.lon,
+        lon: address.lat,
         timezone: resJson.timezone,
         hourly: {
           ...resJson.hourly,
