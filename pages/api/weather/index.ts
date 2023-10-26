@@ -51,7 +51,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
   for (const address of addressesWithoutForecast) {
     try {
       const resApi = await fetch(
-        `${WEATHER_API_URL}&latitude=${address.lat.toFixed(2)}&longitude=${address.lon.toFixed(2)}`
+        `${WEATHER_API_URL}&latitude=${address.lon.toFixed(2)}&longitude=${address.lat.toFixed(2)}`
       )
       const resJson = await resApi.json()
       const newForecast = {
