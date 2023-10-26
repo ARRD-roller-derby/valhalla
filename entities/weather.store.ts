@@ -59,7 +59,7 @@ export const useWeather = create<IWeatherStore>((set, get) => ({
     set({ forecasts: resJson.forecasts, loading: false })
     return resJson.forecasts
   },
-  getForecast(lon, lat) {
+  getForecast(lat, lon) {
     const { forecasts } = get()
     return forecasts.find((f) => f.lat === lat && f.lon === lon)
   },
