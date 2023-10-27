@@ -27,8 +27,8 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
-  const roles = user.roles.map((role: any) => role.name)
 
+  const roles = user.roles.map((role: any) => role.name.toLowerCase())
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
@@ -43,7 +43,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: roles,
+        $in: new RegExp(roles.join('|'), 'i'),
       },
     })
   }

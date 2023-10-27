@@ -23,7 +23,7 @@ export function NextEvents() {
   useEffect(() => {
     if (session?.user) {
       fetchForNext()
-      getForecasts()
+      //getForecasts()
     }
   }, [session])
 

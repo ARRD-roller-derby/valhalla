@@ -32,7 +32,7 @@ export function EventFetch() {
   // Effets -------------------------------------------------------------
   useEffect(() => {
     if (session?.user) {
-      getForecasts()
+      //getForecasts()
       findOne(router.query.eventId as any)
     }
   }, [session])

@@ -100,5 +100,5 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
 
   const forecasts = await Weather.find()
 
-  return res.status(200).json({ forecasts })
+  return res.status(200).json({ forecasts: [] })
 }

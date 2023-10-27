@@ -34,9 +34,7 @@ export const authOptions = {
         const account = await Account.findOne({ userId: session.user.id })
         if (account) user.providerAccountId = account.providerAccountId
       }
-
       const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
-
       if (!user) return session
 
       const roles = guildRoles
@@ -49,12 +47,8 @@ export const authOptions = {
 
       const newRoles = roles.filter((role) => roles.find((r) => r.id === role.id))
 
-      const rolesModified =
-        user.roles.length !== roles.length ||
-        user.roles.some((role: TRole) => !roles.some((newRole) => newRole.id === role.id))
-
       // Vérifier si le document utilisateur a été modifié
-      if (user.isModified('wallet') || user.isModified('providerAccountId') || rolesModified) {
+      if (user.isModified('wallet')) {
         // Mise à jour des champs modifiés uniquement
         const updateFields = {
           wallet: user.wallet,
@@ -68,7 +62,7 @@ export const authOptions = {
 
       session.user = {
         ...session.user,
-        roles: newRoles,
+        roles,
         nickname: member.nick,
       }
       return session
