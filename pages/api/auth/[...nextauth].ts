@@ -37,6 +37,14 @@ export const authOptions = {
       const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
       if (!user) return session
 
+      if (member.user.global_name && user.name !== member.user.global_name) {
+        User.updateOne(
+          { _id: user._id },
+          {
+            name: member.user.global_name,
+          }
+        )
+      }
       const roles = guildRoles
         .filter((role) => member.roles.includes(role.id))
         .map((role) => ({
@@ -57,6 +65,7 @@ export const authOptions = {
         }
 
         // Effectuer la mise à jour dans la base de données On utiliser pas user.save(). On utilise User.updateOne() pour éviter de déclencher les hooks
+
         await User.updateOne({ _id: user._id }, updateFields)
       }
 
