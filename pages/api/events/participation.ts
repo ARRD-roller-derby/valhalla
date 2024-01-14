@@ -80,7 +80,9 @@ export default async function event_participation(req: NextApiRequest, res: Next
       présent: 'confirmer',
     }
 
-    const confirmParticipantsNum = event.participants.filter((p: IParticipant) => p.status === 'présent').length
+    const confirmParticipantsNum = event.participants.filter(
+      (p: IParticipant) => !p.status.match(/abs|conf/) && !p.type.match(/abs/)
+    ).length
     const msg = `---\n**${capitalizeFirstLetter(user.name)}** vient de **${
       newStatus[participant.status]
     }** sa participation à l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format('LLLL')}.
