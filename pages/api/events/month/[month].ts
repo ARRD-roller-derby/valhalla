@@ -37,6 +37,7 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
   const endOfMonth = dayjs().month(month).year(year).endOf('month').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
+
   const between = {
     start: {
       $gte: startOfMonth,
