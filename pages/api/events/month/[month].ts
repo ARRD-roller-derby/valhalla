@@ -34,7 +34,7 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
   const [month, year] = monthAndYear.map((m: string) => parseInt(m))
 
   const startOfMonth = dayjs().month(month).year(year).startOf('month').toISOString()
-  const endOfMonth = dayjs().month(month).year(year).endOf('month').toISOString()
+  const endOfMonth = dayjs().add(7, 'day').month(month).year(year).endOf('month').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
   const between = {
