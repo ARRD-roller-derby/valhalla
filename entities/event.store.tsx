@@ -35,7 +35,7 @@ interface ISetEvents {
   setEvent: (event: IEvent) => void
   setEvents: (events: any[]) => void
   findOne: (id: ObjectId) => Promise<void>
-  fetchForCal: (month: number) => Promise<void>
+  fetchForCal: (month: number, year: number) => Promise<void>
   fetchForNext: () => Promise<void>
   fetchParticipation: (eventId: ObjectId) => Promise<void>
   syncParticipation: (eventId: ObjectId) => Promise<void>
@@ -177,10 +177,10 @@ export const useEvents = create<IEventStore>((set, get) => ({
       set({ loadingExport: false, error: "impossible de récupérer l' événement" })
     }
   },
-  async fetchForCal(month) {
+  async fetchForCal(month, year) {
     set({ loading: true })
     try {
-      const res = await fetch('/api/events/month/' + month)
+      const res = await fetch('/api/events/month/' + month + '_' + year)
       const { events } = await res.json()
       set({ events, loading: false })
     } catch (err: any) {

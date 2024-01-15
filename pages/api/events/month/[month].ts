@@ -28,10 +28,13 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
   const roles = user.roles.map((role: any) => role.name)
-  const month = parseInt(req.query.month as string)
+  const queryMonth = req.query.month as string
+  const monthAndYear = queryMonth.split('_')
 
-  const startOfMonth = dayjs().month(month).startOf('month').toISOString()
-  const endOfMonth = dayjs().month(month).endOf('month').toISOString()
+  const [month, year] = monthAndYear.map((m: string) => parseInt(m))
+
+  const startOfMonth = dayjs().month(month).year(year).startOf('month').toISOString()
+  const endOfMonth = dayjs().month(month).year(year).endOf('month').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
   const between = {

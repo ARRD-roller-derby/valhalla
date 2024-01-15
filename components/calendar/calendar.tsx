@@ -19,7 +19,7 @@ export function Calendar() {
   const { events, currentDay, socketEvt, fetchForCal } = useEvents()
 
   // Hooks ------------------------------------------------------------------
-  const { cal, currentMonth, currentMonthNum, nextMonth, previousMonth } = useCalendar()
+  const { cal, currentMonth, currentYear, currentMonthNum, nextMonth, previousMonth } = useCalendar()
   const isMobile = useIsMobile()
   const { justEventManager } = useCanSee()
   useSocketTrigger<{ event: IEvent }>(TriggerTypes.EVENT, socketEvt)
@@ -37,7 +37,7 @@ export function Calendar() {
 
   // Effets -----------------------------------------------------------------
   useEffect(() => {
-    fetchForCal(currentMonthNum)
+    fetchForCal(currentMonthNum, currentYear)
   }, [fetchForCal, currentMonthNum])
 
   // Rendu ------------------------------------------------------------------

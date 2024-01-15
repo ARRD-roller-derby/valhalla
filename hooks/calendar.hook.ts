@@ -142,5 +142,6 @@ export function useCalendar() {
     nextMonth,
     previousMonth,
     currentMonth: state.currentMonth,
+    currentYear: state.year,
   }
 }
