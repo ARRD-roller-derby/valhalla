@@ -8,7 +8,7 @@ export const routes = [
     icon: AgendaIcon,
     inMenu: true,
   },
-  {
+  /*{
     name: 'Ma progression',
     path: '/skills',
     icon: SkillIcon,
@@ -19,7 +19,7 @@ export const routes = [
     path: '/jeux',
     icon: GameIcon,
     inMenu: true,
-  },
+  },*/
   {
     name: 'répertoire',
     path: '/repertoire',
