@@ -10,6 +10,14 @@ import { TRole, User } from '@/models/user.model'
 import { Routes } from 'discord-api-types/v10'
 import { ObjectId } from 'mongodb'
 
+function checkChangedRoles(newRole: TRole[], userRole: TRole[]) {
+  if (newRole.length !== userRole.length) {
+    return false // Longueurs différentes, donc pas les mêmes rôles
+  }
+
+  return newRole.every((role) => userRole.some((r) => r.id === role.id))
+}
+
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
@@ -53,19 +61,26 @@ export const authOptions = {
           color: role.color,
         }))
 
-      const newRoles = roles.filter((role) => roles.find((r) => r.id === role.id))
+      const haveRoleChanged = checkChangedRoles(roles, user.roles)
+
+      if (haveRoleChanged) {
+        await User.updateOne(
+          { _id: user._id },
+          {
+            roles,
+          }
+        )
+      }
 
       // Vérifier si le document utilisateur a été modifié
       if (user.isModified('wallet')) {
         // Mise à jour des champs modifiés uniquement
         const updateFields = {
           wallet: user.wallet,
-          roles: newRoles,
           providerAccountId: user.providerAccountId,
         }
 
         // Effectuer la mise à jour dans la base de données On utiliser pas user.save(). On utilise User.updateOne() pour éviter de déclencher les hooks
-
         await User.updateOne({ _id: user._id }, updateFields)
       }
 
