@@ -65,6 +65,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
       }
     })
     .filter((member: any) => member.roles.some((role: any) => role.name.toLowerCase() === 'membre'))
+    .filter((member: any) => member.roles.some((role: any) => role.name.toLowerCase() !== 'midgard'))
     .sort((a: any, b: any) => a.username.localeCompare(b.username))
 
   return res.status(200).json({ members })
