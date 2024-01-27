@@ -82,22 +82,21 @@
 
   * {
     box-sizing: border-box;
-    scrollbar-color: theme('colors.arrd.secondary') theme('colors.arrd.bgLight');
-    scrollbar-width: thin;
     outline: none;
   }
 
-  ::-webkit-scrollbar {
-    width: 3px;
-  }
-
   ::-webkit-scrollbar-track {
-    background: theme('colors.arrd.bgLight');
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: theme('colors.arrd.secondary');
     transition: 200ms ease-in-out;
+    background: theme('colors.arrd.secondary');
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
   }
 
   h1:before {
