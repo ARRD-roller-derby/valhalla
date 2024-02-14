@@ -43,10 +43,11 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: new RegExp(roles.join('|'), 'i'),
+        $in: roles,
       },
     })
   }
+
   if (!isMember) {
     or.push({
       ...between,
