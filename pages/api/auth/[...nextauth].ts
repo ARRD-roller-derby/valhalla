@@ -12,10 +12,10 @@ import { ObjectId } from 'mongodb'
 
 function checkChangedRoles(newRole: TRole[], userRole: TRole[]) {
   if (newRole.length !== userRole.length) {
-    return false // Longueurs différentes, donc pas les mêmes rôles
+    return true // Longueurs différentes, donc pas les mêmes rôles
   }
 
-  return newRole.every((role) => userRole.some((r) => r.id === role.id))
+  return !newRole.every((role) => userRole.some((r) => r.id === role.id))
 }
 
 export const authOptions = {
@@ -43,6 +43,7 @@ export const authOptions = {
         if (account) user.providerAccountId = account.providerAccountId
       }
       const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
+
       if (!user) return session
 
       if (member.user.global_name && user.name !== member.user.global_name) {
@@ -64,12 +65,8 @@ export const authOptions = {
       const haveRoleChanged = checkChangedRoles(roles, user.roles)
 
       if (haveRoleChanged) {
-        await User.updateOne(
-          { _id: user._id },
-          {
-            roles,
-          }
-        )
+        user.roles = roles
+        await user.save()
       }
 
       // Vérifier si le document utilisateur a été modifié

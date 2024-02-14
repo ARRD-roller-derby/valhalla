@@ -43,7 +43,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: roles.map((role: string) => role.toLowerCase()),
+        $in: roles.map((role: string) => new RegExp(role, 'i')),
       },
     })
   }
@@ -57,7 +57,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', 'public'],
+        $in: ['membre', 'public'].map((role: string) => new RegExp(role, 'i')),
       },
     })
   }
