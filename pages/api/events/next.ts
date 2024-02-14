@@ -43,7 +43,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: roles,
+        $in: roles.map((role: string) => role.toLowerCase()),
       },
     })
   }

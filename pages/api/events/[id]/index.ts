@@ -17,17 +17,18 @@ export default async function event_findOne(req: NextApiRequest, res: NextApiRes
   const event = await Event.findOne({ _id: req.query.id })
   if (!event) return res.status(404).send('Événement non trouvé')
 
-  if (event.visibility === 'membre') {
+  const visibility = event.visibility.toLowerCase()
+  if (visibility === 'membre') {
     const canSee = checkRoles([ROLES.membre], user)
     if (!canSee) return res.status(403).send('non autorisé')
   }
 
-  if (event.visibility === 'bureau') {
+  if (visibility === 'bureau') {
     const canSee = checkRoles([ROLES.bureau], user)
     if (!canSee) return res.status(403).send('non autorisé')
   }
 
-  if (event.visibility === 'admin') {
+  if (visibility === 'admin') {
     const canSee = checkRoles([ROLES.bureau, ROLES.dev], user)
     if (!canSee) return res.status(403).send('non autorisé')
   }
