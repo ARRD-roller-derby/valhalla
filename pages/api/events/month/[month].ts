@@ -50,7 +50,7 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
     or.push({
       ...between,
       visibility: {
-        $in: roles,
+        $in: roles.map((role: string) => role.toLowerCase()),
       },
     })
   }
