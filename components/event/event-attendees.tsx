@@ -88,8 +88,8 @@ export function EventAttendees() {
                   'opacity-50',
                 ])}
               >
-                <div className="flex h-6 w-6 w-full justify-between fill-arrd-highlight">{icon}</div>
-                <div className="font-bold first-letter:uppercase">
+                <div className="flex h-6 w-full justify-between fill-arrd-highlight">{icon}</div>
+                <div className="text-right font-bold first-letter:uppercase">
                   {p.name}
                   <div className="text-right text-xs italic text-arrd-primary">
                     {p.type} {p.status === 'à confirmer' ? '?' : ''}
