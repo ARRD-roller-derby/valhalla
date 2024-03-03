@@ -66,7 +66,9 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
   const total = Object.values(boosterCards).reduce((acc, curr) => acc + curr, 0)
 
   //On récupère les cartes disponibles, c'est-à-dire celles qui n'ont pas de propriétaire
-  const cards = await Card.find({ owner: null })
+  const cards = (await Card.find({ owner: null }).lean()) as Card[]
+
+  if (!cards) return res.status(404).send('Cartes non trouvées')
 
   const result: Card[] = []
 
@@ -92,8 +94,29 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     result.push(...randomCards)
   }
 
+  const resultToSave = result.map((card: any) => {
+    const newCard = { ...card, owner: user.id }
+    delete newCard._id
+
+    if (Array.isArray(card.answers)) {
+      newCard.answers = card.answers.map((a: any) => {
+        delete a._id
+        return a
+      })
+    }
+    if (card?.flash?.question) {
+      delete newCard.flash._id
+    }
+
+    if (card?.player?.name) {
+      delete newCard.player._id
+    }
+
+    return newCard
+  })
+
   //On ajoute les cartes au joueur
-  await Card.insertMany(result.map((card) => ({ ...card, owner: user.id })))
+  await Card.insertMany(resultToSave)
 
   //On retire le coût du booster
   await bank(user.id, -booster.cost, 1, booster.key)
