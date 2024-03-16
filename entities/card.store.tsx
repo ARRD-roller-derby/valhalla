@@ -74,7 +74,6 @@ export const useCards = create<CardStore>((set, get) => ({
     }
   },
   async getFlashCard() {
-    const { revisionMode } = get()
     set({ loadingRevision: true, error: null })
 
     try {
