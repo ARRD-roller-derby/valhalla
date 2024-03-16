@@ -11,8 +11,8 @@ export function CardSellBtn() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valueInt = parseInt(e.target.value)
-    if (isNaN(valueInt) || valueInt < 0) return
-    setCost(valueInt)
+    if (isNaN(valueInt)) return
+    setCost(valueInt < 0 ? 0 : valueInt)
   }
 
   const handleSell = async (onClose: () => void) => {
