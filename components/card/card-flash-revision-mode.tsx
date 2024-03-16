@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import validator from 'validator'
 
 export function CardFlashRevisionMode() {
-  const { flashCard, loadingRevision, getFlashCard, setRevisionMode, submitAnswer } = useCards()
+  const { flashCard, loadingRevision, numOfCardsForRevision, getFlashCard, setRevisionMode, submitAnswer } = useCards()
   const [response, setResponse] = useState<string | undefined>() // id
   const [readyForNextCard, setReadyForNextCard] = useState(false)
 
@@ -22,6 +22,7 @@ export function CardFlashRevisionMode() {
   }
 
   const handleNext = () => {
+    if (numOfCardsForRevision) setRevisionMode(false)
     setReadyForNextCard(false)
     setResponse(undefined)
     getFlashCard()

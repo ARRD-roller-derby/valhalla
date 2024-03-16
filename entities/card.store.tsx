@@ -84,7 +84,6 @@ export const useCards = create<CardStore>((set, get) => ({
         flashCard,
         numOfCardsForRevision: count,
         loadingRevision: false,
-        revisionMode: revisionMode ? count > 0 : revisionMode,
       })
       return flashCard
     } catch (error) {
