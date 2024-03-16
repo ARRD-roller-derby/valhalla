@@ -7,22 +7,23 @@ export function CardSellBtn() {
   const id = useId()
   const { card, loadingSell, sellCard } = useCard()
 
-  const [cost, setCost] = useState(card?.cost || 0)
+  const [cost, setCost] = useState(card?.cost ? `${card.cost}` : '')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valueInt = parseInt(e.target.value)
-    if (isNaN(valueInt)) return
-    setCost(valueInt < 0 ? 0 : valueInt)
+    if (isNaN(valueInt) && e.target.value.length > 0) return
+    setCost(e.target.value)
   }
 
   const handleSell = async (onClose: () => void) => {
-    await sellCard(cost)
+    const numCost = parseInt(cost)
+    await sellCard(numCost ? numCost : 0)
     onClose()
   }
 
   const handleCancelSell = async (onClose: () => void) => {
     await sellCard(0)
-    setCost(0)
+    setCost('0')
     onClose()
   }
 
