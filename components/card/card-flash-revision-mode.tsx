@@ -22,7 +22,7 @@ export function CardFlashRevisionMode() {
   }
 
   const handleNext = () => {
-    if (numOfCardsForRevision) setRevisionMode(false)
+    if (numOfCardsForRevision === 0) setRevisionMode(false)
     setReadyForNextCard(false)
     setResponse(undefined)
     getFlashCard()
