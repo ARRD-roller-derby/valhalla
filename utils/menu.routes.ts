@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { AddressBookIcon, AgendaIcon, GameIcon, SkillIcon } from '@/ui'
+import { AddressBookIcon, AgendaIcon, DeckIcon, GameIcon, ShopIcon } from '@/ui'
 
 export const routes = [
   {
@@ -8,22 +8,23 @@ export const routes = [
     icon: AgendaIcon,
     inMenu: true,
   },
-  /*{
-    name: 'Ma progression',
-    path: '/skills',
-    icon: SkillIcon,
-    inMenu: true,
-  },
-  {
-    name: 'jeux',
-    path: '/jeux',
-    icon: GameIcon,
-    inMenu: true,
-  },*/
+
   {
     name: 'répertoire',
     path: '/repertoire',
     icon: AddressBookIcon,
+    inMenu: true,
+  },
+  {
+    name: 'boutique',
+    path: '/shop',
+    icon: ShopIcon,
+    inMenu: true,
+  },
+  {
+    name: 'mon deck',
+    path: '/deck',
+    icon: DeckIcon,
     inMenu: true,
   },
 ]

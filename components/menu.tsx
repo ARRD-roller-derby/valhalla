@@ -29,7 +29,7 @@ export function Menu() {
                 data-active={router.pathname.includes(route.path)}
               >
                 <Icon
-                  className={dc(' text-3xl md:text-base', [
+                  className={dc('text-2xl md:text-base', [
                     router.pathname.includes(route.path),
                     'fill-arrd-highlight',
                     'fill-arrd-primary',

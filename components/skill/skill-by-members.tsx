@@ -1,6 +1,6 @@
 import { useSkill, useSkills } from '@/entities'
 import { ReadEditor } from '../editor'
-import { Card, Loader, SkillUserLevelBar } from '@/ui'
+import { CardUI, Loader, SkillUserLevelBar } from '@/ui'
 import { IUserSkill } from '@/models'
 import { SkillEditModal } from '@/components'
 
@@ -39,7 +39,7 @@ export function SkillByMembers() {
               })
               .sort((a, b) => a.username.localeCompare(b.username))
               .map((member) => (
-                <Card
+                <CardUI
                   key={`${member.providerAccountId}-${member.learned || ''}-${member.master || ''}-${
                     member.notAcquired || ''
                   }`}
@@ -54,7 +54,7 @@ export function SkillByMembers() {
                   <div className="mt-2">
                     <SkillUserLevelBar providerAccountId={member.providerAccountId} />
                   </div>
-                </Card>
+                </CardUI>
               ))}
           </div>
         )}

@@ -5,7 +5,7 @@ import Link from 'next/link'
 // Bibliothèques internes
 import { useEvent, useWeather } from '@/entities'
 import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
-import { ArrowLeftIcon, CancelMsg, Card, Modal } from '@/ui'
+import { ArrowLeftIcon, CancelMsg, CardUI, Modal } from '@/ui'
 import { EventAttendeesModal } from './event-attendees.modal'
 import { useMemo, useState } from 'react'
 
@@ -26,7 +26,7 @@ export function EventCard() {
 
   // Rendu ---------------------------------------------------------------------
   return (
-    <Card>
+    <CardUI>
       <div className="grid h-full grid-cols-[auto_1fr] gap-3">
         <Modal
           title="Liste des participants"
@@ -83,6 +83,6 @@ export function EventCard() {
           {event.cancelled ? <CancelMsg /> : <EventParticipation />}
         </div>
       </div>
-    </Card>
+    </CardUI>
   )
 }

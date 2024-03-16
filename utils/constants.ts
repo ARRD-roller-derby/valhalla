@@ -61,6 +61,8 @@ export const PARTICIPATION_TYPES = {
 
 export const PURCHASE_TYPES = {
   spyAttendees: 'spyAttendees',
+  buyCard: 'buyCard',
+  sellCard: 'sellCard',
 }
 
 export const SKILL_CATEGORIES = {
@@ -89,7 +91,7 @@ export const DIET = [
   { label: 'Omnivore', value: '1' },
   { label: 'Végétarien', value: '2' },
   { label: 'Végétalien', value: '3' },
-  { label: 'Pescotarien', value: '4' },
+  { label: 'Pesco végétarien', value: '4' },
   { label: 'Crudivore', value: '5' },
   { label: 'Paléo', value: '6' },
   { label: 'Sans Gluten', value: '8' },

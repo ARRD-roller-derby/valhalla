@@ -154,3 +154,7 @@
 .ProseMirror a {
   word-break: break-all;
 }
+
+button:disabled {
+  opacity: 0.5;
+}

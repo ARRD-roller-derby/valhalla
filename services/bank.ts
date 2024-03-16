@@ -24,7 +24,7 @@ export async function bank(userId: string, amount: number, quantity: number, nam
   const user = await User.findOne(new ObjectId(userId))
 
   // Si on achète quelque chose
-  if (!name && amount < 0) {
+  if (amount < 0) {
     Purchase.create({
       userId: user.id,
       name,
