@@ -1,6 +1,6 @@
 import { useCard } from '@/entities'
 import { Card as ICard } from '@/models'
-import { BoltIcon, CardUI, DragonIcon, EpicIcon, GameIcon, LegendaryIcon, RareIcon } from '@/ui'
+import { BoltIcon, CardUI, CheckBadgeIcon, DragonIcon, EpicIcon, GameIcon, LegendaryIcon, RareIcon } from '@/ui'
 
 import { getResume } from '@/utils/get-resume'
 import { useMemo } from 'react'
@@ -38,14 +38,15 @@ export function Card({ isInSell = false }: CardProps) {
     <CardUI>
       <div className="flex h-full flex-col justify-between gap-2">
         <div className="flex  gap-2">
-          <div className="text-arrd-primary">{validator.unescape(infos.name)}</div>
-          <div className="flex gap-1">
+          <div className="flex items-center text-arrd-primary">{validator.unescape(infos.name)}</div>
+          <div className="flex gap-1 pt-1">
             <div className="fill-arrd-highlight">
               {infos.rarity === 'rare' && <RareIcon />}
               {infos.rarity === 'epic' && <EpicIcon />}
               {infos.rarity === 'legendary' && <LegendaryIcon />}
             </div>
             <div className="fill-arrd-highlight">{!!infos.question ? <BoltIcon /> : <GameIcon />}</div>
+            {infos.isUsed && <CheckBadgeIcon className="mr-2 fill-arrd-primary" />}
           </div>
         </div>
         {infos.question && (
@@ -82,7 +83,7 @@ export function Card({ isInSell = false }: CardProps) {
             </div>
           </div>
         )}
-        {infos.isUsed && <div className="text-arrd-primary">Utilisée</div>}
+
         {isInSell && (
           <div className="mt-1 flex w-full cursor-pointer items-center justify-center gap-2 text-center text-sm text-arrd-highlight">
             Acheter pour <span className="font-bold">{card.cost}</span>
