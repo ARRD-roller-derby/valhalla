@@ -1,9 +1,8 @@
-import { Card } from '@/models/card.model'
-import { getResume } from '../../utils/get-resume'
+import { Card } from '@/models/'
+import { getResume, getRarity } from '@/utils/'
 import { dc } from '@/utils'
 import validator from 'validator'
 import { BoltIcon, GameIcon } from '@/ui'
-import { getRarity } from '@/utils/get-rarity'
 
 type PreviewCardProps = {
   card: Card
@@ -14,10 +13,13 @@ export function PreviewCard({ card }: PreviewCardProps) {
   const isPlayer = card.type === 'player'
   return (
     <div
-      className={dc('flex flex-col gap-2 rounded-md border bg-arrd-bgDark p-2 text-sm', [
-        card.rarity === 'common',
-        'border-arrd-secondary',
-      ])}
+      className={dc(
+        'flex flex-col gap-2 rounded-md border bg-arrd-bgDark p-2 text-sm',
+        [card.rarity === 'common', 'border-arrd-secondary'],
+        [card.rarity === 'rare', 'border-arrd-accent'],
+        [card.rarity === 'epic', 'border-arrd-highlight'],
+        [card.rarity === 'legendary', 'border-arrd-textError']
+      )}
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-end gap-1 text-xs">

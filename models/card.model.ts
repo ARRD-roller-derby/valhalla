@@ -14,6 +14,8 @@ export interface Player {
   block: number
   assistance: number
   recovery: number
+  isFirstLine?: boolean
+  isInTeam?: boolean
 }
 
 export type Frequency = 'daily' | '3days' | 'weekly' | 'monthly' | 'trimester' | 'semester' | 'yearly'
@@ -52,6 +54,8 @@ const PlayerSchema = new Schema<Player>({
   block: Number,
   assistance: Number,
   recovery: Number,
+  isFirstLine: Boolean,
+  isInTeam: Boolean,
 })
 
 const FlashSchema = new Schema<FlashCard>({

@@ -1,6 +1,6 @@
 import { useMember } from '@/entities'
 import { MemberRoles } from './member-roles'
-import { Card } from '@/ui'
+import { CardUI } from '@/ui'
 import Link from 'next/link'
 
 export function MemberCard() {
@@ -9,7 +9,7 @@ export function MemberCard() {
 
   // Rendu ----------------------------------------------------------
   return (
-    <Card>
+    <CardUI>
       <div className="grid grid-cols-[auto_1fr] items-center gap-3 ">
         {member.avatar && <img src={member.avatar} className="h-16 w-16 rounded-full" />}
         <div className="grid h-full grid-rows-[auto_1fr] content-between gap-2">
@@ -29,6 +29,6 @@ export function MemberCard() {
           </div>
         </div>
       </div>
-    </Card>
+    </CardUI>
   )
 }

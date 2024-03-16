@@ -12,11 +12,12 @@ const percentForRare = 0.1
 const percentForEpic = 0.05
 const percentForLegendary = 0.01
 
-export default async function eventsNext(req: NextApiRequest, res: NextApiResponse) {
+export default async function cardBuy(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
 
+  //Protection : on récupère les nom et pas les valeurs (pour éviter les injections)
   const booster = boosters.find((b) => b.key === req.query.name)
 
   if (!booster) return res.status(404).send('Booster not found')

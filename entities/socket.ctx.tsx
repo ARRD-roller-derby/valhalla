@@ -15,6 +15,7 @@ export enum TriggerTypes {
   EVENT = 'event',
   PARTICIPATION = 'participation',
   SKILLS = 'skills',
+  SHOP = 'shop',
 }
 
 interface ISocketMessage<T = any> {

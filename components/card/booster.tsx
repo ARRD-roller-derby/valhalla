@@ -1,11 +1,11 @@
 import { useCards } from '@/entities/card.store'
 import { Card as ICard } from '@/models/card.model'
-import { Button, Card, DragonIcon, Modal } from '@/ui'
+import { Button, CardUI, DragonIcon, Modal } from '@/ui'
 import { dc } from '@/utils'
 import { Booster } from '@/utils/boosters'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
-import { PreviewCard } from './Preview-Card'
+import { PreviewCard } from '@/components'
 
 type BoosterProps = {
   booster: Booster
@@ -32,19 +32,23 @@ export function Booster({ booster }: BoosterProps) {
     <Modal
       title={`Achat`}
       button={(onClick) => (
-        <Card key={booster.key}>
+        <CardUI key={booster.key}>
           <div
-            className={dc('flex  flex-col gap-1', [isDisabled, 'pointer-events-none opacity-50', 'cursor-pointer'])}
+            className={dc('flex  h-full flex-col gap-1', [
+              isDisabled,
+              'pointer-events-none opacity-50',
+              'cursor-pointer',
+            ])}
             onClick={() => onClick()}
           >
             <header className="font-bold uppercase text-arrd-highlight">{booster.title}</header>
-            <div className="text-sm italic">{booster.description}</div>
+            <div className="flex-1 text-sm italic ">{booster.description}</div>
             <div className="flex items-center gap-1 self-end font-bold text-arrd-primary">
               {booster.cost} <DragonIcon className="fill-arrd-primary" />
             </div>
             {isDisabled && <div className="text-arrd-primary">Solde insuffisant</div>}
           </div>
-        </Card>
+        </CardUI>
       )}
     >
       {(onClose) => (

@@ -1,4 +1,4 @@
-import { Card, CardType } from '@/models/card.model'
+import { Card } from '@/models/card.model'
 
 export function getRarity(rarity: Card['rarity']) {
   if (rarity === 'common') return 'commune'
