@@ -15,15 +15,16 @@ export default async function cardAnswer(req: NextApiRequest, res: NextApiRespon
   const body = JSON.parse(req.body)
   if (!cardId) return res.status(404).send('Card not found')
 
-  const answer = body.answer
+  const answers = body.answers
 
-  if (!answer) return res.status(400).send('Answer not found')
+  if (!answers) return res.status(400).send('Aucune réponse')
 
   await MongoDb()
   const card = await Card.findById(cardId)
 
-  const findAnswer = card?.answers.find((a: Answer) => a.answer === answer)
-  if (!findAnswer) return res.status(404).send('Answer not found')
+  const goodChoices = card?.answers.filter((a: Answer) => a.type === 'good')
+  const numOfGoodChoices = goodChoices.length
+  const iHaveToAnswer = goodChoices.filter((a: Answer) => answers.includes(a.answer)).length === numOfGoodChoices
 
   if (!card.flash) {
     card.flash = {
@@ -35,7 +36,7 @@ export default async function cardAnswer(req: NextApiRequest, res: NextApiRespon
   }
 
   const frequencyIdx = FrequencyEnum.indexOf(card.flash.frequency)
-  if (findAnswer.type === 'good') {
+  if (iHaveToAnswer) {
     if (frequencyIdx < FrequencyEnum.length - 1) {
       card.flash.frequency = FrequencyEnum[frequencyIdx + 1]
     }

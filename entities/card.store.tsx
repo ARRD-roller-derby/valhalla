@@ -19,7 +19,7 @@ interface CardStore {
   // FETCHERS----------------------------------------------------------------
   getCards: () => Promise<void>
   getFlashCard: () => Promise<Card>
-  submitAnswer: (id: string, answer: string) => Promise<void>
+  submitAnswer: (id: string, answers: string[]) => Promise<void>
 
   // GETTERS----------------------------------------------------------------
 
@@ -90,13 +90,13 @@ export const useCards = create<CardStore>((set, get) => ({
       return null
     }
   },
-  async submitAnswer(id: string, answer: string) {
+  async submitAnswer(id: string, answers: string[]) {
     set({ loadingRevision: true, error: null })
 
     try {
       const res = await fetch(`/api/cards/${id}/answer`, {
         method: 'POST',
-        body: JSON.stringify({ answer }),
+        body: JSON.stringify({ answers }),
       })
       const flashCard = await res.json()
       set({ flashCard, loadingRevision: false })

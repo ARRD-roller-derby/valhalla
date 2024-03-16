@@ -6,7 +6,7 @@ import validator from 'validator'
 
 export function CardFlashRevisionMode() {
   const { flashCard, loadingRevision, numOfCardsForRevision, getFlashCard, setRevisionMode, submitAnswer } = useCards()
-  const [response, setResponse] = useState<string | undefined>() // id
+  const [response, setResponse] = useState<string[]>([]) // id
   const [readyForNextCard, setReadyForNextCard] = useState(false)
 
   useEffect(() => {
@@ -14,18 +14,21 @@ export function CardFlashRevisionMode() {
     getFlashCard()
   }, [])
 
-  const handleSubmit = async (answer: string) => {
-    if (!flashCard) return
-    setResponse(answer)
-    await submitAnswer(flashCard._id.toString(), answer)
-    setReadyForNextCard(true)
+  const handleSelect = (answer: string) => {
+    if (response.includes(answer)) setResponse(response.filter((r) => r !== answer))
+    else setResponse([...response, answer])
   }
-
-  const handleNext = () => {
+  const handleSubmit = async () => {
+    if (!flashCard) return
     if (numOfCardsForRevision === 0) setRevisionMode(false)
-    setReadyForNextCard(false)
-    setResponse(undefined)
-    getFlashCard()
+    if (readyForNextCard) {
+      setReadyForNextCard(false)
+      setResponse([])
+      getFlashCard()
+    } else {
+      await submitAnswer(flashCard._id.toString(), response)
+      setReadyForNextCard(true)
+    }
   }
 
   const handleQuit = async () => {
@@ -53,12 +56,16 @@ export function CardFlashRevisionMode() {
                   flashCard?.answers.map((answer) => (
                     <button
                       key={answer.answer}
-                      onClick={() => handleSubmit(answer.answer)}
+                      onClick={() => handleSelect(answer.answer)}
                       className={dc(
                         'input border-2  p-4',
                         [answer.type === 'good', 'bg-arrd-primary text-white'],
-                        [answer.answer === response, 'border-arrd-highlight', 'border-arrd-bgLight'],
-                        [answer.answer === response && answer.type === 'bad', 'border-arrd-textError']
+                        [response.includes(answer.answer), 'border-arrd-highlight', 'border-arrd-bgLight'],
+                        [response.includes(answer.answer) && !readyForNextCard, 'border-arrd-highlight'],
+                        [
+                          response.includes(answer.answer) && answer.type === 'bad' && readyForNextCard,
+                          'border-arrd-textError',
+                        ]
                       )}
                     >
                       {validator.unescape(answer.answer)}
@@ -74,9 +81,9 @@ export function CardFlashRevisionMode() {
         <Button
           text="Suivant"
           type="secondary"
-          onClick={handleNext}
+          onClick={handleSubmit}
           loading={loadingRevision}
-          disabled={!readyForNextCard}
+          disabled={!readyForNextCard && response.length === 0}
         />
       </div>
     </div>
