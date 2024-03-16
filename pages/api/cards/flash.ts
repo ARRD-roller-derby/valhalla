@@ -51,7 +51,7 @@ export default async function cardsFlash(req: NextApiRequest, res: NextApiRespon
   const { user } = session
   await MongoDb()
 
-  const cards = await Card.find({ $and: [{ owner: user.id }, { type: 'flashcard' }] })
+  const cards = await Card.find({ $and: [{ owner: user.id }, { type: 'flashcard' }, { cost: 0 }] })
 
   // Trier les card pour avoir que celle à reviser.
   const now = dayjs()
