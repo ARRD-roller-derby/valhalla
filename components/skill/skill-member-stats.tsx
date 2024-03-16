@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 
 // Bibliothèques internes
 import { useMember, useSkills } from '@/entities'
-import { Card, Loader } from '@/ui'
+import { CardUI, Loader } from '@/ui'
 import { LevelBar } from '@/ui/level-bar'
 import { SKILL_LEVELS_LABELS } from '@/utils'
 import { useSession } from 'next-auth/react'
@@ -105,7 +105,7 @@ export function SkillMemberStats() {
             <h2>{score.category}</h2>
             <LevelBar level="TOTAL" percentage={score.percentage} />
 
-            <Card>
+            <CardUI>
               <div key={score.category} className="flex flex-col gap-2 ">
                 {score.details
                   .sort((a, b) => SKILL_LEVELS_LABELS.indexOf(a.level) - SKILL_LEVELS_LABELS.indexOf(b.level))
@@ -117,7 +117,7 @@ export function SkillMemberStats() {
                     />
                   ))}
               </div>
-            </Card>
+            </CardUI>
           </div>
         ))}
     </div>
