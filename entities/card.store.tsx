@@ -79,7 +79,11 @@ export const useCards = create<CardStore>((set, get) => ({
     try {
       const res = await fetch(`/api/cards/flash`)
       const { flashCard, count } = await res.json()
-      set({ flashCard, numOfCardsForRevision: count, loadingRevision: false, revisionMode: count > 0 })
+      set({
+        flashCard,
+        numOfCardsForRevision: count,
+        loadingRevision: false,
+      })
       return flashCard
     } catch (error) {
       set({ loadingRevision: false, error: 'Erreur lors du chargement de la carte' })

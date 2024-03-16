@@ -10,7 +10,7 @@ export function CardFlashHome() {
     getFlashCard()
   }, [])
 
-  if (revisionMode) return <CardFlashRevisionMode />
+  if (revisionMode && numOfCardsForRevision > 0) return <CardFlashRevisionMode />
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-2 p-4">
