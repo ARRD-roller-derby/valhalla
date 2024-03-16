@@ -8,6 +8,7 @@ import { Card } from '@/models/card.model'
 import { ObjectId } from 'mongodb'
 import { bank } from '@/services'
 import { PURCHASE_TYPES } from '@/utils'
+import dayjs from 'dayjs'
 
 export default async function cardBuy(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
@@ -27,6 +28,17 @@ export default async function cardBuy(req: NextApiRequest, res: NextApiResponse)
 
   card.owner = newOwner
   card.cost = 0
+
+  if (card.type === 'player') {
+    card.player.isFirstLine = false
+    card.player.isInTeam = false
+  }
+
+  if (card.type === 'flashcard') {
+    card.flash.lastRevision = dayjs().subtract(1, 'day').toDate()
+    card.flash.frequency = 'daily'
+  }
+
   await card.save()
   //On paye le vendeur
   await bank(oldOwnerId.toString(), cost, 1, PURCHASE_TYPES.sellCard)

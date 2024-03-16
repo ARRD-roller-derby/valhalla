@@ -13,7 +13,7 @@ export const boosters: Booster[] = [
   {
     title: 'Booster Classique',
     description: 'Contient 5 cartes communes. Peut contenir une carte rare',
-    cost: 15,
+    cost: 300,
     key: 'classic',
     common: 5,
     rare: 0,
@@ -24,7 +24,7 @@ export const boosters: Booster[] = [
   {
     title: 'Booster Rare',
     description: 'Contient 4 cartes communes, 1 rare. Peut contenir une carte épique',
-    cost: 100,
+    cost: 1000,
     common: 4,
     rare: 1,
     epic: 0,
@@ -35,7 +35,7 @@ export const boosters: Booster[] = [
   {
     title: 'Booster Épique',
     description: 'Contient 3 cartes commune, 1 carte rare et une épique. Peut contenir une carte légendaire',
-    cost: 500,
+    cost: 5000,
     common: 3,
     rare: 1,
     epic: 1,

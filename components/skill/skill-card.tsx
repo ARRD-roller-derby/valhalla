@@ -1,7 +1,7 @@
 import { useMember, useSkill } from '@/entities'
 import Link from 'next/link'
 import { ReadEditor } from '../editor'
-import { Card, SkillUserLevelBar } from '@/ui'
+import { CardUI, SkillUserLevelBar } from '@/ui'
 import { SKILL_LEVELS_LABELS, dc } from '@/utils'
 import { SkillEditModal } from './skill-edit-member.modal'
 
@@ -17,7 +17,7 @@ export function SkillCard({ editable }: ISkillCardProps) {
 
   // Rendu -----------------------------------
   return (
-    <Card>
+    <CardUI>
       <div className="flex h-full flex-col  justify-between gap-3">
         <div className="flex flex-col gap-1">
           <Link href={`/skills/${skill._id}`}>
@@ -66,6 +66,6 @@ export function SkillCard({ editable }: ISkillCardProps) {
           }
         </div>
       </div>
-    </Card>
+    </CardUI>
   )
 }

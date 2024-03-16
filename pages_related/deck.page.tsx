@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { AuthLayout } from '@/layout'
 import { PageTabs } from '@/ui'
 import { CardList } from '@/components'
+import { CardFlashHome } from '@/components/card/card-flash-home'
 
 export function Deck() {
   const { data: session } = useSession()
@@ -24,12 +25,12 @@ export function Deck() {
             {
               title: 'Révision',
               tab: 'revision',
-              element: <div>Bientôt disponible</div>,
+              element: <CardFlashHome />,
             },
             {
               title: 'Deck',
               tab: 'deck',
-              element: <div>Bientôt disponible</div>,
+              element: <div>Tu pourras bientôt utiliser tes cartes de joueuses.</div>,
             },
           ]}
         />
