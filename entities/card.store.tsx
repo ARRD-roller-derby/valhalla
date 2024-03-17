@@ -17,7 +17,7 @@ interface CardStore {
   numOfCardsForRevision: number
 
   // FETCHERS----------------------------------------------------------------
-  getCards: () => Promise<void>
+  getCards: (reset?: boolean) => Promise<void>
   getFlashCard: () => Promise<Card>
   submitAnswer: (id: string, answers: string[]) => Promise<void>
 
@@ -46,7 +46,8 @@ export const useCards = create<CardStore>((set, get) => ({
   numOfCardsForRevision: 0,
 
   //=== FETCHERS ============================================================
-  async getCards() {
+  async getCards(reset) {
+    if (reset) set({ cards: [] })
     set({ loading: true, error: null })
 
     try {
@@ -61,7 +62,7 @@ export const useCards = create<CardStore>((set, get) => ({
   },
 
   async shop() {
-    set({ loading: true, error: null })
+    set({ loading: true, error: null, cards: [] })
 
     try {
       const res = await fetch(`/api/cards/shop`)
