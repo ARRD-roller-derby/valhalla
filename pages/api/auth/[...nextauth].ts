@@ -85,6 +85,7 @@ export const authOptions = {
         ...session.user,
         roles,
         nickname: member.nick,
+        image: member.user.avatar ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png` : null,
       }
       return session
     },

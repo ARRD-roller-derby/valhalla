@@ -36,7 +36,7 @@ export interface Card {
   _id: ObjectId
   question?: string
   answers?: Answer[]
-  img: string
+  img?: string
   rarity: Rarity
   type: CardType
   cost: number
