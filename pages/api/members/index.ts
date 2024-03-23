@@ -58,7 +58,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
         ...dolibarrInfos,
         roles,
         providerAccountId: member.user.id,
-        username: member?.nick || member.user.username,
+        username: member?.user?.global_name || member?.nick || member.user.username,
         avatar: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
           : '/static/images/valhalla.png',
