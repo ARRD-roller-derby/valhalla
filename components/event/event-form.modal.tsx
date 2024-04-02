@@ -20,6 +20,7 @@ interface EventModalProps {
 export function EventFormModal({ day, eventToUpdate, customButton }: EventModalProps) {
   // Stores -----------------------------------------------------------------------------
   const { loading, currentDay, updateEvent, createEvent } = useEvents()
+  const [reset, setReset] = useState(0)
 
   // Constantes -------------------------------------------------------------------------
 
@@ -99,11 +100,42 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     })
   }
 
+  const handleChangeEnd = () => {
+    if (form.start && form.end && dayjs(form.start).isValid() && dayjs(form.end).isValid()) {
+      if (dayjs(form.start).isAfter(dayjs(form.end))) setForm((prev) => ({ ...prev, end: form.start }))
+    } else if (!form.end) setForm((prev) => ({ ...prev, end: form.start, endHour: form.startHour }))
+
+    if (form.startHour && form.endHour) {
+      const startDateTime = dayjs(form.start)
+        .hour(parseInt(form.startHour.split(':')[0]))
+        .minute(parseInt(form.startHour.split(':')[1]))
+      const endDateTime = dayjs(form.end)
+        .hour(parseInt(form.endHour.split(':')[0]))
+        .minute(parseInt(form.endHour.split(':')[1]))
+
+      if (dayjs(form.start).isSame(dayjs(form.end)) && startDateTime.isAfter(endDateTime)) {
+        const newEndDateTime = dayjs(form.start)
+          .hour(parseInt(form.startHour.split(':')[0]))
+          .minute(parseInt(form.startHour.split(':')[1]))
+          .add(1, 'hour')
+
+        const newEndHour = newEndDateTime.format('HH:mm')
+
+        setForm((prev) => ({ ...prev, endHour: newEndHour }))
+        setReset(Date.now())
+      }
+    }
+  }
+
   // Effets ------------------------------------------------------------------------------
   useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
     if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
   }, [form.type])
+
+  useEffect(() => {
+    handleChangeEnd()
+  }, [form.start, form.end, form.startHour, form.endHour])
 
   // Render ------------------------------------------------------------------------------
   return (
@@ -141,7 +173,11 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
             <div className="grid grid-cols-[auto_auto_1fr] items-center gap-2">
               <DateInput date={form.end} setDate={(end) => setForm((prev) => ({ ...prev, end }))} />
               <div className="text-center">{'à'}</div>
-              <TimeInput time={form.endHour} setTime={(endHour) => setForm((prev) => ({ ...prev, endHour }))} />
+              <TimeInput
+                time={form.endHour}
+                setTime={(endHour) => setForm((prev) => ({ ...prev, endHour }))}
+                key={reset}
+              />
             </div>
           </LabelBlock>
 
