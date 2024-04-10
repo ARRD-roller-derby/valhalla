@@ -15,7 +15,7 @@ export function AuthLayout({ children, title }: AuthLayoutProps) {
     <SocketProvider>
       <div
         className={dc(
-          'grid h-screen gap-1',
+          'grid h-[100dvh] gap-1',
           'grid-areas-menu-mobile',
           'grid-cols-menu-mobile',
           'grid-rows-menu-mobile',
