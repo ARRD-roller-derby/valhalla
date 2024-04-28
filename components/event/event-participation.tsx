@@ -116,7 +116,7 @@ export function EventParticipation() {
         </div>
         <div className="flex items-center justify-between gap-2">
           <Modal
-            title="Liste des s"
+            title="Liste des participants"
             button={(onClick) => <Button onClick={onClick} type="secondary" text="participants" />}
           >
             {() => <EventAttendeesModal />}
