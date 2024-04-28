@@ -91,7 +91,7 @@ export function EventAttendees() {
 
       {hasConfirmedCount > 0 && (
         <div className="flex flex-col gap-1">
-          {participants.length > 0 && (
+          {hasConfirmedCount > 0 && (
             <div className="text-center text-arrd-highlight">
               {hasConfirmedCount} {'à confirmer'}
             </div>
