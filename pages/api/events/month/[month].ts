@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
-import { Event } from '@/models'
+import { Event, IParticipant } from '@/models'
 import { authOptions } from '../../auth/[...nextauth]'
 process.env.TZ = 'Europe/Paris'
 
@@ -13,6 +13,8 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
+import { getDiscordMember } from '@/services/get-discord-member'
+import { APIGuildMember } from 'discord-api-types/v10'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -77,5 +79,21 @@ export default async function eventsMonth(req: NextApiRequest, res: NextApiRespo
 
   await MongoDb()
   const events = await Event.find({ $or: or })
-  return res.status(200).json({ events })
+  const { members } = await getDiscordMember()
+
+  return res.status(200).json({
+    events: events.map((event) => {
+      return {
+        ...event._doc,
+        participants: event.participants.map((par: any) => {
+          const m = members.find((member) => member.id === par.userId)
+          return {
+            ...par._doc,
+            avatar: m?.avatar,
+            name: m?.global_name || m?.username || m?.name,
+          }
+        }),
+      }
+    }),
+  })
 }

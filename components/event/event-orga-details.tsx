@@ -17,6 +17,7 @@ export function EventOrgaDetails() {
   }, [event.participants])
 
   // Rendu ---------------------------------------------------------------------
+
   return (
     <>
       {(coachAndAssistCoach.coach || coachAndAssistCoach.assistCoach) && (

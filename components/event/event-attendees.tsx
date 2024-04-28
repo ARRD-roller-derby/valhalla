@@ -78,7 +78,7 @@ export function EventAttendees() {
       )}
       <div className="m-auto flex max-w-[500px] justify-center">
         <div className="flex flex-col gap-2">
-          {participants.sort(compareParticipants).map((p) => {
+          {participants.sort(compareParticipants).map((p: any) => {
             const icon = participationTypes.find((pType) => pType.key === p.type)?.icon || <HandIcon />
             return (
               <div
@@ -88,10 +88,12 @@ export function EventAttendees() {
                   'opacity-50',
                 ])}
               >
-                <div className="flex h-6 w-full justify-between fill-arrd-highlight">{icon}</div>
-                <div className="text-right font-bold first-letter:uppercase">
+                <div className="">{p.avatar && <img src={p.avatar} className="h-12 w-12 rounded-full" />}</div>
+
+                <div className="flex-1 text-right font-bold first-letter:uppercase">
                   {p.name}
-                  <div className="text-right text-xs italic text-arrd-primary">
+                  <div className="flex items-center  justify-end gap-1 text-right text-xs  italic text-arrd-primary ">
+                    <div className="flex w-3 items-center justify-center fill-arrd-highlight">{icon}</div>
                     {p.type} {p.status === 'à confirmer' ? '?' : ''}
                   </div>
                 </div>
