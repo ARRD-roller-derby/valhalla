@@ -69,7 +69,14 @@ export function EventParticipation() {
 
   // Rendu ------------------------------------------------------
 
-  if (dayjs(event.end).isBefore(dayjs())) return <></>
+  if (dayjs(event.end).isBefore(dayjs()))
+    return (
+      <div className="flex h-full w-full items-end justify-center">
+        <div className="flex-1 rounded-sm border border-arrd-textError p-2 text-center text-arrd-textError">
+          Terminé
+        </div>
+      </div>
+    )
   return (
     <div className="mr-1 mt-2 fill-arrd-highlight">
       <div className="flex justify-between gap-3">
