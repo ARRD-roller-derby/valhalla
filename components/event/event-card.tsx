@@ -8,6 +8,7 @@ import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from 
 import { ArrowLeftIcon, CancelMsg, CardUI, Modal } from '@/ui'
 import { EventAttendeesModal } from './event-attendees.modal'
 import { useMemo } from 'react'
+import { dc } from '@/utils'
 
 export function EventCard() {
   // Stores -------------------------------------------------------------------
@@ -21,6 +22,7 @@ export function EventCard() {
   const end = useMemo(() => dayjs(event.end), [event.end])
   //TODO implementer le calcul de la durée de l'event, et l'afficher dans le composant
 
+  console.log('event', event)
   // Rendu ---------------------------------------------------------------------
   return (
     <CardUI>
@@ -62,7 +64,14 @@ export function EventCard() {
         <div className="grid grid-rows-[1fr_auto] gap-3">
           <div>
             <Link href={`/agenda/${event._id}`}>
-              <div className="text-md rounded border border-arrd-secondary p-2  uppercase text-arrd-textExtraLight">
+              <div
+                className={dc(
+                  'text-md rounded border p-2  uppercase text-arrd-textExtraLight',
+                  [!!event.type.match(/derby/), 'border-arrd-secondary'],
+                  [!!event.type.match(/patin/), 'border-arrd-primary'],
+                  [!event.type.match(/patin|derby/), 'border-arrd-highlight']
+                )}
+              >
                 {event.title}
               </div>
             </Link>
