@@ -7,15 +7,12 @@ import { useEvent, useWeather } from '@/entities'
 import { ReadEditor, EventOrgaDetails, EventParticipation, WeatherWidget } from '@/components'
 import { ArrowLeftIcon, CancelMsg, CardUI, Modal } from '@/ui'
 import { EventAttendeesModal } from './event-attendees.modal'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 export function EventCard() {
   // Stores -------------------------------------------------------------------
   const { event } = useEvent()
   const { loading } = useWeather()
-
-  // States -------------------------------------------------------------------
-  const [_modal, setModal] = useState(false)
 
   // Constantes ----------------------------------------------------------------
   const isOneDay = dayjs(event.start).isSame(event.end, 'day')
@@ -30,7 +27,6 @@ export function EventCard() {
       <div className="grid h-full grid-cols-[auto_1fr] gap-3">
         <Modal
           title="Liste des participants"
-          onOpen={() => setModal(true)}
           button={(onClick) => (
             <div className="flex cursor-pointer flex-col items-center" onClick={onClick}>
               <div className="text-xs">{start.format('dddd')}</div>
@@ -74,12 +70,13 @@ export function EventCard() {
               <div className="py-2 text-sm italic text-arrd-secondary">{event.address.label}</div>
             )}
             <EventOrgaDetails />
-            <div className="text-arrd-textSecondary pb-2 text-sm">
+            <div className="text-arrd-textSecondary text-sm">
               {event.description && <ReadEditor content={event.description} />}
             </div>
             {event.address?.lat && event.address?.lon && !loading && <WeatherWidget />}
           </div>
-
+        </div>
+        <div className=" col-span-full flex flex-col border-t-[1px]  border-arrd-bg pt-2">
           {event.cancelled ? <CancelMsg /> : <EventParticipation />}
         </div>
       </div>
