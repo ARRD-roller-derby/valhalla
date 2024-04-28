@@ -121,7 +121,7 @@ export function EventParticipation() {
           >
             {() => <EventAttendeesModal />}
           </Modal>
-          {myParticipation.btn ? (
+          {myParticipation.btn && (
             <Button
               type="invert-primary"
               text={myParticipation.status === 'à confirmer' ? 'Confirmer' : 'Peut-être'}
@@ -129,8 +129,6 @@ export function EventParticipation() {
                 changeMyParticipationStatus(event._id, myParticipation.status === 'à confirmer' ? 'confirm' : 'maybe')
               }
             />
-          ) : (
-            <div />
           )}
         </div>
       </div>
