@@ -111,7 +111,7 @@ export function EventAttendees() {
       <div className="flex flex-col gap-1">
         {absCount > 0 && (
           <div className="text-center text-arrd-highlight">
-            {presentCount} absent·e{absCount > 1 ? '·s' : ''}
+            {absCount} absent·e{absCount > 1 ? '·s' : ''}
           </div>
         )}
 
