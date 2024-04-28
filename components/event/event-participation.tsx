@@ -110,7 +110,7 @@ export function EventParticipation() {
           )}
         </div>
       </div>
-      <div className="mt-1 flex flex-1 flex-col justify-between gap-3 sm:flex-row">
+      <div className="mt-1 flex flex-1 flex-col justify-between gap-3">
         <div className="p-1 text-right text-xs italic">
           {myParticipation.label} <span className="font-bold">{myParticipation.type}</span>
         </div>
