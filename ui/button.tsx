@@ -6,7 +6,7 @@ interface ButtonProps {
   loading?: boolean
   disabled?: boolean
   onClick: () => void
-  type?: 'primary' | 'secondary' | 'danger' | 'invert-secondary'
+  type?: 'primary' | 'secondary' | 'danger' | 'invert-secondary' | 'invert-primary'
 }
 
 export function Button({ onClick, text, type, disabled, loading }: ButtonProps) {
@@ -16,6 +16,7 @@ export function Button({ onClick, text, type, disabled, loading }: ButtonProps) 
     secondary: 'bg-arrd-secondary text-arrd-textExtraLight',
     danger: 'bg-arrd-textError text-arrd-textExtraLight',
     'invert-secondary': 'bg-transparent border border-arrd-secondary text-arrd-secondary',
+    'invert-primary': 'bg-transparent border border-arrd-primary text-arrd-primary',
   }
 
   return (

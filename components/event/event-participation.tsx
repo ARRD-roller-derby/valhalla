@@ -122,16 +122,13 @@ export function EventParticipation() {
             {() => <EventAttendeesModal />}
           </Modal>
           {myParticipation.btn ? (
-            <div
-              className="flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-arrd-bg px-1 py-2 text-left text-xs text-white"
+            <Button
+              type="invert-primary"
+              text={myParticipation.status === 'à confirmer' ? 'Confirmer' : 'Peut-être'}
               onClick={() =>
                 changeMyParticipationStatus(event._id, myParticipation.status === 'à confirmer' ? 'confirm' : 'maybe')
               }
-            >
-              <span className="first-letter:uppercase">
-                {myParticipation.status === 'à confirmer' ? 'je confirme' : 'Je ne suis pas sûr.e'}
-              </span>
-            </div>
+            />
           ) : (
             <div />
           )}

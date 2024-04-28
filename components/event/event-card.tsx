@@ -76,7 +76,7 @@ export function EventCard() {
             {event.address?.lat && event.address?.lon && !loading && <WeatherWidget />}
           </div>
         </div>
-        <div className=" col-span-full flex flex-col border-t-[1px]  border-arrd-bg pt-2">
+        <div className="col-span-full flex flex-col content-stretch justify-around border-t-[1px] border-arrd-bg pt-2">
           {event.cancelled ? <CancelMsg /> : <EventParticipation />}
         </div>
       </div>
