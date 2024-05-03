@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 
 // Bibliothèque interne
-import {  DOLAPIKEY, DOL_URL, dolibarrMemberParser, hexToTailwind } from '@/utils'
+import { DOLAPIKEY, DOL_URL, dolibarrMemberParser, hexToTailwind } from '@/utils'
 import { authOptions } from '../auth/[...nextauth]'
 import { getDiscordMember } from '@/services/get-discord-member'
 
@@ -14,8 +14,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
   const session = await getServerSession(req, res, authOptions)
   if (!session) return res.status(403).send('non autorisé')
 
-
-  const {members: discordMembers, guildRoles} = await getDiscordMember()
+  const { members: discordMembers, guildRoles } = await getDiscordMember()
 
   const params = new URLSearchParams({
     DOLAPIKEY: DOLAPIKEY,
@@ -32,6 +31,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
   const dolibarrData = await dolibarrRes.json()
 
   const members = discordMembers
+    .filter((member) => !member.bot)
     .map((member: any) => {
       const roles = guildRoles
         .filter((role) => member?.roles?.includes(role.id))
@@ -42,15 +42,17 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
         }))
 
       const dolibarrMember = dolibarrData.find((dolibarrMember: any) =>
-        dolibarrMember?.note_private ? dolibarrMember.note_private.includes(member.user.id) : false
+        dolibarrMember?.note_private ? dolibarrMember.note_private.includes(member.providerAccountId) : false
       )
 
-      const dolibarrInfos = dolibarrMember ? dolibarrMemberParser([dolibarrMember], session.user, member.user.id) : {}
+      const dolibarrInfos = dolibarrMember
+        ? dolibarrMemberParser([dolibarrMember], session.user, member.providerAccountId)
+        : {}
       return {
         ...member.user,
         ...dolibarrInfos,
         roles,
-        providerAccountId: member.user.id,
+        providerAccountId: member.providerAccountId,
         username: member?.user?.global_name || member?.nick || member.user.username,
         avatar: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
@@ -58,7 +60,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
       }
     })
     .filter((member: any) => member.roles.some((role: any) => role.name.toLowerCase() === 'membre'))
-    .filter((member: any) => !member.roles.find((role: any) => role.name.toLowerCase() === 'midgard'))
+
     .sort((a: any, b: any) => a.username.localeCompare(b.username))
     .sort((a: any, b: any) => {
       const aHasBureau = a.roles.some((role: any) => role.name.toLowerCase() === 'bureau')

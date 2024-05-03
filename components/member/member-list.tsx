@@ -27,7 +27,7 @@ export function MemberList() {
       {!loading && members.length > 0 && (
         <div className="flex flex-col gap-4 p-3 sm:grid sm:grid-cols-3 lg:grid-cols-4">
           {members.map((member) => (
-            <MemberProvider member={member}>
+            <MemberProvider member={member} key={member.id}>
               <MemberCard />
             </MemberProvider>
           ))}

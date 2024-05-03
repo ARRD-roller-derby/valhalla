@@ -22,7 +22,6 @@ export function EventCard() {
   const end = useMemo(() => dayjs(event.end), [event.end])
   //TODO implementer le calcul de la durée de l'event, et l'afficher dans le composant
 
-  console.log('event', event)
   // Rendu ---------------------------------------------------------------------
   return (
     <CardUI>

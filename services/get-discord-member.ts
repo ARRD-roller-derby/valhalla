@@ -5,6 +5,7 @@ import { Routes } from 'discord-api-types/v10'
 
 import { User } from '../models/user.model'
 import { MongoDb } from '@/db'
+import { Map } from '../ui/map'
 
 export async function getDiscordMember() {
   const query = new URLSearchParams()
@@ -23,8 +24,11 @@ export async function getDiscordMember() {
       const user = users.find((user) => user.providerAccountId === member?.user?.id)
       return {
         ...user?._doc,
+        ...member,
         ...member.user,
         id: user?._doc?._id.toString(),
+        providerAccountId: member?.user?.id,
+        roles: member.roles,
         avatar: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
           : '/static/images/valhalla.png',
