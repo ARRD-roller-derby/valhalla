@@ -32,11 +32,15 @@ process.env.TZ = 'Europe/Paris'
 async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
   const start = dayjs().startOf('day').toISOString()
 
-  await MongoDb()
-  const event = await Event.findOne({
+  const between = {
     start: {
       $gte: start,
     },
+  }
+
+  await MongoDb()
+  const event = await Event.findOne({
+    ...between,
     type: {
       $in: ['Cours de patinage', 'Entraînement de derby'],
     },
