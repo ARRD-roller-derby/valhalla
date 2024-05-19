@@ -14,8 +14,6 @@ import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
 import { getDiscordMember } from '@/services/get-discord-member'
-import { APIGuildMember } from 'discord-api-types/v10'
-import { ObjectId } from 'mongodb'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
