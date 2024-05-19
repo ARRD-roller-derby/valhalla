@@ -30,15 +30,16 @@ import { getDiscordMember } from '@/services/get-discord-member'
 process.env.TZ = 'Europe/Paris'
 
 async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
-  const start = dayjs().toISOString()
+  const start = dayjs().startOf('day').toISOString()
 
-  console.log('start', start)
   await MongoDb()
   const event = await Event.findOne({
     start: {
       $gte: start,
     },
-    // type: 'training',
+    type: {
+      $in: ['Cours de patinage', 'Entraînement de derby'],
+    },
   })
 
   const { members } = await getDiscordMember()
