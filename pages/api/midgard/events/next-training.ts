@@ -44,7 +44,7 @@ async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IU
     type: {
       $in: ['Cours de patinage', 'Entraînement de derby'],
     },
-  })
+  }).sort({ start: 1 })
 
   const { members } = await getDiscordMember()
   return res.status(200).json({
