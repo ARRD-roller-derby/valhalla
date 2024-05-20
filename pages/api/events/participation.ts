@@ -49,6 +49,8 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
 
     if (form.participation.match(/absent/)) {
       participantEvt.status = 'absent.e'
+    } else {
+      participantEvt.status = 'présent'
     }
     participantEvt.type = form.participation
     participantEvt.guestsNumber = form.guestsNumber || 0

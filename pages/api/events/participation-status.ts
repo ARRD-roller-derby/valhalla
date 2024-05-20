@@ -27,7 +27,6 @@ dayjs.tz.setDefault('Europe/Paris')
 async function event_participation_status(req: NextApiRequest, res: NextApiResponse, user: any) {
   const form = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body
 
-  console.log('form', user)
   if (!form.eventId || !form.status) return res.status(400).send('Il manque des informations')
   await MongoDb()
   const event = await Event.findOne({ _id: form.eventId })
@@ -38,7 +37,7 @@ async function event_participation_status(req: NextApiRequest, res: NextApiRespo
 
   if (!participantEvt) return res.status(404).send('Participant non trouvé')
 
-  participantEvt.status = form.status.match(/confirm/) ? 'présent' : 'à confirmer'
+  participantEvt.status = form.status.match(/confirm|présent|pres/) ? 'présent' : 'à confirmer'
   participantEvt.updatedAt = dayjs().toDate()
 
   event.participants = event.participants.map((p: IParticipant) => {
