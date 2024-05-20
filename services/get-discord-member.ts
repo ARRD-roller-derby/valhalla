@@ -19,21 +19,23 @@ export async function getDiscordMember() {
   const members = membersRes as any[]
 
   return {
-    members: members.map((member) => {
-      const user = users.find((user) => user.providerAccountId === member?.user?.id)
+    members: members
+      .filter((m) => !m?.bot || !m.user?.bot)
+      .map((member) => {
+        const user = users.find((user) => user.providerAccountId === member?.user?.id)
 
-      return {
-        ...user?._doc,
-        ...member,
-        ...member.user,
-        id: user?._doc?._id.toString(),
-        providerAccountId: member?.user?.id,
-        roles: member.roles,
-        avatar: member.user.avatar
-          ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
-          : '/static/images/valhalla.png',
-      }
-    }),
+        return {
+          ...user?._doc,
+          ...member,
+          ...member.user,
+          id: user?._doc?._id.toString(),
+          providerAccountId: member?.user?.id,
+          roles: member.roles,
+          avatar: member.user.avatar
+            ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
+            : '/static/images/valhalla.png',
+        }
+      }),
     guildRoles,
   }
 }
