@@ -77,7 +77,8 @@ async function eventsNext(req: NextApiRequest, res: NextApiResponse, user: any) 
           return {
             ...par._doc,
             avatar: m?.avatar,
-            name: m?.global_name || m?.username || m?.name,
+            name: m?.username || m?.global_name || m?.name || par.name,
+            providerAccountId: m?.providerAccountId,
           }
         }),
       }
