@@ -1,11 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../auth/[...nextauth]'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
-export default async function address_search(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-
+async function address_search(req: NextApiRequest, res: NextApiResponse) {
   const search = req.query.search as string
 
   const resBano = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${search}&limit=5`)
@@ -31,3 +27,5 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
 
   return res.status(200).json(addresses)
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, address_search)

@@ -1,18 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
-import { authOptions } from '../../auth/[...nextauth]'
 import { ROLES, checkRoles } from '@/utils'
+import { authMiddleWare } from '@/utils/auth-middleware'
 process.env.TZ = 'Europe/Paris'
 
-export default async function event_findOne(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-  const { user } = session
-
-  if (!user) return res.status(403).send('non autorisé')
-
+async function event_findOne(req: NextApiRequest, res: NextApiResponse, user: any) {
   await MongoDb()
   const event = await Event.findOne({ _id: req.query.id })
   if (!event) return res.status(404).send('Événement non trouvé')
@@ -37,3 +30,7 @@ export default async function event_findOne(req: NextApiRequest, res: NextApiRes
     event,
   })
 }
+
+const helper = (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, event_findOne)
+
+export default helper

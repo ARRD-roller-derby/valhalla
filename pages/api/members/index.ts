@@ -1,19 +1,15 @@
 // Bibliothèque externe
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 
 // Bibliothèque interne
 import { DOLAPIKEY, DOL_URL, dolibarrMemberParser, hexToTailwind } from '@/utils'
-import { authOptions } from '../auth/[...nextauth]'
 import { getDiscordMember } from '@/services/get-discord-member'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
-export default async function members(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-
+async function members(_req: NextApiRequest, res: NextApiResponse, user: any) {
   const { members: discordMembers, guildRoles } = await getDiscordMember()
 
   const params = new URLSearchParams({
@@ -45,9 +41,7 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
         dolibarrMember?.note_private ? dolibarrMember.note_private.includes(member.providerAccountId) : false
       )
 
-      const dolibarrInfos = dolibarrMember
-        ? dolibarrMemberParser([dolibarrMember], session.user, member.providerAccountId)
-        : {}
+      const dolibarrInfos = dolibarrMember ? dolibarrMemberParser([dolibarrMember], user, member.providerAccountId) : {}
       return {
         ...member.user,
         ...dolibarrInfos,
@@ -72,3 +66,5 @@ export default async function members(req: NextApiRequest, res: NextApiResponse)
 
   return res.status(200).json({ members })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, members)

@@ -1,10 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../auth/[...nextauth]'
 import { Event, IParticipant } from '@/models'
 import { capitalizeFirstLetter } from '@/utils'
-import { bank, publishToDiscord, trigger } from '@/services'
+import { publishToDiscord, trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
 process.env.TZ = 'Europe/Paris'
 
@@ -15,6 +13,7 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -25,10 +24,7 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-export default async function event_participation_status(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-  const { user } = session
+async function event_participation_status(req: NextApiRequest, res: NextApiResponse, user: any) {
   const form = JSON.parse(req.body || '{}')
   if (!form.eventId || !form.status) return res.status(400).send('Il manque des informations')
   await MongoDb()
@@ -88,3 +84,6 @@ Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
     participant,
   })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) =>
+  authMiddleWare(request, response, event_participation_status)

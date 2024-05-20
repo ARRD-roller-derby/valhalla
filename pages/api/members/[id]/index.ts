@@ -1,31 +1,18 @@
 // Bibliothèque externe
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
 import { TRole, User } from '@/models'
 
 // Bibliothèque interne
-import {
-  DISCORD_GUILD_ID,
-  DISCORD_TOKEN,
-  DOLAPIKEY,
-  DOL_URL,
-  ROLES_CAN_MANAGE_EVENT,
-  checkRoles,
-  hexToTailwind,
-} from '@/utils'
-import { authOptions } from '../../auth/[...nextauth]'
-import { IDolibarrMember } from '@/entities'
+import { DISCORD_GUILD_ID, DISCORD_TOKEN, DOLAPIKEY, DOL_URL, hexToTailwind } from '@/utils'
 import { dolibarrMemberParser } from '../../../../utils/dolibarr-member-parser'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
-export default async function member(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-
+async function member(req: NextApiRequest, res: NextApiResponse) {
   const providerAccountId = req.query.id as string
 
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
@@ -74,3 +61,5 @@ export default async function member(req: NextApiRequest, res: NextApiResponse) 
     },
   })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, member)

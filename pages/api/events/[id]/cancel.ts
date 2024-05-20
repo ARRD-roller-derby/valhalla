@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
-import { authOptions } from '../../auth/[...nextauth]'
 import { ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
@@ -15,6 +13,7 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -25,12 +24,7 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-export default async function event_cancel(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-  const { user } = session
-  if (!user) return res.status(403).send('non autorisé')
-
+async function event_cancel(req: NextApiRequest, res: NextApiResponse, user: any) {
   const canCancel = checkRoles(ROLES_CAN_MANAGE_EVENT, user)
   if (!canCancel) return res.status(403).send('non autorisé')
 
@@ -58,3 +52,5 @@ export default async function event_cancel(req: NextApiRequest, res: NextApiResp
     event,
   })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, event_cancel)

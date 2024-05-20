@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
-import { Event, IParticipant } from '@/models'
-import { authOptions } from '../auth/[...nextauth]'
+import { Event } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -14,6 +12,7 @@ import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
 import { getDiscordMember } from '@/services/get-discord-member'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -24,11 +23,7 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-export default async function eventsNext(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
-  const { user } = session
-
+async function eventsNext(req: NextApiRequest, res: NextApiResponse, user: any) {
   const roles = user.roles.map((role: any) => role.name.toLowerCase())
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
@@ -89,3 +84,5 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     }),
   })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, eventsNext)
