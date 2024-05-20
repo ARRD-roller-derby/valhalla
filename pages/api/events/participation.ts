@@ -25,12 +25,10 @@ dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
 async function event_participation(req: NextApiRequest, res: NextApiResponse, user: any) {
-  console.log('event_participation', user)
-  const form = JSON.parse(req.body || '{}')
+  const form = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body
   if (!form.eventId || !form.participation) return res.status(400).send('Il manque des informations')
   await MongoDb()
   const event = await Event.findOne({ _id: form.eventId })
-
   if (!event) return res.status(404).send('Événement non trouvé')
   if (!event.participants) event.participants = []
   const participantEvt = event.participants.find((p: IParticipant) => p.userId === user.id)
