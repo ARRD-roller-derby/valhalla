@@ -5,7 +5,6 @@ import { Routes } from 'discord-api-types/v10'
 
 import { User } from '../models/user.model'
 import { MongoDb } from '@/db'
-import { Map } from '../ui/map'
 
 export async function getDiscordMember() {
   const query = new URLSearchParams()
@@ -22,6 +21,7 @@ export async function getDiscordMember() {
   return {
     members: members.map((member) => {
       const user = users.find((user) => user.providerAccountId === member?.user?.id)
+
       return {
         ...user?._doc,
         ...member,

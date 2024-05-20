@@ -73,9 +73,11 @@ async function eventsNext(req: NextApiRequest, res: NextApiResponse, user: any) 
       return {
         ...event._doc,
         participants: event.participants.map((par: any) => {
-          const m = members.find((member) => member.id === par.userId)
+          const user = par._doc || par
+          const m = members.find((member) => member.id === user.userId)
+
           return {
-            ...par._doc,
+            ...user,
             avatar: m?.avatar,
             name: m?.username || m?.global_name || m?.name || par.name,
             providerAccountId: m?.providerAccountId,

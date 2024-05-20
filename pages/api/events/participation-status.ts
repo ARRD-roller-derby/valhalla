@@ -26,7 +26,8 @@ dayjs.tz.setDefault('Europe/Paris')
 
 async function event_participation_status(req: NextApiRequest, res: NextApiResponse, user: any) {
   const form = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body
-  console.log(form)
+
+  console.log('form', user)
   if (!form.eventId || !form.status) return res.status(400).send('Il manque des informations')
   await MongoDb()
   const event = await Event.findOne({ _id: form.eventId })

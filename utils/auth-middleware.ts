@@ -17,6 +17,11 @@ export async function authMiddleWare(request: NextApiRequest, response: NextApiR
   if (!provider_id) return response.status(401).json({ error: 'aucun id utilisateur' })
   await MongoDb()
   const user = await User.findOne({ providerAccountId: provider_id })
-  if (user) return helper(request, response, user.toJSON())
+  if (user) {
+    return helper(request, response, {
+      ...user.toJSON(),
+      id: user._id.toString(),
+    })
+  }
   return response.status(403).send('non autorisé')
 }
