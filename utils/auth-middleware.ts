@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { User } from '@/models'
+import { MongoDb } from '@/db'
 
 export async function authMiddleWare(request: NextApiRequest, response: NextApiResponse, helper: Function) {
   const session = await getServerSession(request, response, authOptions)
