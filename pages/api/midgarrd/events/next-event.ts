@@ -1,8 +1,7 @@
 // Bibliothèque externe
 import { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
-import { checkRoles } from '@/utils/check-roles'
-import { Event, User } from '@/models'
+import { Event } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -23,18 +22,18 @@ dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
-import { IUser } from '@/models'
 import { getDiscordMember } from '@/services/get-discord-member'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
-async function nextEvent(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
+async function nextEvent(_req: NextApiRequest, res: NextApiResponse) {
   const start = dayjs().startOf('day').toISOString()
 
   const between = {
     start: {
       $gte: start,
+      $lte: dayjs().endOf('day').toISOString(),
     },
   }
 
@@ -43,15 +42,20 @@ async function nextEvent(_req: NextApiRequest, res: NextApiResponse, user: IUser
     ...between,
   }).sort({ start: 1 })
 
+  if (!event) return res.status(404).json({ error: 'Aucun événement trouvé' })
+
   const { members } = await getDiscordMember()
   return res.status(200).json({
     ...event._doc,
     participants: event.participants.map((par: any) => {
-      const m = members.find((member) => member.id === par.userId)
+      const user = par._doc || par
+      const m = members.find((member) => member.id === user.userId)
+
       return {
-        ...par._doc,
+        ...user,
         avatar: m?.avatar,
-        name: m?.global_name || m?.username || m?.name,
+        name: m?.username || m?.global_name || m?.name || par.name,
+        providerAccountId: m?.providerAccountId,
       }
     }),
   })
