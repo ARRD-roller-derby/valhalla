@@ -29,7 +29,7 @@ import { getDiscordMember } from '@/services/get-discord-member'
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
 
-async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
+async function nextEvent(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
   const start = dayjs().startOf('day').toISOString()
 
   const between = {
@@ -41,9 +41,6 @@ async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IU
   await MongoDb()
   const event = await Event.findOne({
     ...between,
-    type: {
-      $in: ['Cours de patinage', 'Entraînement de derby'],
-    },
   }).sort({ start: 1 })
 
   const { members } = await getDiscordMember()
@@ -60,7 +57,6 @@ async function nextTraining(_req: NextApiRequest, res: NextApiResponse, user: IU
   })
 }
 
-const helper = (request: NextApiRequest, response: NextApiResponse) =>
-  midgardMiddleWare(request, response, nextTraining)
+const helper = (request: NextApiRequest, response: NextApiResponse) => midgardMiddleWare(request, response, nextEvent)
 
 export default helper
