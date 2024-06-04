@@ -64,7 +64,7 @@ async function event_participation_status(req: NextApiRequest, res: NextApiRespo
     const confirmParticipantsNum = event.participants.filter(
       (p: IParticipant) => p.status === 'présent' && !p.type.match(/absent|conf/)
     ).length
-    const msg = `---\n**${capitalizeFirstLetter(user.name)}** vient de **${
+    const msg = `---\n**${capitalizeFirstLetter(user.nickname || user.name)}** vient de **${
       newStatus[participant.status]
     }** sa participation à l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format('LLLL')}.
 Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${

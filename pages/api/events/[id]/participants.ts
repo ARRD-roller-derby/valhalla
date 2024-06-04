@@ -18,7 +18,7 @@ async function event_participants(req: NextApiRequest, res: NextApiResponse, use
       return {
         ...par._doc,
         ...m,
-        name: m?.global_name || m?.username || m?.name,
+        name: m?.nick || m?.global_name || m?.name,
       }
     }),
   })

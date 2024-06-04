@@ -50,7 +50,7 @@ export const authOptions = {
         User.updateOne(
           { _id: user._id },
           {
-            name: member.user.global_name,
+            name: member.nick || member.user.global_name,
           }
         )
       }

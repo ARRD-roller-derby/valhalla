@@ -47,7 +47,7 @@ async function members(_req: NextApiRequest, res: NextApiResponse, user: any) {
         ...dolibarrInfos,
         roles,
         providerAccountId: member.providerAccountId,
-        username: member?.user?.global_name || member?.nick || member.user.username,
+        username: member?.nick || member?.user?.global_name || member.user.username,
         avatar: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png?size=256`
           : '/static/images/valhalla.png',
