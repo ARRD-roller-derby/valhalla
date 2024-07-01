@@ -68,7 +68,7 @@ export function QuestionCreateModal({
             setError('')
             onClick()
           }}
-          text={defaultQuestion ? 'Modifier' : 'Créer'}
+          text={defaultQuestion._id ? 'Modifier' : 'Créer'}
         />
       )}
       footer={(close) => (
