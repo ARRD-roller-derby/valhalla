@@ -11,12 +11,21 @@ interface FooterModalProps {
   closeModal: () => void
   onCancel?: () => void
   onConfirm?: () => Promise<void>
+  onConfirmCb?: (cb: () => void) => Promise<void>
   txtCancel?: string
   txtConfirm?: string
   loading?: boolean
 }
 
-export function FooterModal({ onCancel, closeModal, onConfirm, txtCancel, txtConfirm, loading }: FooterModalProps) {
+export function FooterModal({
+  onCancel,
+  closeModal,
+  onConfirm,
+  onConfirmCb,
+  txtCancel,
+  txtConfirm,
+  loading,
+}: FooterModalProps) {
   // functions
   const handleCancel = () => {
     onCancel?.()
@@ -26,6 +35,10 @@ export function FooterModal({ onCancel, closeModal, onConfirm, txtCancel, txtCon
   const handleConfirm = async () => {
     if (loading) return
     if (onConfirm) await onConfirm()
+    if (onConfirmCb) {
+      await onConfirmCb(closeModal)
+      return
+    }
     closeModal()
   }
 

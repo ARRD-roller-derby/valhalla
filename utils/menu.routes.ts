@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { AddressBookIcon, AgendaIcon, DeckIcon, GameIcon, ShopIcon } from '@/ui'
+import { AddressBookIcon, AgendaIcon, BlockQuestionIcon } from '@/ui'
 
 export const routes = [
   {
@@ -16,15 +16,10 @@ export const routes = [
     inMenu: true,
   },
   {
-    name: 'boutique',
-    path: '/shop',
-    icon: ShopIcon,
+    name: 'questions',
+    path: '/questions',
+    icon: BlockQuestionIcon,
     inMenu: true,
-  },
-  {
-    name: 'mon deck',
-    path: '/deck',
-    icon: DeckIcon,
-    inMenu: true,
+    roles: ['bureau', 'dev'],
   },
 ]
