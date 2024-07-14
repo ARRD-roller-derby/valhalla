@@ -45,7 +45,7 @@ export default class S3 {
           ACL: 'public-read',
           Key: link,
           Body: body,
-          Tagging: 'roadcast=' + tag,
+          Tagging: 'arrd=' + tag,
         })
       )
       return `${process.env.S3_PUBLIC_ENDPOINT || ''.replace('BUCKETNAME', this.bucketName)}/${link}`

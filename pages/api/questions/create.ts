@@ -5,7 +5,17 @@ import { authOptions } from '../auth/[...nextauth]'
 import { Answer, Question } from '@/models'
 import { checkRoles } from '@/utils'
 import validator from 'validator'
+import formidable from 'formidable'
+import fs from 'fs'
+import S3 from '@/utils/bucket'
+import { ObjectId } from 'mongodb'
 process.env.TZ = 'Europe/Paris'
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 export default async function questionCreate(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
@@ -15,21 +25,60 @@ export default async function questionCreate(req: NextApiRequest, res: NextApiRe
   const isCanView = checkRoles(['bureau', 'dev'], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
-  await MongoDb()
-  const form = JSON.parse(req.body || '{}')
+  const form = new formidable.IncomingForm()
+  const fileContent: {
+    file: { content: Buffer; name: string; type: string; size: number; extension: string }
+    fields: { question: string; _id: any; answers: string; file: any; status: string; img?: string }
+  } = await new Promise((resolve, reject) => {
+    form.parse(req, (_err: any, fields: any, files: any) => {
+      //@ts-ignore
+      if (!files.file) return resolve({ fields })
+      const fileContentBuffer = fs.readFileSync(files.file.filepath)
+      resolve({
+        file: {
+          content: fileContentBuffer,
+          name: files.file.originalFilename,
+          type: files.file.mimetype,
+          size: files.file.size,
+          extension: files.file.originalFilename.split('.').pop(),
+        },
+        fields,
+      })
 
-  if (form.answers.length < 2 || form.answers.filter((a: Answer) => a.type === 'good').length === 0) {
+      reject()
+    })
+  })
+
+  const { fields, file } = fileContent
+  const { question, answers: _answers, status, img: _img } = fields
+
+  const answers = JSON.parse(_answers || '[]')
+
+  if (answers.length < 2 || answers.filter((a: Answer) => a.type === 'good').length === 0)
     return res.status(400).json({ error: 'Il faut au moins une bonne réponse et une mauvaise réponse' })
-  }
 
-  const questions = await Question.create({
-    question: validator.escape(form.question),
-    answers: form.answers.map((answer: Answer) => ({
+  await MongoDb()
+  const questionCreate = await Question.create({
+    question: validator.escape(question),
+    answers: answers.map((answer: Answer) => ({
       answer: validator.escape(answer.answer),
       type: answer.type,
     })),
-    img: form.img,
-    status: validator.escape(form.status),
+    status: validator.escape(status),
   })
-  return res.status(200).json(questions)
+
+  if (file) {
+    const s3 = new S3()
+    // @ts-ignore
+    const img = await s3.sendMedia({
+      folder: 'questions',
+      body: file.content as any,
+      fileName: questionCreate._id,
+      ext: file.extension as string,
+      tag: 'question',
+    })
+    await Question.updateOne({ _id: new ObjectId(questionCreate._id) }, { img })
+  }
+
+  return res.status(200).json(questionCreate)
 }

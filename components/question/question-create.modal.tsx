@@ -36,10 +36,11 @@ export function QuestionCreateModal({
   },
 }: QuestionCreateModalProps) {
   // Stores -----------------------------------------------------------------------------
-  const { loading, error, setError, createQuestion, updateQuestion } = useQuestions()
+  const { loading, error, setError, createQuestion } = useQuestions()
 
   // States ------------------------------------------------------------------------------
-  const [form, setForm] = useState<Question>(defaultQuestion)
+  const [form, setForm] = useState<Question & { file?: any }>(defaultQuestion)
+  const [imgSrc, setImgSrc] = useState<string | null>(defaultQuestion.img)
 
   // Fonctions ---------------------------------------------------------------------------
   const handleSubmit = async (cb: () => void) => {
@@ -48,16 +49,12 @@ export function QuestionCreateModal({
       setError('Il faut au moins une bonne réponse et une mauvaise réponse')
     }
     try {
-      if (defaultQuestion) {
-        await updateQuestion(form)
-      } else {
-        await createQuestion(form)
-      }
+      await createQuestion(form, defaultQuestion?._id ? 'update' : 'create')
     } catch (error) {
       setError(error as string)
+    } finally {
+      cb()
     }
-
-    if (!error) cb()
   }
 
   // Render ------------------------------------------------------------------------------
@@ -79,7 +76,7 @@ export function QuestionCreateModal({
         <FooterModal
           closeModal={close}
           loading={loading}
-          txtConfirm={defaultQuestion ? 'Modifier' : 'Créer'}
+          txtConfirm={defaultQuestion?._id ? 'Modifier' : 'Créer'}
           onConfirmCb={handleSubmit}
         />
       )}
@@ -108,6 +105,46 @@ export function QuestionCreateModal({
           />
           <LabelBlock label="Question">
             <TextInput value={form.question} setValue={(question) => setForm((prev) => ({ ...prev, question }))} />
+          </LabelBlock>
+
+          <LabelBlock label="Image" col>
+            {imgSrc && (
+              <div className="m-2 flex items-end justify-center">
+                <img src={imgSrc} alt="image" className="h-auto w-auto" />
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e: any) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  const reader = new FileReader()
+                  reader.onload = (e) => {
+                    setForm((prev) => ({ ...prev, file }))
+                    setImgSrc(e.target?.result as string)
+                  }
+                  reader.readAsDataURL(file)
+                }
+              }}
+              id="file"
+            />
+            <div className="flex items-center justify-between gap-3 p-2">
+              <Button
+                text="supprimer"
+                type="invert-secondary"
+                onClick={() => {
+                  setImgSrc(null)
+                  setForm((prev) => ({ ...prev, file: null, delImg: true }))
+                }}
+              />
+              <label htmlFor="file">
+                <div className="cursor-pointer rounded-sm bg-arrd-secondary p-2 text-arrd-textExtraLight">
+                  {defaultQuestion.img ? 'Changer' : 'Ajouter'}
+                </div>
+              </label>
+            </div>
           </LabelBlock>
 
           <div className="flex flex-col gap-2">

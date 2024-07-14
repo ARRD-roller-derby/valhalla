@@ -57,7 +57,7 @@ interface ModalProps {
   button: (open: () => void) => React.ReactNode
   title?: string
   footer?: (close: () => void) => React.ReactNode
-  onClose?: () => void
+  onClose?: () => void | Promise<void>
   onOpen?: () => void
 }
 
@@ -66,8 +66,8 @@ export function Modal({ title, children, button, onOpen, onClose, footer }: Moda
   const [isOpen, setIsOpen] = useState(false)
 
   // functions
-  const closeModal = () => {
-    onClose?.()
+  const closeModal = async () => {
+    await onClose?.()
     setIsOpen(false)
   }
 
