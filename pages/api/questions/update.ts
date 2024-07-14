@@ -22,15 +22,17 @@ export default async function questionUpdate(req: NextApiRequest, res: NextApiRe
     return res.status(400).json({ error: 'Il faut au moins une bonne réponse et une mauvaise réponse' })
   }
 
-  const questions = await Question.updateOne({
-    _id: form._id,
-    question: validator.escape(form.question),
-    answers: form.answers.map((answer: Answer) => ({
-      answer: validator.escape(answer.answer),
-      type: answer.type,
-    })),
-    img: form.img,
-    status: validator.escape(form.status),
-  })
+  const questions = await Question.updateOne(
+    { _id: form._id },
+    {
+      question: validator.escape(form.question),
+      answers: form.answers.map((answer: Answer) => ({
+        answer: validator.escape(answer.answer),
+        type: answer.type,
+      })),
+      img: form.img,
+      status: validator.escape(form.status),
+    }
+  )
   return res.status(200).json(questions)
 }

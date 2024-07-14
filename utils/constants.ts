@@ -20,6 +20,12 @@ export const DOL_URL = process.env.DOL_URL || ''
 
 export const WEATHER_API_URL = process.env.WEATHER_API_URL || ''
 
+export const S3_BUCKET = process.env.S3_BUCKET || ''
+export const S3_ENDPOINT = process.env.S3_ENDPOINT || ''
+export const S3_KEY = process.env.S3_KEY || ''
+export const S3_PRIVATE = process.env.S3_PRIVATE || ''
+export const S3_REGION = process.env.S3_REGION || ''
+
 export const DISCORD_LINKS = {
   event: DISCORD_EVENT_HOOK,
   news: DISCORD_NEWS_HOOK,

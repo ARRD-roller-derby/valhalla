@@ -62,7 +62,7 @@ export const useQuestions = create<QuestionStore>((set, get) => ({
 
     try {
       await fetch(`/api/questions/update`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(question),
       })
       get().getQuestions()
