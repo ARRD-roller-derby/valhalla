@@ -47,10 +47,14 @@ export function QuestionCreateModal({
     if (form.answers.length < 2 || form.answers.filter((a) => a.type === 'good').length === 0) {
       setError('Il faut au moins une bonne réponse et une mauvaise réponse')
     }
-    if (defaultQuestion) {
-      await updateQuestion(form)
-    } else {
-      await createQuestion(form)
+    try {
+      if (defaultQuestion) {
+        await updateQuestion(form)
+      } else {
+        await createQuestion(form)
+      }
+    } catch (error) {
+      setError(error as string)
     }
 
     if (!error) cb()

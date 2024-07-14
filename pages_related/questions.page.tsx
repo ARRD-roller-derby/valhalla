@@ -48,7 +48,12 @@ export function Questions() {
                   ))}
                 </ul>
                 <div className="flex justify-end">
-                  <QuestionCreateModal defaultQuestion={question} />
+                  <QuestionCreateModal
+                    defaultQuestion={{
+                      ...question,
+                      status: question.status || 'published',
+                    }}
+                  />
                 </div>
               </div>
             ))}
