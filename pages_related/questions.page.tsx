@@ -2,6 +2,7 @@ import { QuestionCreateModal } from '@/components/question'
 import { useQuestions } from '@/entities/question.store'
 import { AuthLayout } from '@/layout'
 import { Loader } from '@/ui'
+import { dc } from '@/utils'
 import { useEffect } from 'react'
 import validator from 'validator'
 
@@ -40,8 +41,8 @@ export function Questions() {
                 <ul className="flex flex-col gap-2">
                   {question.answers.map((answer) => (
                     <li key={answer?._id?.toString()} className="ml-3 flex items-center gap-1">
-                      <div>
-                        {validator.unescape(answer.answer)} {answer.type}
+                      <div className={dc([answer.type === 'good', 'bold text-arrd-primary', 'text-arrd-textError'])}>
+                        {validator.unescape(answer.answer)}
                       </div>
                     </li>
                   ))}
