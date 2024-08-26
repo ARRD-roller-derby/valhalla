@@ -1,7 +1,13 @@
 // Bibliothèque interne
 import { AddressBookIcon, AgendaIcon, BlockQuestionIcon } from '@/ui'
 
-export const routes = [
+export const routes: {
+  name: string
+  path: string
+  icon: any
+  inMenu: boolean
+  roles?: string[]
+}[] = [
   {
     name: 'agenda',
     path: '/agenda',
