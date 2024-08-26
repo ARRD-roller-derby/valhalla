@@ -15,6 +15,7 @@ export const routes = [
     icon: AddressBookIcon,
     inMenu: true,
   },
+  /*
   {
     name: 'questions',
     path: '/questions',
@@ -22,4 +23,5 @@ export const routes = [
     inMenu: true,
     roles: ['bureau', 'dev'],
   },
+  */
 ]
