@@ -20,7 +20,7 @@ export function Menu() {
       {routes
         .filter((route) => route.inMenu)
         .filter(
-          (route) => !route.roles || user?.roles.some((role) => route.roles.includes(role.name.toLocaleLowerCase()))
+          (route) => !route.roles || user?.roles.some((role) => route.roles?.includes(role.name.toLocaleLowerCase()))
         )
         .map((route) => {
           const Icon = route.icon
