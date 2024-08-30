@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { AddressBookIcon, AgendaIcon, BlockQuestionIcon } from '@/ui'
+import { AddressBookIcon, AgendaIcon, BadgeIcon, BlockQuestionIcon } from '@/ui'
 
 export const routes: {
   name: string
@@ -9,25 +9,28 @@ export const routes: {
   roles?: string[]
 }[] = [
   {
-    name: 'agenda',
+    name: 'Agenda',
     path: '/agenda',
     icon: AgendaIcon,
     inMenu: true,
   },
-
   {
-    name: 'répertoire',
+    name: 'Badges',
+    path: '/badges',
+    icon: BadgeIcon,
+    inMenu: true,
+  },
+  {
+    name: 'Répertoire',
     path: '/repertoire',
     icon: AddressBookIcon,
     inMenu: true,
   },
-  /*
   {
-    name: 'questions',
+    name: 'Questions',
     path: '/questions',
     icon: BlockQuestionIcon,
     inMenu: true,
     roles: ['bureau', 'dev'],
   },
-  */
 ]

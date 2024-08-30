@@ -15,7 +15,6 @@ export interface IUser {
   _id: string
   id: string
   providerAccountId: string
-  wallet: number
   name: string
   derbyName: string
   numRoster: number
@@ -33,7 +32,6 @@ const RoleSchema = new Schema<TRole>({
 
 const userSchema = new Schema<IUser>({
   providerAccountId: String,
-  wallet: Number,
   name: String,
   derbyName: String,
   numRoster: Number,

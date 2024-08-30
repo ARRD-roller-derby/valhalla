@@ -10,7 +10,7 @@ interface SocketProviderProps {
 }
 
 export enum TriggerTypes {
-  WALLET = 'wallet',
+  BADGE_COUNT = 'badge_count',
   EVENTS = 'events',
   EVENT = 'event',
   PARTICIPATION = 'participation',

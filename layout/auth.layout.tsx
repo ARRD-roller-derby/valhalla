@@ -2,7 +2,7 @@
 import Head from 'next/head'
 
 // Bibliothèques internes
-import { Avatar, LogoAndGoBack, Menu } from '@/components'
+import { Avatar, BadgeCounter, LogoAndGoBack, Menu } from '@/components'
 import { SocketProvider } from '@/entities'
 import { dc } from '@/utils'
 
@@ -31,6 +31,7 @@ export function AuthLayout({ children, title }: AuthLayoutProps) {
         <nav className="flex items-center justify-between p-1 grid-in-nav">
           <LogoAndGoBack />
           <div className="flex items-center gap-3">
+            <BadgeCounter />
             <Avatar />
           </div>
         </nav>
