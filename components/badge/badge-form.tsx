@@ -1,4 +1,4 @@
-import { useBadges, useSkills } from '@/entities'
+import { useBadges } from '@/entities'
 import { Button, Checkbox, FooterModal, LabelBlock, ListSelector, Modal, TagsInput, TextInput } from '@/ui'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

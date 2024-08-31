@@ -21,7 +21,7 @@ export const routes: {
     inMenu: true,
   },
   {
-    name: 'Répertoire',
+    name: "L'équipe",
     path: '/repertoire',
     icon: AddressBookIcon,
     inMenu: true,

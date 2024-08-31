@@ -17,7 +17,7 @@ export function EventFetch() {
   const { loading: loadingEvent, events, findOne, setEvent, getEvent } = useEvents()
 
   // Hooks --------------------------------------------------------------
-  const { loading: loadingWeather, getForecasts } = useWeather()
+  const { loading: loadingWeather } = useWeather()
   const router = useRouter()
   useSocketTrigger<{ event: IEvent; userId: string }>(TriggerTypes.EVENT, (msg) => {
     if (!msg || !msg.event) return

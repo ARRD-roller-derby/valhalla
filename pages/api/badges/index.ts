@@ -4,23 +4,8 @@ import { MongoDb } from '@/db'
 import { authOptions } from '../auth/[...nextauth]'
 process.env.TZ = 'Europe/Paris'
 
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import timezone from 'dayjs/plugin/timezone'
-import duration from 'dayjs/plugin/duration'
-import isBetween from 'dayjs/plugin/isBetween'
-import fr from 'dayjs/locale/fr'
-import { User, Badge } from '@/models'
-
-dayjs.extend(relativeTime)
-dayjs.extend(localizedFormat)
-dayjs.extend(timezone)
-dayjs.extend(duration)
-dayjs.extend(isBetween)
-dayjs.locale(fr)
-dayjs.tz.guess()
-dayjs.tz.setDefault('Europe/Paris')
+import { Badge } from '@/models'
+import { UserBadge } from '@/models/user_badge.model'
 
 export default async function badges(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions)
@@ -28,11 +13,14 @@ export default async function badges(req: NextApiRequest, res: NextApiResponse) 
   await MongoDb()
 
   const badges_ = await Badge.find()
-  const user = await User.findById(session.user.id)
+  const _userBadge = await UserBadge.find({
+    providerAccountId: req?.query?.userId || session.user.providerAccountId,
+  })
 
-  console.log('badges', badges_)
+  const userBadge = _userBadge.map((badge) => badge.badgeId)
+
   const badges = badges_.map((badge) => {
-    if (user?.badges?.includes(badge._id)) {
+    if (userBadge?.includes(badge._id.toString())) {
       return {
         ...badge.toObject(),
         win: true,

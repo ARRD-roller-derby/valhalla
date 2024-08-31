@@ -36,7 +36,6 @@ export const authOptions = {
 
       await MongoDb()
       const user = await User.findById(new ObjectId(session.user.id))
-      if (!user?.wallet) user.wallet = 500
 
       if (!user.providerAccountId) {
         const account = await Account.findOne({ userId: session.user.id })
@@ -73,7 +72,6 @@ export const authOptions = {
       if (user.isModified('wallet')) {
         // Mise à jour des champs modifiés uniquement
         const updateFields = {
-          wallet: user.wallet,
           providerAccountId: user.providerAccountId,
         }
 

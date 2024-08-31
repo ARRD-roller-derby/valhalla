@@ -4,9 +4,13 @@ import { useEffect } from 'react'
 // Bibliothèque interne
 import { type IBadge, useBadges } from '@/entities'
 import { Loader } from '@/ui'
-import { BadgeCard } from '../badge/badge-card'
+import { BadgeCard } from './badge-card'
 
-export function BadgesList() {
+type BadgesListProps = {
+  userId?: string
+}
+
+export function BadgesList({ userId }: BadgesListProps) {
   // Store -----------------------------------
   const { loadingGet, badges, getBadges } = useBadges()
 
@@ -17,7 +21,7 @@ export function BadgesList() {
 
   // Effects -----------------------------------
   useEffect(() => {
-    getBadges()
+    getBadges(userId)
   }, [])
 
   if (loadingGet)

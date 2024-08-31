@@ -7,7 +7,7 @@ import { AuthLayout } from '@/layout'
 import { PageTabs } from '@/ui'
 import { BadgeForm } from '@/components/badge/badge-form'
 import { checkRoles, ROLES } from '@/utils'
-import { BadgesList } from '@/components/skill/badges-list'
+import { BadgesList } from '@/components'
 
 export function Badges() {
   const { data: session } = useSession()

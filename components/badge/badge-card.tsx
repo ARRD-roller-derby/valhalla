@@ -1,7 +1,7 @@
 import type { IBadge } from '@/entities'
 import { BadgeIcon } from '@/ui'
 import { ReadEditor } from '../editor'
-import dayjs from 'dayjs'
+import { BadgeCardStatus } from './badge-card-status'
 
 type BadgeProps = {
   badge: IBadge
@@ -10,7 +10,8 @@ export function BadgeCard({ badge }: BadgeProps) {
   return (
     <div
       data-win={badge.win}
-      className="grid cursor-pointer grid-cols-[auto_1fr] items-center  gap-3 rounded-md border-2 border-arrd-bgLight p-2 transition-colors hover:border-arrd-primary hover:opacity-100 data-[win=false]:border-dashed data-[win=false]:opacity-50 data-[win=false]:hover:opacity-100"
+      data-color={badge.level}
+      className="grid cursor-pointer grid-cols-[auto_1fr] items-center gap-3 rounded-md border-2 p-2  transition-colors hover:border-arrd-primary hover:opacity-100 data-[win=false]:border-dashed data-[color=argent]:border-zinc-400  data-[color=bronze]:border-orange-800 data-[color=or]:border-amber-400  data-[color]:data-[win=false]:border-arrd-bgLight data-[win=false]:opacity-50 data-[win=false]:hover:opacity-100"
     >
       <div>
         <BadgeIcon
@@ -29,11 +30,7 @@ export function BadgeCard({ badge }: BadgeProps) {
           <ReadEditor content={badge.description} />
         </div>
 
-        {badge.win ? (
-          <div className="text-end text-xs text-arrd-highlight">obtenu</div>
-        ) : (
-          <div className="text-end text-xs text-arrd-textError">verrouillé</div>
-        )}
+        <BadgeCardStatus badge={badge} />
       </div>
     </div>
   )

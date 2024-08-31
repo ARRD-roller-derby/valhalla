@@ -1,18 +1,26 @@
-import { TriggerTypes, useSocketTrigger } from '@/entities'
-import { BadgeIcon } from '@/ui'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useState } from 'react'
+
+import { TriggerTypes, useBadges, useSocketTrigger } from '@/entities'
+import { BadgeIcon } from '@/ui'
 
 export function BadgeCounter() {
+  const { getCount } = useBadges()
   const [count, setCount] = useState(0)
-  // stores
 
-  useSocketTrigger<number>(TriggerTypes.BADGE_COUNT, (msg) => {
-    if (typeof msg !== 'number') return
-    setCount(msg as number)
+  useSocketTrigger<number>(TriggerTypes.BADGE_COUNT, (msg: any) => {
+    if (!msg || typeof msg?.count !== 'number') return
+    setCount(msg.count as number)
   })
 
-  //TODO faire l'appel aux badges de l'utilisateur
+  const handleFetch = async () => {
+    setCount((await getCount()) as number)
+  }
+
+  useEffect(() => {
+    handleFetch()
+  }, [])
+
   return (
     <Link href={'/badges'} className="relative cursor-pointer pt-1">
       <BadgeIcon className="h-7 w-7 fill-arrd-primary" />
