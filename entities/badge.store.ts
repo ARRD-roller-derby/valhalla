@@ -98,10 +98,9 @@ export const useBadges = create<Store>((set, get) => ({
     }))
 
     try {
-      const res = await fetch(`/api/badges/${badgeId}/unlock/${userId}`, {
+      await fetch(`/api/badges/${badgeId}/unlock/${userId}`, {
         method: 'PUT',
       })
-      const { badge } = await res.json()
     } catch (err: any) {
       set({ loadingUpdate: false, error: 'impossible de débloquer la compétence', badges })
     } finally {
