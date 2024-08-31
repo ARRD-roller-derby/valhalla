@@ -18,7 +18,7 @@ export interface IBadgeSchema {
   name: string
   tags: string[]
   type: 'derby' | 'patins'
-  level: 'bronze' | 'silver' | 'gold'
+  level: 'bronze' | 'argent' | 'or'
   medias: IBadgeMedia[]
   description: Object
   isProgressive: boolean

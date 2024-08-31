@@ -16,7 +16,31 @@ export function BadgesList({ userId }: BadgesListProps) {
 
   // Const -----------------------------------
   const sortedBadges = (a: IBadge, b: IBadge) => {
-    return a.win ? -1 : a.name.localeCompare(b.name)
+    const getBadgeScore = (badge: IBadge): number => {
+      let score = 0
+
+      score += badge.win ? 1000 : 0
+      switch (badge.level) {
+        case 'or':
+          score += 100
+          break
+        case 'argent':
+          score += 50
+          break
+        case 'bronze':
+          score += 25
+          break
+      }
+
+      return score
+    }
+
+    const scoreA = getBadgeScore(a)
+    const scoreB = getBadgeScore(b)
+
+    if (scoreA !== scoreB) return scoreB - scoreA
+
+    return a.name.localeCompare(b.name)
   }
 
   // Effects -----------------------------------

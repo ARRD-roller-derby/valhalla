@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Event, IParticipant } from '@/models'
 import { capitalizeFirstLetter } from '@/utils'
-import { bank, publishToDiscord, trigger } from '@/services'
+import { publishToDiscord, trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
 process.env.TZ = 'Europe/Paris'
 
@@ -43,7 +43,6 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
       updatedAt: dayjs().toDate(),
       guestsNumber: form.guestsNumber || 0,
     })
-    bank(user.id, 15, 1)
   } else {
     participantEvt.name = user.nickname || user.name
 
