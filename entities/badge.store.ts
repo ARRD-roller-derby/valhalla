@@ -1,6 +1,19 @@
 import { IBadgeSchema } from '@/models/badges.model'
 import { create } from 'zustand'
 
+export type WinnerPodium = {
+  name: string
+  avatar: string
+  total: number
+}
+
+export type Podium = {
+  total: number
+  key: string
+  title: string
+  podium: [WinnerPodium, WinnerPodium, WinnerPodium]
+}
+
 export type IBadge = IBadgeSchema & { win?: boolean }
 type State = {
   loading: boolean
@@ -9,6 +22,7 @@ type State = {
   loadingDelete: boolean
   loadingGet: boolean
   badges: IBadge[]
+  hallOfFame: Podium[]
   error: string | null
 }
 
@@ -18,6 +32,7 @@ type GET = {
   // All the loading states
   getLoading: () => boolean
   getCount: () => Promise<number>
+  getHallOfFame: () => Promise<Podium[]>
 }
 
 type SET = {
@@ -35,6 +50,7 @@ export const useBadges = create<Store>((set, get) => ({
   loadingUpdate: false,
   loadingDelete: false,
   loadingGet: false,
+  hallOfFame: [],
   badges: [],
   error: null,
 
@@ -73,6 +89,17 @@ export const useBadges = create<Store>((set, get) => ({
       return count
     } catch (err: any) {
       set({ error: 'impossible de récupérer le nombre de compétences' })
+    }
+  },
+  async getHallOfFame() {
+    set({ loadingGet: true, error: null, badges: [] })
+    try {
+      const res = await fetch('/api/badges/hall_of_fame')
+      const hallOfFame = await res.json()
+      set({ hallOfFame, loadingGet: false })
+      return hallOfFame
+    } catch (err: any) {
+      set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
     }
   },
   //SET --------------------------------------------------------------------

@@ -8,6 +8,7 @@ import { PageTabs } from '@/ui'
 import { BadgeForm } from '@/components/badge/badge-form'
 import { checkRoles, ROLES } from '@/utils'
 import { BadgesList } from '@/components'
+import { BadgeHallOfFame } from '@/components/badge/badge-hall-of-fame'
 
 export function Badges() {
   const { data: session } = useSession()
@@ -42,7 +43,7 @@ export function Badges() {
             {
               title: 'Hall of Fame',
               tab: 'hall_of_fame',
-              element: <div>ICI le hall of fame, avec les classements</div>,
+              element: <BadgeHallOfFame />,
             },
           ]}
         />
