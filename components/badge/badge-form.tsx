@@ -91,7 +91,7 @@ export function BadgeForm() {
             />
           </LabelBlock>
 
-          <div className="my-2">
+          {/* <div className="my-2">
             <Checkbox
               label="Progressif"
               checked={form.isProgressive || false}
@@ -101,6 +101,7 @@ export function BadgeForm() {
               Ajoute une bar de progression augmentant grâce aux badges partageant les mêmes tags.
             </div>
           </div>
+          */}
 
           <LabelBlock label="Description" col>
             <Editor

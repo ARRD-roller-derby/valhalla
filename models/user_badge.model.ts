@@ -4,13 +4,13 @@ export interface IUserBadgeSchema {
   _id: string
   providerAccountId: string
   badgeId: string
-  date: Date
+  unLockDate: Date
 }
 
 const userBadgeSchema = new Schema<IUserBadgeSchema>({
   providerAccountId: String,
   badgeId: String,
-  date: Date,
+  unLockDate: Date,
 })
 
 export const UserBadge = models.user_badges || model('user_badges', userBadgeSchema)

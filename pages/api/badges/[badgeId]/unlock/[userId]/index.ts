@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
-import { Badge, User } from '@/models'
+import { User } from '@/models'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { checkRoles, ROLES } from '@/utils'
 import { UserBadge } from '@/models/user_badge.model'
@@ -46,7 +46,7 @@ export default async function badges(req: NextApiRequest, res: NextApiResponse) 
   if (userBadgeExist) {
     await UserBadge.deleteOne({ providerAccountId, badgeId })
   } else {
-    await UserBadge.create({ providerAccountId, badgeId, date: new Date() })
+    await UserBadge.create({ providerAccountId, badgeId, unLockDate: dayjs().toDate() })
   }
 
   const badges = await UserBadge.find({ providerAccountId })
