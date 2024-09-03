@@ -4,21 +4,18 @@ import { useSession } from 'next-auth/react'
 // Bibliothèques internes
 import { AuthLayout } from '@/layout'
 import { useRouter } from 'next/router'
-import { MemberProvider, useMembers, useSkills } from '@/entities'
+import { MemberProvider, useMembers } from '@/entities'
 import { Loader, PageTabs } from '@/ui'
 import { useCanSee } from '@/hooks'
 import { useEffect } from 'react'
-import { MemberDetails, SkillList, SkillMemberStats } from '@/components'
-import { SKILL_CATEGORIES } from '@/utils'
+import { BadgesList, MemberDetails } from '@/components'
 
 export function Member() {
   // Stores --------------------------------------------------
   const { data: session } = useSession()
   const { loading, fetchMember, getMember } = useMembers()
-  const { setMembers } = useSkills()
   // Hooks --------------------------------------------------
   const { query } = useRouter()
-  const { justCoach } = useCanSee()
 
   // Constantes --------------------------------------------------
   const user = session?.user
@@ -34,34 +31,9 @@ export function Member() {
       ),
     },
     {
-      title: 'stats',
-      tab: 'stats',
-      element: (
-        <div>
-          <div className="sticky top-0 bg-arrd-bg p-1 text-center text-arrd-highlight">{member?.username}</div>
-          <SkillMemberStats />
-        </div>
-      ),
-    },
-    {
-      title: 'derby',
-      tab: 'derby',
-      element: (
-        <div>
-          <div className="sticky top-0 bg-arrd-bg p-1 text-center text-arrd-highlight">{member?.username}</div>
-          <SkillList category={SKILL_CATEGORIES.derby} editable />
-        </div>
-      ),
-    },
-    {
-      title: 'patin',
-      tab: 'patin',
-      element: (
-        <div>
-          <div className="sticky top-0 bg-arrd-bg p-1 text-center text-arrd-highlight">{member?.username}</div>
-          <SkillList category={SKILL_CATEGORIES.patinage} editable />
-        </div>
-      ),
+      title: 'Badges',
+      tab: 'badges',
+      element: <BadgesList userId={member?.id} />,
     },
   ]
 
@@ -70,10 +42,6 @@ export function Member() {
   useEffect(() => {
     if (!member) fetchMember(query.id as string)
   }, [query.id])
-
-  useEffect(() => {
-    if (member) setMembers([member as any])
-  }, [member])
 
   // Rendus --------------------------------------------------
 
@@ -100,13 +68,13 @@ export function Member() {
   return (
     <AuthLayout title={member.username}>
       <MemberProvider member={member}>
-        {justCoach ? (
-          <div className="grid h-full grid-rows-[auto_1fr_auto] items-start gap-1 p-2">
-            <PageTabs tabs={tabs} />
-          </div>
-        ) : (
-          <MemberDetails />
-        )}
+        <div className="grid h-full grid-rows-[auto_auto_1fr_auto] items-start gap-1 p-2">
+          <header className="flex items-center justify-center gap-2">
+            {member.avatar && <img src={member.avatar} className="h-12 w-12 rounded-full" />}
+            <div className="text-center text-2xl font-bold text-arrd-highlight">{member?.username}</div>
+          </header>
+          <PageTabs tabs={tabs} />
+        </div>
       </MemberProvider>
     </AuthLayout>
   )

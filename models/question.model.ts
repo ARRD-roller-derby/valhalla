@@ -15,6 +15,12 @@ export interface IAnswer {
   answer: string
 }
 
+export interface Answer {
+  type: 'good' | 'bad'
+  answer: string
+  _id: ObjectId
+}
+
 const Answer = new Schema({
   type: String,
   answer: String,

@@ -11,7 +11,7 @@ export function useCanSee() {
   }
 
   return {
-    justCoach: handleCheckRoles([ROLES.coach]),
+    justCoach: handleCheckRoles([ROLES.coach, ROLES.dev]),
     justEventManager: handleCheckRoles(ROLES_CAN_MANAGE_EVENT),
   }
 }
