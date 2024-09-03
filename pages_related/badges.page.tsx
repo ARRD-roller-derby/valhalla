@@ -9,6 +9,7 @@ import { BadgeForm } from '@/components/badge/badge-form'
 import { checkRoles, ROLES } from '@/utils'
 import { BadgesList } from '@/components'
 import { BadgeHallOfFame } from '@/components/badge/badge-hall-of-fame'
+import { BadgesClassement } from '@/components/badge/badges-classement'
 
 export function Badges() {
   const { data: session } = useSession()
@@ -44,6 +45,11 @@ export function Badges() {
               title: 'Hall of Fame',
               tab: 'hall_of_fame',
               element: <BadgeHallOfFame />,
+            },
+            {
+              title: 'Classement',
+              tab: 'classement',
+              element: <BadgesClassement />,
             },
           ]}
         />

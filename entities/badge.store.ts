@@ -22,6 +22,7 @@ type State = {
   loadingDelete: boolean
   loadingGet: boolean
   badges: IBadge[]
+  classement: { name: string; avatar: string; badges: { total: number; or: number; argent: number; bronze: number } }[]
   hallOfFame: Podium[]
   error: string | null
 }
@@ -51,6 +52,7 @@ export const useBadges = create<Store>((set, get) => ({
   loadingDelete: false,
   loadingGet: false,
   hallOfFame: [],
+  classement: [],
   badges: [],
   error: null,
 
@@ -92,11 +94,11 @@ export const useBadges = create<Store>((set, get) => ({
     }
   },
   async getHallOfFame() {
-    set({ loadingGet: true, error: null, badges: [] })
+    set({ loadingGet: true, error: null, badges: [], classement: [] })
     try {
       const res = await fetch('/api/badges/hall_of_fame')
-      const hallOfFame = await res.json()
-      set({ hallOfFame, loadingGet: false })
+      const { hallOfFame, classement } = await res.json()
+      set({ hallOfFame, classement, loadingGet: false })
       return hallOfFame
     } catch (err: any) {
       set({ loadingGet: false, error: 'impossible de récupérer la compétence' })

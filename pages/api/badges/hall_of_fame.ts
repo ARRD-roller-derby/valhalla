@@ -52,7 +52,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
   }[]
 
   const podium = userBadgesGroupedArray
-    .sort((a, b) => b.badges.total - a.badges.total)
+
     .slice(0, 3)
     .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total }))
   const podiumOr = userBadgesGroupedArray
@@ -68,26 +68,29 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     .slice(0, 3)
     .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.bronze }))
 
-  return res.status(200).json([
-    {
-      title: 'Légendaire',
-      key: 'all',
-      podium,
-    },
-    {
-      title: 'Podium Or',
-      key: 'or',
-      podium: podiumOr,
-    },
-    {
-      title: 'Podium Argent',
-      key: 'argent',
-      podium: podiumArgent,
-    },
-    {
-      title: 'Podium Bronze',
-      key: 'bronze',
-      podium: podiumBronze,
-    },
-  ])
+  return res.status(200).json({
+    classement: userBadgesGroupedArray.sort((a, b) => b.badges.total - a.badges.total),
+    hallOfFame: [
+      {
+        title: 'Légendaire',
+        key: 'all',
+        podium,
+      },
+      {
+        title: 'Podium Or',
+        key: 'or',
+        podium: podiumOr,
+      },
+      {
+        title: 'Podium Argent',
+        key: 'argent',
+        podium: podiumArgent,
+      },
+      {
+        title: 'Podium Bronze',
+        key: 'bronze',
+        podium: podiumBronze,
+      },
+    ],
+  })
 }
