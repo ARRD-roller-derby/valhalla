@@ -26,7 +26,7 @@ export function ListSelector({ onSelect, defaultValue, options }: ListSelectorPr
     <Listbox value={selected} onChange={handleSelect}>
       <div className="relative mt-1">
         <Listbox.Button className="input relative w-full cursor-pointer">
-          <span className="block truncate">{selected.label}</span>
+          <span className="block truncate first-letter:uppercase">{selected.label}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ShortIcon className="h-5 w-5 fill-arrd-accent" />
           </span>
@@ -37,7 +37,10 @@ export function ListSelector({ onSelect, defaultValue, options }: ListSelectorPr
               <Listbox.Option
                 key={options.label}
                 className={({ active }) =>
-                  dc('relative cursor-pointer select-none p-2', [active, 'bg-second text-txtLight'])
+                  dc('relative cursor-pointer select-none p-2 first-letter:uppercase', [
+                    active,
+                    'bg-second text-txtLight',
+                  ])
                 }
                 value={options}
               >

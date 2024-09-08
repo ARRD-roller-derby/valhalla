@@ -47,37 +47,6 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     return acc
   }, {} as any)
 
-  const dailyBadges = winnedBadges
-    .filter((userBadge) => {
-      return userBadge.unLockDate > new Date(new Date().setHours(0, 0, 0, 0))
-    })
-    .reduce(
-      (acc, userBadge) => {
-        const index = acc.findIndex((user) => user.providerAccountId === userBadge.providerAccountId)
-
-        const badge = badges.find((badge) => badge._id.toString() === userBadge.badgeId.toString())
-        if (index !== -1) {
-          acc[index].badges.push({
-            level: badge.level,
-            name: badge.name,
-          })
-          return acc
-        } else {
-          acc.push({
-            providerAccountId: userBadge.providerAccountId,
-            badges: [
-              {
-                level: badge.level,
-                name: badge.name,
-              },
-            ],
-          })
-        }
-        return acc
-      },
-      [] as { providerAccountId: string; badges: { level: string; name: string }[] }[]
-    )
-
   const userBadgesGroupedArray = Object.entries(userBadgesGrouped)
     .map(([providerAccountId, badges]) => {
       const user = members.find((member) => member.providerAccountId === providerAccountId)
@@ -109,7 +78,6 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
 
   return res.status(200).json({
     classement: userBadgesGroupedArray.sort((a, b) => b.badges.total - a.badges.total),
-    dailyBadges,
     hallOfFame: [
       {
         title: 'Légendaire',

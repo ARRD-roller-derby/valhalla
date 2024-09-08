@@ -1,7 +1,7 @@
 // Bibliothèques externes
 import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 // Bibliothèques internes
 import { dc } from '@/utils'
@@ -14,7 +14,8 @@ interface ITab {
 
 export function PageTabs({ tabs }: { tabs: ITab[] }) {
   // hooks
-  const { query, push } = useRouter()
+  const { query } = useRouter()
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   // const
   const defaultTab = useMemo(() => {
@@ -25,11 +26,21 @@ export function PageTabs({ tabs }: { tabs: ITab[] }) {
 
   // functions
   const handleClick = (tab: ITab) => {
-    push({ query: { ...query, tab: query.tab } }, { query: { ...query, tab: tab.tab } }, { shallow: true })
+    setSelectedIndex(tabs.findIndex((t) => t.tab === tab.tab))
+    const params = new URLSearchParams(window.location.search)
+    params.set('tab', tab.tab)
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
   }
 
+  useEffect(() => {
+    if (query.tab) {
+      const idx = tabs.findIndex((tab) => tab.tab === query.tab)
+      if (idx >= 0 && idx !== selectedIndex) setSelectedIndex(idx)
+    }
+  }, [query])
+
   return (
-    <Tab.Group defaultIndex={defaultTab}>
+    <Tab.Group defaultIndex={defaultTab} selectedIndex={selectedIndex} onChange={setSelectedIndex}>
       <Tab.List className="sticky -top-1 z-10 flex flex-wrap justify-center gap-4 bg-arrd-bg p-1 text-arrd-primary">
         {tabs.map((tab) => (
           <Tab key={tab.title} className="p-0 hover:shadow-none" onClick={() => handleClick(tab)}>

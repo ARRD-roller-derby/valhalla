@@ -37,8 +37,10 @@ type GET = {
 }
 
 type SET = {
-  createBadge: (badge: Partial<IBadgeSchema>) => void
+  createBadge: (badge: Partial<IBadgeSchema>) => Promise<void>
+  updateBadge: (badge: Partial<IBadgeSchema>) => Promise<void>
   unlockBadge: (badgeId: string, userId: string) => void
+  deleteBadge: (badgeId: string) => Promise<void>
 }
 
 type Store = State & GET & SET
@@ -77,6 +79,7 @@ export const useBadges = create<Store>((set, get) => ({
     try {
       const res = await fetch(`/api/badges/${id}`)
       const { badge } = await res.json()
+
       set((prev) => ({ badges: [...prev.badges.filter((b) => b._id !== badge._id), badge], loadingGet: false }))
       return badge
     } catch (err: any) {
@@ -118,6 +121,23 @@ export const useBadges = create<Store>((set, get) => ({
       set({ loadingCreate: false, error: 'impossible de créer la compétence' })
     }
   },
+  async updateBadge(badge) {
+    if (!badge._id) return
+    set({ loadingUpdate: true, error: null })
+    try {
+      const res = await fetch(`/api/badges/${badge._id}/update`, {
+        method: 'PUT',
+        body: JSON.stringify(badge),
+      })
+      const { badge: updatedBadge } = await res.json()
+      set((prev) => ({
+        badges: prev.badges.map((b) => (b._id === updatedBadge._id ? updatedBadge : b)),
+        loadingUpdate: false,
+      }))
+    } catch (err: any) {
+      set({ loadingUpdate: false, error: 'impossible de mettre à jour la compétence' })
+    }
+  },
   async unlockBadge(badgeId, userId) {
     const badges = get().badges
     set((prev) => ({
@@ -134,6 +154,17 @@ export const useBadges = create<Store>((set, get) => ({
       set({ loadingUpdate: false, error: 'impossible de débloquer la compétence', badges })
     } finally {
       set({ loadingUpdate: false })
+    }
+  },
+  async deleteBadge(badgeId) {
+    set({ loadingDelete: true, error: null })
+    try {
+      await fetch(`/api/badges/${badgeId}/delete`, {
+        method: 'DELETE',
+      })
+      set((prev) => ({ badges: prev.badges.filter((b) => b._id !== badgeId), loadingDelete: false }))
+    } catch (err: any) {
+      set({ loadingDelete: false, error: 'impossible de supprimer la compétence' })
     }
   },
 }))

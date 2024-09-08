@@ -1,30 +1,11 @@
 // Bibliothèque externe
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Bibliothèque interne
 import { type IBadge, useBadges } from '@/entities'
 import { ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
-import { IBadgeSchema } from '@/models'
 
-const LEVELS = [
-  {
-    label: 'Tous',
-    value: 'tous',
-  },
-  {
-    label: 'Bronze',
-    value: 'bronze',
-  },
-  {
-    label: 'Argent',
-    value: 'argent',
-  },
-  {
-    label: 'Or',
-    value: 'or',
-  },
-]
 type BadgesListProps = {
   userId?: string
 }
@@ -33,7 +14,14 @@ export function BadgesList({ userId }: BadgesListProps) {
   // Store -----------------------------------
   const { loadingGet, badges, getBadges } = useBadges()
   const [search, setSearch] = useState<string>('')
-  const [level, setLevel] = useState<{ label: string; value: unknown }>(LEVELS[0])
+  const [level, setLevel] = useState<{ label: string; value: unknown }>({
+    label: 'Tous',
+    value: 'tous',
+  })
+  const [type, setType] = useState<{ label: string; value: unknown }>({
+    label: 'Tous',
+    value: 'tous',
+  })
 
   // Const -----------------------------------
   const sortedBadges = (a: IBadge, b: IBadge) => {
@@ -64,6 +52,20 @@ export function BadgesList({ userId }: BadgesListProps) {
     return a.name.localeCompare(b.name)
   }
 
+  const types = useMemo(() => {
+    const types = new Set<string>()
+    types.add('tous')
+    badges.forEach((badge) => types.add(badge.type))
+    return Array.from(types).map((type) => ({ label: type, value: type }))
+  }, [badges])
+
+  const levels = useMemo(() => {
+    const levels = new Set<string>()
+    levels.add('tous')
+    badges.forEach((badge) => levels.add(badge.level))
+    return Array.from(levels).map((level) => ({ label: level, value: level }))
+  }, [badges])
+
   // Effects -----------------------------------
   useEffect(() => {
     getBadges(userId)
@@ -81,10 +83,13 @@ export function BadgesList({ userId }: BadgesListProps) {
 
   return (
     <div className="flex= mx-auto max-w-lg flex-col gap-4">
-      <div className="my-1 flex flex-col justify-center gap-2 sm:grid sm:grid-cols-[3fr_1fr] sm:items-center">
+      <div className="my-1 flex flex-col justify-center gap-2 sm:grid sm:grid-cols-[3fr_1fr_1fr] sm:items-center">
         <TextInput value={search} setValue={setSearch} />
         <div className="w-full pb-1">
-          <ListSelector options={LEVELS} onSelect={setLevel} defaultValue={LEVELS[0]} />
+          {types?.length && <ListSelector options={types} onSelect={setType} defaultValue={types[0]} />}
+        </div>
+        <div className="w-full pb-1">
+          {levels.length && <ListSelector options={levels} onSelect={setLevel} defaultValue={levels[0]} />}
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -92,6 +97,10 @@ export function BadgesList({ userId }: BadgesListProps) {
           .filter((badge) => {
             if (level.value === 'tous') return true
             return badge.level === level.value
+          })
+          .filter((badge) => {
+            if (type.value === 'tous') return true
+            return badge.type === type.value
           })
           .filter((badge) => badge.name.toLowerCase().includes(search.toLowerCase()))
           .sort(sortedBadges)
