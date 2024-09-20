@@ -1,5 +1,6 @@
 // Bibliothèque interne
 import { AddressBookIcon, AgendaIcon, BadgeIcon, BlockQuestionIcon } from '@/ui'
+import { RuleIcon } from '@/ui/icons/rule.icon'
 
 export const routes: {
   name: string
@@ -24,6 +25,12 @@ export const routes: {
     name: "L'équipe",
     path: '/repertoire',
     icon: AddressBookIcon,
+    inMenu: true,
+  },
+  {
+    name: 'Les règles du Derby',
+    path: '/rules',
+    icon: RuleIcon,
     inMenu: true,
   },
   {
