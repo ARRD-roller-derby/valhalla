@@ -32,6 +32,8 @@ export const DISCORD_LINKS = {
   logs: DISCORD_ADMIN_HOOK,
 }
 
+export const URL_API_DERBY_FRANCE = 'https://api.rollerderby.ovh/'
+
 export const frequencyOpts: TOption[] = [
   { label: 'Tous les jours', value: 'day' },
   { label: 'Toutes les semaines', value: 'week' },

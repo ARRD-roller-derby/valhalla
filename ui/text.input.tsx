@@ -5,9 +5,10 @@ interface TextInputProps {
   value: string
   setValue: (value: string) => void
   longText?: boolean
+  placeholder?: string
 }
 
-export function TextInput({ value, longText, setValue }: TextInputProps) {
+export function TextInput({ value, longText, placeholder, setValue }: TextInputProps) {
   return (
     <div className="input grid grid-cols-[1fr_auto] gap-1 fill-arrd-primary">
       {longText ? (
@@ -21,6 +22,7 @@ export function TextInput({ value, longText, setValue }: TextInputProps) {
         <input
           className="bg-transparent outline-none"
           type="text"
+          placeholder={placeholder}
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
