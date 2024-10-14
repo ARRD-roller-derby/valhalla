@@ -26,5 +26,11 @@ export default async function eventsPublic(_req: NextApiRequest, res: NextApiRes
     $and: [{ start: { $gte: dayjs().startOf('day').toISOString() } }, { visibility: '@everyone' }],
   }).sort({ start: 1 })
 
-  return res.status(200).json(events)
+  return res.status(200).json(
+    events.map((event) => {
+      const newEvent = { ...event._doc }
+      delete newEvent.participants
+      return newEvent
+    })
+  )
 }
