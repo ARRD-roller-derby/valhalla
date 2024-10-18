@@ -42,7 +42,7 @@ export const frequencyOpts: TOption[] = [
 ]
 
 export const ROLES = {
-  invite: 'invité',
+  invite: '@everyone',
   membre: 'membre',
   bureau: 'bureau',
   dev: 'dev',
@@ -53,6 +53,8 @@ export const ROLES = {
   discrimination: 'discrimination',
   com: 'com',
   fresh: 'fresh',
+  guest: 'guest',
+  everyone: '@everyone',
 }
 
 export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenement]

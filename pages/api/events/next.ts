@@ -47,13 +47,13 @@ async function eventsNext(req: NextApiRequest, res: NextApiResponse, user: any) 
   if (!isMember) {
     or.push({
       ...between,
-      visibility: 'public',
+      visibility: '@everyone',
     })
   } else if (isMember && !isAdmin) {
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', 'public'].map((role: string) => new RegExp(role, 'i')),
+        $in: ['membre', '@everyone'].map((role: string) => new RegExp(role, 'i')),
       },
     })
   }

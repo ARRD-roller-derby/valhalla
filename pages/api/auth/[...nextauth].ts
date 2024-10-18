@@ -1,6 +1,6 @@
 import clientPromise from '@/db/mongo.auth.connect'
 import { Account } from '@/models/account.model'
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_GUILD_ID, DISCORD_TOKEN } from '@/utils/constants'
+import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_GUILD_ID, DISCORD_TOKEN, ROLES } from '@/utils/constants'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
@@ -41,11 +41,28 @@ export const authOptions = {
         const account = await Account.findOne({ userId: session.user.id })
         if (account) user.providerAccountId = account.providerAccountId
       }
-      const member: any = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
 
-      if (!user) return session
+      let member: any = undefined
+      try {
+        member = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
+      } catch (e) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            roles: [
+              {
+                id: '0',
+                name: ROLES.everyone,
+                color: 0x000000,
+              },
+            ],
+          },
+        }
+      }
+      if (!user || !member) return session
 
-      if (member.user.global_name && user.name !== member.user.global_name) {
+      if (member?.user?.global_name && user.name !== member.user.global_name) {
         User.updateOne(
           { _id: user._id },
           {

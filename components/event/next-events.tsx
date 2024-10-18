@@ -13,7 +13,7 @@ import { IEvent } from '@/models'
 export function NextEvents() {
   // Stores -------------------------------------------------------------------
   const { data: session } = useSession()
-  const { events, eventsTypesFilters, loading, eventFilter, fetchForNext, socketEvt } = useEvents()
+  const { events, loading, eventFilter, fetchForNext, socketEvt } = useEvents()
 
   // Hooks --------------------------------------------------------------------
   const { getForecasts } = useWeather()

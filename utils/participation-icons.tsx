@@ -30,14 +30,14 @@ export const participationTypes: IParticipationType[] = [
     label: 'patineur·euse',
     key: PARTICIPATION_TYPES.skater,
     icon: <SkaterIcon className="h-6 w-6" />,
-    roles: [ROLES.membre],
+    roles: [ROLES.membre, ROLES.everyone],
     type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match', 'Randonnée / Balade'],
   },
   {
     label: 'visiteur·euse / NSO',
     key: PARTICIPATION_TYPES.visitor,
     icon: <WalkIcon className="h-6 w-6" />,
-    roles: [ROLES.membre],
+    roles: [ROLES.membre, ROLES.everyone],
     type: ['Entraînement de derby', 'Cours de patinage', 'Scrimmage', 'Bootcamp', 'Match', 'Randonnée / Balade'],
   },
 
@@ -52,7 +52,7 @@ export const participationTypes: IParticipationType[] = [
     label: 'invité.e',
     key: PARTICIPATION_TYPES.invite,
     icon: <HandIcon className="h-6 w-6" />,
-    roles: [ROLES.invite, ROLES.membre],
+    roles: [ROLES.invite, ROLES.membre, ROLES.everyone],
     type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale', 'Randonnée / Balade'],
   },
   {
