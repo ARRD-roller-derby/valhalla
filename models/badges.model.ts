@@ -1,3 +1,4 @@
+import { BADGE_LEVELS } from '@/utils/badge-levels'
 import { Schema, model, models } from 'mongoose'
 
 export type IBadgeMedia = {
@@ -18,7 +19,7 @@ export interface IBadgeSchema {
   name: string
   tags: string[]
   type: 'derby' | 'patins'
-  level: 'bronze' | 'argent' | 'or'
+  level: (typeof BADGE_LEVELS)[number]['value']
   medias: IBadgeMedia[]
   description: Object
   isProgressive: boolean

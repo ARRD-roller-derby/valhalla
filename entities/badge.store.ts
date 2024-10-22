@@ -38,6 +38,7 @@ type GET = {
 
 type SET = {
   createBadge: (badge: Partial<IBadgeSchema>) => void
+  updateBadge: (badge: IBadgeSchema) => void
   unlockBadge: (badgeId: string, userId: string) => void
   deleteBadge: (badgeId: string) => void
 }
@@ -117,6 +118,27 @@ export const useBadges = create<Store>((set, get) => ({
       set((state) => ({ badges: [...state.badges, { ...newBadge, win: false }], loadingCreate: false }))
     } catch (err: any) {
       set({ loadingCreate: false, error: 'impossible de créer la compétence' })
+    }
+  },
+  async updateBadge(badge) {
+    const badges = get().badges
+
+    set((prev) => ({
+      loadingUpdate: true,
+      error: null,
+      badges: prev.badges.map((b) => (b._id === badge._id ? badge : b)),
+    }))
+
+    try {
+      await fetch(`/api/badges/${badge._id}/update`, {
+        method: 'PUT',
+        body: JSON.stringify(badge),
+      })
+      set({
+        loadingUpdate: false,
+      })
+    } catch (err: any) {
+      set({ loadingUpdate: false, error: 'impossible de mettre à jour la compétence', badges })
     }
   },
   async unlockBadge(badgeId, userId) {

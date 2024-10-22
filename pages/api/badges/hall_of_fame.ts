@@ -22,15 +22,17 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
   const badges = await Badge.find().select('_id level name')
   const userBadges = await UserBadge.find()
 
-  const winnedBadges = userBadges.map((userBadge) => {
-    const badge = badges.find((badge) => badge._id.toString() === userBadge.badgeId.toString())
-    return {
-      badgeId: userBadge.badgeId,
-      level: badge.level,
-      providerAccountId: userBadge.providerAccountId,
-      unLockDate: userBadge.unLockDate,
-    }
-  })
+  const winnedBadges = userBadges
+    .filter((b) => badges.some((badge) => b.badgeId === badge._id.toString()))
+    .map((userBadge) => {
+      const badge = badges.find((badge) => badge._id.toString() === userBadge.badgeId.toString())
+      return {
+        badgeId: userBadge.badgeId,
+        level: badge.level,
+        providerAccountId: userBadge.providerAccountId,
+        unLockDate: userBadge.unLockDate,
+      }
+    })
 
   const userBadgesGrouped = winnedBadges.reduce((acc, userBadge) => {
     if (!acc[userBadge.providerAccountId]) {
@@ -56,6 +58,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
         const index = acc.findIndex((user) => user.providerAccountId === userBadge.providerAccountId)
 
         const badge = badges.find((badge) => badge._id.toString() === userBadge.badgeId.toString())
+
         if (index !== -1) {
           acc[index].badges.push({
             level: badge.level,

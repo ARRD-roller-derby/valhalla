@@ -11,6 +11,7 @@ module.exports = {
     './pages_related/**/*.page.{js,ts,jsx,tsx,mdx}',
     './ui/**/*.{js,ts,jsx,tsx,mdx}',
     './layout/**/*.{js,ts,jsx,tsx,mdx}',
+    './utils/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     fontFamily: {
@@ -65,6 +66,19 @@ module.exports = {
           // Couleurs spécifiques
           discord: '#5468ff',
           discordHover: '#656c85cc',
+
+          // Badge levels
+
+          badge: {
+            'safe-skills-1': '#cfbe97', // Jaune pâle pour représenter le début
+            'safe-skills-2': '#ffffff', // Orange pour indiquer la progression
+            'safe-skills-3': '#bab325', // Vert pour la maîtrise
+            'roue-jaune': '#FCD34D', // Jaune vif pour la roue jaune
+            'roue-verte': '#10B981', // Vert émeraude pour la roue verte
+            'roue-bleue': '#3B82F6', // Bleu vif pour la roue bleue
+            advanced: '#378f6a', // Violet pour symboliser l'avancement
+            'vie-asso': '#EC4899', // Rose pour refléter l'aspect social
+          },
         },
       },
 

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { type IBadge, useBadges } from '@/entities'
 import { ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
+import { BADFLAGS } from 'dns'
+import { BADGE_LEVELS } from '@/utils/badge-levels'
 
 const LEVELS = [
   {
@@ -40,17 +42,10 @@ export function BadgesList({ userId }: BadgesListProps) {
       let score = 0
 
       score += badge.win ? 1000 : 0
-      switch (badge.level) {
-        case 'or':
-          score += 100
-          break
-        case 'argent':
-          score += 50
-          break
-        case 'bronze':
-          score += 25
-          break
-      }
+
+      const levelIndex = BADGE_LEVELS.findIndex((level) => level.value === badge.level)
+
+      if (levelIndex !== -1) score += (levelIndex + 1) * 100
 
       return score
     }

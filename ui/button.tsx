@@ -6,10 +6,11 @@ interface ButtonProps {
   loading?: boolean
   disabled?: boolean
   onClick: () => void
+  size?: 'small' | 'default'
   type?: 'primary' | 'secondary' | 'danger' | 'invert-secondary' | 'invert-primary'
 }
 
-export function Button({ onClick, text, type, disabled, loading }: ButtonProps) {
+export function Button({ onClick, text, type, size = 'default', disabled, loading }: ButtonProps) {
   // const
   const styles = {
     primary: 'bg-arrd-bgLight text-arrd-textExtraLight',
@@ -22,7 +23,12 @@ export function Button({ onClick, text, type, disabled, loading }: ButtonProps) 
   return (
     <button
       onClick={onClick}
-      className={dc('rounded-md text-sm', 'px-2 py-1 md:px-4 md:py-2', styles[type || 'primary'])}
+      data-size={size}
+      className={dc(
+        'rounded-md text-sm',
+        'px-2 py-1 data-[size=small]:rounded-sm data-[size=small]:p-1 data-[size=small]:text-xs md:px-4 md:py-2',
+        styles[type || 'primary']
+      )}
       disabled={disabled}
     >
       {loading ? 'Chargement...' : text}

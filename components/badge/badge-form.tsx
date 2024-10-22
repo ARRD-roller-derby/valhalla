@@ -1,32 +1,42 @@
 import { useBadges } from '@/entities'
-import { Button, Checkbox, FooterModal, LabelBlock, ListSelector, Modal, TagsInput, TextInput } from '@/ui'
+import { Button, FooterModal, LabelBlock, ListSelector, Modal, TextInput } from '@/ui'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Editor } from '../editor'
 import { IBadgeSchema } from '@/models/badges.model'
+import { BADGE_LEVELS } from '@/utils/badge-levels'
 
-export function BadgeForm() {
+type BadgeFormProps = {
+  badge: IBadgeSchema
+}
+
+export function BadgeForm({ badge }: BadgeFormProps) {
   //Store ------------------------------------------------------
-  const { loadingCreate, createBadge } = useBadges()
+  const { loadingCreate, loadingUpdate, createBadge, updateBadge } = useBadges()
 
   // hooks ------------------------------------------------------
   const router = useRouter()
 
   // Constante ------------------------------------------------------
   const formInit: Partial<IBadgeSchema> = {
-    name: '',
+    name: badge?.name || '',
     isProgressive: false,
-    description: '',
+    description: badge?.description || '',
     tags: [],
     date: new Date(),
-    level: 'bronze',
-    type: 'derby',
+    level: BADGE_LEVELS.find((level) => level.value === badge?.level)?.value || BADGE_LEVELS[0].value,
+    type: badge?.type || 'derby',
   }
 
   // state
   const [form, setForm] = useState(formInit)
+  const isInEditMode = !!badge?._id
 
   // Functions
+
+  const handleUpdate = async () => {
+    updateBadge({ ...badge, ...form })
+  }
 
   const handleCreate = async () => {
     createBadge(form)
@@ -39,14 +49,21 @@ export function BadgeForm() {
 
   return (
     <Modal
-      title="Ajouter un badge"
-      button={(onClick) => <Button onClick={onClick} text="Ajouter" type="secondary" />}
+      title={isInEditMode ? `Modifier ${badge.name}` : 'Ajouter un badge'}
+      button={(onClick) => (
+        <Button
+          onClick={onClick}
+          text={isInEditMode ? 'Modifier' : 'Ajouter'}
+          type="secondary"
+          size={isInEditMode ? 'small' : 'default'}
+        />
+      )}
       footer={(close) => (
         <FooterModal
           closeModal={close}
-          loading={loadingCreate}
-          txtConfirm={`Créer le badge`}
-          onConfirm={handleCreate}
+          loading={loadingCreate || loadingUpdate}
+          txtConfirm={`${isInEditMode ? 'Modifier' : 'Créer'} le badge`}
+          onConfirm={isInEditMode ? handleUpdate : handleCreate}
         />
       )}
     >
@@ -73,20 +90,8 @@ export function BadgeForm() {
           </LabelBlock>
           <LabelBlock label="Niveau">
             <ListSelector
-              options={[
-                {
-                  label: 'Bronze',
-                  value: 'bronze',
-                },
-                {
-                  label: 'Argent',
-                  value: 'argent',
-                },
-                {
-                  label: 'Or',
-                  value: 'or',
-                },
-              ]}
+              options={BADGE_LEVELS}
+              defaultValue={BADGE_LEVELS.find((level) => level.value === form.level)}
               onSelect={(level) => setForm((prev) => ({ ...prev, level: level.value as IBadgeSchema['level'] }))}
             />
           </LabelBlock>
@@ -108,10 +113,6 @@ export function BadgeForm() {
               content={form.description || ''}
               onChange={(description) => setForm((prev) => ({ ...prev, description }))}
             />
-          </LabelBlock>
-
-          <LabelBlock label="Tags">
-            <TagsInput onChange={(tags) => setForm((prev) => ({ ...prev, tags }))} />
           </LabelBlock>
         </div>
       )}

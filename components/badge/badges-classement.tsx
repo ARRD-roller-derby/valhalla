@@ -33,7 +33,7 @@ export function BadgesClassement() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-center gap-2">
+            {/*<div className="flex justify-center gap-2">
               <div
                 className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-sm text-black data-[count='0']:opacity-50"
                 data-count={user.badges.or}
@@ -52,7 +52,7 @@ export function BadgesClassement() {
               >
                 {user.badges.bronze}
               </div>
-            </div>
+            </div> */}
           </div>
         </CardUI>
       ))}
