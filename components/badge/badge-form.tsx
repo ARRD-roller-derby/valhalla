@@ -7,7 +7,7 @@ import { IBadgeSchema } from '@/models/badges.model'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 
 type BadgeFormProps = {
-  badge: IBadgeSchema
+  badge?: IBadgeSchema
 }
 
 export function BadgeForm({ badge }: BadgeFormProps) {
@@ -35,6 +35,7 @@ export function BadgeForm({ badge }: BadgeFormProps) {
   // Functions
 
   const handleUpdate = async () => {
+    if (!badge) return
     updateBadge({ ...badge, ...form })
   }
 
