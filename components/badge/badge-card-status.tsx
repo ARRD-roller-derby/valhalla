@@ -39,7 +39,7 @@ export function BadgeCardStatus({ badge }: BadgeCardStatusProps) {
     return (
       <div className="flex justify-end">
         <button
-          className="rounded-sm bg-arrd-secondary p-1  text-xs text-arrd-textLight data-[win=true]:bg-arrd-textError"
+          className="rounded-sm bg-arrd-secondary p-1  text-xs text-arrd-textLight data-[win=true]:bg-arrd-textDark"
           onClick={handleWin}
           data-win={win}
         >

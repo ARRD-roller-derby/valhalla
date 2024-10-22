@@ -39,6 +39,7 @@ type GET = {
 type SET = {
   createBadge: (badge: Partial<IBadgeSchema>) => void
   unlockBadge: (badgeId: string, userId: string) => void
+  deleteBadge: (badgeId: string) => void
 }
 
 type Store = State & GET & SET
@@ -134,6 +135,23 @@ export const useBadges = create<Store>((set, get) => ({
       set({ loadingUpdate: false, error: 'impossible de débloquer la compétence', badges })
     } finally {
       set({ loadingUpdate: false })
+    }
+  },
+  async deleteBadge(badgeId) {
+    const badges = get().badges
+    set((prev) => ({
+      loadingDelete: true,
+      error: null,
+      badges: prev.badges.filter((b) => b._id !== badgeId),
+    }))
+
+    try {
+      await fetch(`/api/badges/${badgeId}/delete`, {
+        method: 'DELETE',
+      })
+      set({ loadingDelete: false })
+    } catch (err: any) {
+      set({ loadingDelete: false, error: 'impossible de supprimer la compétence', badges })
     }
   },
 }))

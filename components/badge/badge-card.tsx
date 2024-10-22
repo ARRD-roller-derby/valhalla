@@ -2,6 +2,7 @@ import type { IBadge } from '@/entities'
 import { BadgeIcon } from '@/ui'
 import { ReadEditor } from '../editor'
 import { BadgeCardStatus } from './badge-card-status'
+import { BadgeDelete } from './badge-delete'
 
 type BadgeProps = {
   badge: IBadge
@@ -11,7 +12,7 @@ export function BadgeCard({ badge }: BadgeProps) {
     <div
       data-win={badge.win}
       data-color={badge.level}
-      className="grid cursor-pointer grid-cols-[auto_1fr] items-center gap-3 rounded-md border-2 p-2  transition-colors hover:border-arrd-primary hover:opacity-100 data-[win=false]:border-dashed data-[color=argent]:border-zinc-400  data-[color=bronze]:border-orange-800 data-[color=or]:border-amber-400  data-[color]:data-[win=false]:border-arrd-bgLight data-[win=false]:opacity-50 data-[win=false]:hover:opacity-100"
+      className="relative grid cursor-pointer grid-cols-[auto_1fr] items-center gap-3 rounded-md border-2 p-2 transition-colors hover:border-arrd-primary hover:opacity-100 data-[win=false]:border-dashed data-[color=argent]:border-zinc-400  data-[color=bronze]:border-orange-800 data-[color=or]:border-amber-400  data-[color]:data-[win=false]:border-arrd-bgLight data-[win=false]:opacity-50 data-[win=false]:hover:opacity-100"
     >
       <div>
         <BadgeIcon
@@ -29,7 +30,7 @@ export function BadgeCard({ badge }: BadgeProps) {
         <div className="text-xs text-arrd-textExtraLight">
           <ReadEditor content={badge.description} />
         </div>
-
+        <BadgeDelete badge={badge} />
         <BadgeCardStatus badge={badge} />
       </div>
     </div>

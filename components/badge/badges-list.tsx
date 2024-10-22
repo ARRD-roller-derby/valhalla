@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { type IBadge, useBadges } from '@/entities'
 import { ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
-import { IBadgeSchema } from '@/models'
 
 const LEVELS = [
   {
