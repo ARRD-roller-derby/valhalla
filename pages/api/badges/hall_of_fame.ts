@@ -7,6 +7,8 @@ process.env.TZ = 'Europe/Paris'
 import { Badge } from '@/models/badges.model'
 import { UserBadge } from '@/models/user_badge.model'
 import { getDiscordMember } from '@/services/get-discord-member'
+import { BADGE_LEVELS } from '@/utils/badge-levels'
+import { hexToTailwind } from '@/utils'
 
 export default async function hallOfFame(req: NextApiRequest, res: NextApiResponse, midgard: boolean = false) {
   if (!midgard) {
@@ -16,7 +18,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
 
   await MongoDb()
 
-  const { members } = await getDiscordMember()
+  const { members, guildRoles } = await getDiscordMember()
 
   // Récupérer tous les badges et les badges des utilisateurs
   const badges = await Badge.find().select('_id level name')
@@ -36,12 +38,15 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
 
   const userBadgesGrouped = winnedBadges.reduce((acc, userBadge) => {
     if (!acc[userBadge.providerAccountId]) {
-      acc[userBadge.providerAccountId] = {
-        or: 0,
-        argent: 0,
-        bronze: 0,
-        total: 0,
-      }
+      acc[userBadge.providerAccountId] = BADGE_LEVELS.reduce(
+        (acc, level) => {
+          acc[level.value] = 0
+          return acc
+        },
+        {
+          total: 0,
+        } as any
+      )
     }
     acc[userBadge.providerAccountId][userBadge.level]++
     acc[userBadge.providerAccountId].total++
@@ -85,30 +90,25 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     .map(([providerAccountId, badges]) => {
       const user = members.find((member) => member.providerAccountId === providerAccountId)
       if (!user) return null
-      return { name: user.nick || user.name, avatar: user.avatar, badges }
+
+      const roles = guildRoles.filter((role) => user?.roles?.includes(role.id)).map((role) => role.name)
+      return { name: user.nick || user.name, avatar: user.avatar, badges, roles }
     })
     .filter(Boolean) as {
     name: string
     avatar: string
-    badges: { or: number; argent: number; bronze: number; total: number }
+    badges: any
+    roles: string[]
   }[]
 
   const podium = userBadgesGroupedArray
-
     .slice(0, 3)
     .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total }))
-  const podiumOr = userBadgesGroupedArray
-    .sort((a, b) => b.badges.or - a.badges.or)
+
+  const fresh = userBadgesGroupedArray
+    .filter((user) => user?.roles.some((role) => role.toLowerCase() === 'fresh'))
     .slice(0, 3)
-    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.or }))
-  const podiumArgent = userBadgesGroupedArray
-    .sort((a, b) => b.badges.argent - a.badges.argent)
-    .slice(0, 3)
-    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.argent }))
-  const podiumBronze = userBadgesGroupedArray
-    .sort((a, b) => b.badges.bronze - a.badges.bronze)
-    .slice(0, 3)
-    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.bronze }))
+    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total }))
 
   return res.status(200).json({
     classement: userBadgesGroupedArray.sort((a, b) => b.badges.total - a.badges.total),
@@ -120,19 +120,9 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
         podium,
       },
       {
-        title: 'Podium Or',
-        key: 'or',
-        podium: podiumOr,
-      },
-      {
-        title: 'Podium Argent',
-        key: 'argent',
-        podium: podiumArgent,
-      },
-      {
-        title: 'Podium Bronze',
-        key: 'bronze',
-        podium: podiumBronze,
+        title: 'Fresh',
+        key: 'all',
+        podium: fresh,
       },
     ],
   })
