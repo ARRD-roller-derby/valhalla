@@ -41,7 +41,7 @@ export function BadgesList({ userId }: BadgesListProps) {
     const getBadgeScore = (badge: IBadge): number => {
       let score = 0
 
-      score += badge.win ? 1000 : 0
+      // score += badge.win ? 1000 : 0
 
       const levelIndex = BADGE_LEVELS.findIndex((level) => level.value === badge.level)
 
@@ -74,11 +74,11 @@ export function BadgesList({ userId }: BadgesListProps) {
     return <div className="flex h-full items-center justify-center">Aucun badge trouvé</div>
 
   return (
-    <div className="flex= mx-auto max-w-lg flex-col gap-4">
-      <div className="my-1 flex flex-col justify-center gap-2 sm:grid sm:grid-cols-[3fr_1fr] sm:items-center">
+    <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto lg:max-w-lg">
+      <div className="my-1 flex w-full flex-col justify-center gap-2 sm:grid sm:grid-cols-[2fr_1fr] sm:items-center">
         <TextInput value={search} setValue={setSearch} />
         <div className="w-full pb-1">
-          <ListSelector options={LEVELS} onSelect={setLevel} defaultValue={LEVELS[0]} />
+          <ListSelector options={BADGE_LEVELS} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -90,7 +90,7 @@ export function BadgesList({ userId }: BadgesListProps) {
           .filter((badge) => badge.name.toLowerCase().includes(search.toLowerCase()))
           .sort(sortedBadges)
           .map((badge) => (
-            <BadgeCard key={badge._id.toString()} badge={badge} />
+            <BadgeCard key={`${badge._id}`} badge={badge} />
           ))}
       </div>
     </div>

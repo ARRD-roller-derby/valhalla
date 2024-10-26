@@ -158,3 +158,24 @@
 button:disabled {
   opacity: 0.5;
 }
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  background-color: black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.ProseMirror li {
+  margin-left: 1rem;
+}
+
+.ProseMirror ul {
+  margin-left: 2rem;
+  list-style-type: square;
+}
+
+.ProseMirror[contenteditable='false'] {
+  overflow: hidden;
+}

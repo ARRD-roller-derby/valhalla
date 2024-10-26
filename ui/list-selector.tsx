@@ -26,7 +26,7 @@ export function ListSelector({ onSelect, defaultValue, options }: ListSelectorPr
     <Listbox value={selected} onChange={handleSelect}>
       <div className="relative mt-1">
         <Listbox.Button className="input relative w-full cursor-pointer">
-          <span className="block truncate">{selected.label}</span>
+          <span className="block truncate pr-5">{selected.label}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ShortIcon className="h-5 w-5 fill-arrd-accent" />
           </span>

@@ -32,7 +32,7 @@ export function BadgeCard({ badge }: BadgeProps) {
       <div>
         <div className={dc('text-lg first-letter:uppercase', color.replace('fill-', 'text-'))}>{badge.name}</div>
         <div className="text-xs text-arrd-textExtraLight">
-          <ReadEditor content={badge.description} />
+          <ReadEditor content={badge.description} key={JSON.stringify(badge.description || '{}')} />
         </div>
         <div className="flex justify-end gap-3">
           <BadgeForm badge={badge} />

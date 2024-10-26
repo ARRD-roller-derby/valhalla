@@ -76,18 +76,12 @@ export function MenuBar({ editor }: MenuBarProps) {
       isDisabled: () => !editor.can().toggleStrike(),
       icon: <StrikeIcon />,
     },
-    {
-      name: 'link',
-      onClick: () => editor.chain().focus().toggleLink().run(),
-      isDisabled: () => !editor.can().toggleLink(),
-      icon: <LinkIcon />,
-    },
   ]
 
   const layoutOpts = [
     {
       name: 'list',
-      onClick: () => editor.chain().focus().toggleStrike().run(),
+      onClick: () => editor.chain().focus().toggleBulletList().run(),
       isDisabled: () => !editor.can().toggleStrike(),
       icon: <ListIcon />,
     },
@@ -133,10 +127,18 @@ export function Editor({ content, onChange }: EditorProps) {
   // hooks
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+      }),
       Underline,
       Link.configure({
-        openOnClick: false,
         HTMLAttributes: {
           rel: 'noreferrer',
           target: '_blank',

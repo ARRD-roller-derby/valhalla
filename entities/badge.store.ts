@@ -122,11 +122,10 @@ export const useBadges = create<Store>((set, get) => ({
   },
   async updateBadge(badge) {
     const badges = get().badges
-
-    set((prev) => ({
+    set(() => ({
       loadingUpdate: true,
       error: null,
-      badges: prev.badges.map((b) => (b._id === badge._id ? badge : b)),
+      badges: badges.map((b) => (b._id === badge._id ? badge : b)),
     }))
 
     try {
