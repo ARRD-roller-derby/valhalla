@@ -30,6 +30,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
       return {
         badgeId: userBadge.badgeId,
         level: badge.level,
+        point: BADGE_LEVELS?.find((level) => level?.value === badge.level)?.point || 0,
         providerAccountId: userBadge.providerAccountId,
         unLockDate: userBadge.unLockDate,
       }
@@ -44,10 +45,13 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
         },
         {
           total: 0,
+          point: 0,
         } as any
       )
     }
+    if (!acc[userBadge.providerAccountId][userBadge.level]) acc[userBadge.providerAccountId][userBadge.level] = 0
     acc[userBadge.providerAccountId][userBadge.level]++
+    acc[userBadge.providerAccountId]['point'] += userBadge.point
     acc[userBadge.providerAccountId].total++
     acc.unLockDate = userBadge.unLockDate
     return acc
@@ -100,17 +104,25 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     roles: string[]
   }[]
 
-  const podium = userBadgesGroupedArray
-    .slice(0, 3)
-    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total }))
+  const classement = userBadgesGroupedArray.sort((a, b) => {
+    if (b.badges.point !== a.badges.point) {
+      return b.badges.point - a.badges.point // Trie par points décroissants
+    } else {
+      return b.badges.total - a.badges.total // En cas d'égalité, trie par badges décroissants
+    }
+  })
 
-  const fresh = userBadgesGroupedArray
+  const podium = classement
+    .slice(0, 3)
+    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total, points: user.badges.point }))
+
+  const fresh = classement
     .filter((user) => user?.roles.some((role) => role.toLowerCase() === 'fresh'))
     .slice(0, 3)
-    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total }))
+    .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total, points: user.badges.point }))
 
   return res.status(200).json({
-    classement: userBadgesGroupedArray.sort((a, b) => b.badges.total - a.badges.total),
+    classement,
     dailyBadges,
     hallOfFame: [
       {
