@@ -17,8 +17,6 @@ export function BadgeHallOfFame() {
       </div>
     )
 
-  console.log(hallOfFame)
-
   return (
     <div className="relative mt-6 flex h-full flex-col items-center gap-6 ">
       {hallOfFame.map((winner: any, index) => (
