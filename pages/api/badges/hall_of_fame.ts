@@ -8,7 +8,6 @@ import { Badge } from '@/models/badges.model'
 import { UserBadge } from '@/models/user_badge.model'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
-import { hexToTailwind } from '@/utils'
 
 export default async function hallOfFame(req: NextApiRequest, res: NextApiResponse, midgard: boolean = false) {
   if (!midgard) {
