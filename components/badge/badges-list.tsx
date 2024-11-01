@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 // Bibliothèque interne
 import { type IBadge, useBadges } from '@/entities'
-import { ListSelector, Loader, TextInput } from '@/ui'
+import { Checkbox, ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
 import { BADFLAGS } from 'dns'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
@@ -34,6 +34,7 @@ export function BadgesList({ userId }: BadgesListProps) {
   // Store -----------------------------------
   const { loadingGet, badges, getBadges } = useBadges()
   const [search, setSearch] = useState<string>('')
+  const [displayOnlyWin, setDisplayOnlyWin] = useState<boolean>(false)
   const [level, setLevel] = useState<{ label: string; value: unknown }>(LEVELS[0])
 
   // Const -----------------------------------
@@ -81,8 +82,16 @@ export function BadgesList({ userId }: BadgesListProps) {
           <ListSelector options={BADGE_LEVELS} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>
       </div>
+      <div className="flex justify-center">
+        <Checkbox
+          label="Uniquement les badges obtenus"
+          onChange={() => setDisplayOnlyWin(!displayOnlyWin)}
+          checked={displayOnlyWin}
+        />
+      </div>
       <div className="flex flex-col gap-2">
         {badges
+          .filter((badge) => (displayOnlyWin ? badge.win : true))
           .filter((badge) => {
             if (level.value === 'tous') return true
             return badge.level === level.value
