@@ -34,6 +34,7 @@ type GET = {
   getLoading: () => boolean
   getCount: () => Promise<number>
   getHallOfFame: () => Promise<Podium[]>
+  getHasViewed: () => Promise<IBadgeSchema[]>
 }
 
 type SET = {
@@ -41,6 +42,7 @@ type SET = {
   updateBadge: (badge: IBadgeSchema) => void
   unlockBadge: (badgeId: string, userId: string) => void
   deleteBadge: (badgeId: string) => void
+  haveViewedBadge: () => void
 }
 
 type Store = State & GET & SET
@@ -93,6 +95,15 @@ export const useBadges = create<Store>((set, get) => ({
       return count
     } catch (err: any) {
       set({ error: 'impossible de récupérer le nombre de compétences' })
+    }
+  },
+  async getHasViewed() {
+    try {
+      const res = await fetch('/api/badges/has_view')
+      const badges = await res.json()
+      return badges
+    } catch (err: any) {
+      console.error(err)
     }
   },
   async getHallOfFame() {
@@ -173,6 +184,15 @@ export const useBadges = create<Store>((set, get) => ({
       set({ loadingDelete: false })
     } catch (err: any) {
       set({ loadingDelete: false, error: 'impossible de supprimer la compétence', badges })
+    }
+  },
+  async haveViewedBadge() {
+    try {
+      await fetch('/api/badges/have_viewed', {
+        method: 'PUT',
+      })
+    } catch (err: any) {
+      console.error(err)
     }
   },
 }))

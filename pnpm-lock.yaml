@@ -68,6 +68,9 @@ dependencies:
   ics:
     specifier: ^3.4.0
     version: 3.4.0
+  js-confetti:
+    specifier: ^0.12.0
+    version: 0.12.0
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
@@ -5315,6 +5318,10 @@ packages:
 
   /jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+    dev: false
+
+  /js-confetti@0.12.0:
+    resolution: {integrity: sha512-1R0Akxn3Zn82pMqW65N1V2NwKkZJ75bvBN/VAb36Ya0YHwbaSiAJZVRr/19HBxH/O8x2x01UFAbYI18VqlDN6g==}
     dev: false
 
   /js-tokens@4.0.0:

@@ -46,7 +46,7 @@ export default async function badges(req: NextApiRequest, res: NextApiResponse) 
   if (userBadgeExist) {
     await UserBadge.deleteOne({ providerAccountId, badgeId })
   } else {
-    await UserBadge.create({ providerAccountId, badgeId, unLockDate: dayjs().toDate() })
+    await UserBadge.create({ providerAccountId, badgeId, unLockDate: dayjs().toDate(), hasViewed: false })
   }
 
   const badges = await UserBadge.find({ providerAccountId })

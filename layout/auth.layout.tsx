@@ -5,6 +5,7 @@ import Head from 'next/head'
 import { Avatar, BadgeCounter, LogoAndGoBack, Menu } from '@/components'
 import { SocketProvider } from '@/entities'
 import { dc } from '@/utils'
+import { BadgeUnlockModal } from '@/components/badge/badge-unlock-modal'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -28,6 +29,7 @@ export function AuthLayout({ children, title }: AuthLayoutProps) {
         <Head>
           <title>{title ? `${title} | ` : ''}Valhalla</title>
         </Head>
+        <BadgeUnlockModal />
         <nav className="flex items-center justify-between p-1 grid-in-nav">
           <LogoAndGoBack />
           <div className="flex items-center gap-3">

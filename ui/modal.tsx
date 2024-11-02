@@ -59,11 +59,12 @@ interface ModalProps {
   footer?: (close: () => void) => React.ReactNode
   onClose?: () => void | Promise<void>
   onOpen?: () => void
+  openDefault?: boolean
 }
 
-export function Modal({ title, children, button, onOpen, onClose, footer }: ModalProps) {
+export function Modal({ title, openDefault = false, children, button, onOpen, onClose, footer }: ModalProps) {
   // states
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(openDefault)
 
   // functions
   const closeModal = async () => {
