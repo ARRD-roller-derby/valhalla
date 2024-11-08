@@ -48,7 +48,7 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     const { x, y } = player
 
     if (colNum) {
-      set({ player: { x: colNum - 1, y } })
+      set({ player: { x: colNum, y } })
       return
     }
     if (direction === 'left' && x === 0) return

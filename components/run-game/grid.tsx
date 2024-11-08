@@ -40,7 +40,7 @@ export function Grid() {
   const movePlayer = (direction: 'left' | 'right', colNum?: number) => {
     const { x } = refs.current.player
     if (colNum) {
-      refs.current.player.x = colNum
+      refs.current.player.x = colNum - 1
       _movePlayer(direction, refs.current.player.x)
       return
     }
@@ -146,19 +146,16 @@ export function Grid() {
     recognition.onerror = (event) => {
       console.error('Erreur de reconnaissance vocale', event)
       if (event.error === 'network' && retryCount < maxRetries) {
-        console.log('Relancement de la reconnaissance vocale après une erreur réseau.')
         retryCount += 1 // Augmenter le compteur de tentatives
         if (!isRestarting && !isRecognizing) {
           isRestarting = true // Marquer le redémarrage en cours
           recognition.start()
         }
       } else {
-        console.error('Erreur critique ou nombre maximal de tentatives atteint. Arrêt de la reconnaissance vocale.')
       }
     }
 
     recognition.onend = () => {
-      console.log('Reconnaissance terminée, relancement...')
       isRecognizing = false
 
       if (!isRestarting && retryCount < maxRetries) {
@@ -171,7 +168,6 @@ export function Grid() {
       const lastResult = event.results[event.results.length - 1]
       const command = lastResult[0].transcript.trim().toLowerCase()
 
-      console.log('Commande reconnue:', command)
       if (command.match(/un|1/g)) {
         movePlayer('left', 1)
       }
