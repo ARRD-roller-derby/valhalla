@@ -33,7 +33,9 @@ export function Grid() {
     accumulatedTime: number
     speed: number
     isRecognizing: boolean
+    isRestarting: boolean
     recognitionInstance: any
+    retryCount: number
   }>({
     grid,
     request: undefined,
@@ -50,6 +52,8 @@ export function Grid() {
     speed: 20,
     isRecognizing: false,
     recognitionInstance: null,
+    isRestarting: false,
+    retryCount: 0,
   })
 
   // === Boucle de jeu === //
@@ -157,46 +161,42 @@ export function Grid() {
 
     //@ts-ignore
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    const recognition = new SpeechRecognition()
-    recognition.lang = 'fr-FR'
-    recognition.interimResults = false
-    recognition.continuous = true
+    refs.current.recognitionInstance = new SpeechRecognition()
+    refs.current.recognitionInstance.lang = 'fr-FR'
+    refs.current.recognitionInstance.interimResults = false
+    refs.current.recognitionInstance.continuous = true
 
-    // Variable pour contrôler si un redémarrage est déjà en cours
-    let isRestarting = false
-    let isRecognizing = false // Ajout de l'état de reconnaissance
-    let retryCount = 0
     const maxRetries = 5
 
-    recognition.onstart = () => {
+    refs.current.recognitionInstance.onstart = () => {
       console.log('Reconnaissance vocale démarrée')
-      isRecognizing = true
-      isRestarting = false // Réinitialiser le flag de redémarrage lorsqu'il démarre correctement
-      retryCount = 0 // Réinitialiser le compteur de tentatives
+      refs.current.isRecognizing = true
+      refs.current.isRestarting = false // Réinitialiser le flag de redémarrage lorsqu'il démarre correctement
+      refs.current.retryCount = 0 // Réinitialiser le compteur de tentatives
     }
 
-    recognition.onerror = (event: any) => {
+    refs.current.recognitionInstance.onerror = (event: any) => {
       console.error('Erreur de reconnaissance vocale', event)
-      if (event.error === 'network' && retryCount < maxRetries) {
-        retryCount += 1 // Augmenter le compteur de tentatives
-        if (!isRestarting && !isRecognizing) {
-          isRestarting = true // Marquer le redémarrage en cours
-          recognition.start()
+      if (event.error === 'network' && refs.current.retryCount < maxRetries) {
+        refs.current.retryCount += 1 // Augmenter le compteur de tentatives
+        if (!refs.current.isRestarting && !refs.current.isRecognizing) {
+          refs.current.isRestarting = true // Marquer le redémarrage en cours
+          refs?.current?.recognitionInstance?.start()
         }
       } else {
       }
     }
 
-    recognition.onend = () => {
-      isRecognizing = false
+    refs.current.recognitionInstance.onend = () => {
+      refs.current.isRecognizing = false
 
-      if (!isRestarting && retryCount < maxRetries) {
-        isRestarting = true // Marquer le redémarrage en cours
-        recognition.start()
+      if (!refs.current.isRestarting && refs.current.retryCount < maxRetries) {
+        refs.current.isRestarting = true // Marquer le redémarrage en cours
+        refs?.current?.recognitionInstance?.start()
       }
     }
 
-    recognition.onresult = (event: any) => {
+    refs.current.recognitionInstance.onresult = (event: any) => {
       const lastResult = event.results[event.results.length - 1]
       const command = lastResult[0].transcript.trim().toLowerCase()
 
@@ -215,8 +215,8 @@ export function Grid() {
     }
 
     // Démarrer la reconnaissance si elle n'est pas déjà en cours
-    if (!isRecognizing && !isRestarting) {
-      recognition.start()
+    if (!refs.current.isRecognizing && !refs.current.isRestarting) {
+      refs?.current?.recognitionInstance?.start()
     }
   }
 
@@ -226,10 +226,6 @@ export function Grid() {
     if (refs?.current) {
       refs.current.grid = initGame()
       refs.current.request = requestAnimationFrame(run)
-
-      setTimeout(() => {
-        startVoiceControl(), 1000
-      })
     }
     window.addEventListener('keydown', keyBoardHandler)
     return () => {
@@ -305,7 +301,15 @@ export function Grid() {
                   <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
                 </div>
               )}
-              <Button onClick={() => startGame()} text="Jouer" size="large" type="secondary" />
+              <Button
+                onClick={() => {
+                  startGame()
+                  startVoiceControl()
+                }}
+                text="Jouer"
+                size="large"
+                type="secondary"
+              />
             </div>
           </>
         )}
