@@ -33,7 +33,7 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
   start: false,
   gameOver: false,
   grid: [],
-  jammer: { x: 0, y: GRID_SIZE_ROWS - 1 },
+  jammer: { x: 0, y: GRID_SIZE_ROWS + 20 },
   player: { x: 1, y: 2 },
   indicator: { x: 0, y: 0 },
   score: 0,

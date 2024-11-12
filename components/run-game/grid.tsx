@@ -82,7 +82,8 @@ export function Grid() {
     if (!jammer) return
     const newY = jammer.y - 1 < 0 || resetY ? Math.floor(Math.random() * 20) + GRID_SIZE_ROWS : jammer.y - 1
 
-    const x = jammer.y - 1 < 0 || resetY ? getRandomColumn(jammer.x) : newX
+    const xValue = jammer.y - 1 < 0 || resetY ? getRandomColumn(jammer.x) : newX
+    const x = typeof xValue === 'number' ? xValue : undefined
     refs.current.jammer = { x: x || jammer.x, y: newY }
 
     _runJammer(x || jammer.x, newY)
@@ -110,7 +111,6 @@ export function Grid() {
 
     return randomIndex
   }
-
   // === Core game === //
 
   const updateGame = (deltaTime: number) => {
@@ -123,6 +123,7 @@ export function Grid() {
       // ====> Collision avec le jammer
       if (refs.current.jammer.x === refs.current.player.x && refs.current.player.y === refs.current.jammer.y) {
         const randomIndex = getRandomColumn(refs.current.jammer.x)
+
         runJammer(randomIndex, true)
         increaseScore()
         if (refs.current.speed < 300) refs.current.speed += 1
