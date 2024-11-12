@@ -6,7 +6,7 @@ interface ButtonProps {
   loading?: boolean
   disabled?: boolean
   onClick: () => void
-  size?: 'small' | 'default'
+  size?: 'small' | 'default' | 'large'
   type?: 'primary' | 'secondary' | 'danger' | 'invert-secondary' | 'invert-primary'
 }
 
@@ -26,7 +26,7 @@ export function Button({ onClick, text, type, size = 'default', disabled, loadin
       data-size={size}
       className={dc(
         'rounded-md text-sm',
-        'px-2 py-1 data-[size=small]:rounded-sm data-[size=small]:p-1 data-[size=small]:text-xs md:px-4 md:py-2',
+        'px-2 py-1 data-[size=small]:rounded-sm data-[size=large]:p-3 data-[size=small]:p-1 data-[size=large]:text-lg  data-[size=small]:text-xs md:px-4 md:py-2',
         styles[type || 'primary']
       )}
       disabled={disabled}
