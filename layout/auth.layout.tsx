@@ -6,6 +6,7 @@ import { Avatar, BadgeCounter, LogoAndGoBack, Menu } from '@/components'
 import { SocketProvider } from '@/entities'
 import { dc } from '@/utils'
 import { BadgeUnlockModal } from '@/components/badge/badge-unlock-modal'
+import { WallOfDeathModal } from '@/components/badge/wall-of-death-modal'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -33,6 +34,7 @@ export function AuthLayout({ children, title }: AuthLayoutProps) {
         <nav className="flex items-center justify-between p-1 grid-in-nav">
           <LogoAndGoBack />
           <div className="flex items-center gap-3">
+            <WallOfDeathModal />
             <BadgeCounter />
             <Avatar />
           </div>

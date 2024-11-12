@@ -1,5 +1,9 @@
+'use client'
 import { GRID_SIZE_COLS, GRID_SIZE_ROWS, useRunGame } from '@/entities/rungame.store'
-import { BoltIcon, DragonIcon } from '@/ui'
+import { Button } from '@/ui'
+import { ExplodeIcon } from '@/ui/icons/explode.icon'
+import { StarIcon } from '@/ui/icons/star.icon'
+import { WallIcon } from '@/ui/icons/wall.icon'
 import { useEffect, useRef } from 'react'
 
 export function Grid() {
@@ -9,6 +13,9 @@ export function Grid() {
     player,
     jammer,
     score,
+    start,
+    gameOver,
+    startGame: _startGame,
     movePlayer: _movePlayer,
     runJammer: _runJammer,
     initGame,
@@ -17,7 +24,17 @@ export function Grid() {
   } = useRunGame()
 
   // ---- Refs ---- //
-  const refs = useRef({
+  const refs = useRef<{
+    grid: number[][]
+    request: number | undefined
+    previousTime: number | undefined
+    jammer: { x: number; y: number }
+    player: { x: number; y: number }
+    accumulatedTime: number
+    speed: number
+    isRecognizing: boolean
+    recognitionInstance: any
+  }>({
     grid,
     request: undefined,
     previousTime: undefined,
@@ -36,6 +53,14 @@ export function Grid() {
   })
 
   // === Boucle de jeu === //
+
+  const startGame = () => {
+    if (!start) {
+      _startGame()
+      refs.current.speed = 20
+      refs.current.jammer = { x: 0, y: GRID_SIZE_ROWS - 40 }
+    }
+  }
 
   const movePlayer = (direction: 'left' | 'right', colNum?: number) => {
     const { x } = refs.current.player
@@ -69,8 +94,11 @@ export function Grid() {
       updateGame(deltaTime)
     }
 
-    refs.current.previousTime = time
-    refs.current.request = requestAnimationFrame(run)
+    if (refs?.current) {
+      refs.current.previousTime = time
+
+      refs.current.request = requestAnimationFrame(run)
+    }
   }
 
   const getRandomColumn = (currentCol: number) => {
@@ -124,6 +152,7 @@ export function Grid() {
       return
     }
 
+    //@ts-ignore
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
     recognition.lang = 'fr-FR'
@@ -143,7 +172,7 @@ export function Grid() {
       retryCount = 0 // Réinitialiser le compteur de tentatives
     }
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error('Erreur de reconnaissance vocale', event)
       if (event.error === 'network' && retryCount < maxRetries) {
         retryCount += 1 // Augmenter le compteur de tentatives
@@ -164,7 +193,7 @@ export function Grid() {
       }
     }
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       const lastResult = event.results[event.results.length - 1]
       const command = lastResult[0].transcript.trim().toLowerCase()
 
@@ -204,7 +233,7 @@ export function Grid() {
       window.removeEventListener('keydown', keyBoardHandler)
       if (refs?.current?.request) cancelAnimationFrame(refs.current.request)
       if (refs.current.recognitionInstance) {
-        refs.current.recognitionInstance.stop()
+        refs.current.recognitionInstance?.stop()
         refs.current.recognitionInstance = null
       }
     }
@@ -214,38 +243,69 @@ export function Grid() {
 
   if (!grid?.length) return null
   return (
-    <div className="max-h-max w-full max-w-md">
-      <div>SCORE: {score}</div>
-      <div
-        className="relative grid max-h-max w-full max-w-md cursor-pointer"
-        style={{
-          gridTemplateColumns: `repeat(${GRID_SIZE_COLS}, 1fr)`,
-        }}
-      >
+    <div className="relative h-full w-full">
+      <div className="absolute inset-2 grid grid-rows-[auto_1fr] md:justify-center">
+        <div>
+          SCORE: <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
+        </div>
+        <div
+          className="pointer-events-none grid h-full w-full cursor-pointer lg:w-96"
+          style={{
+            gridTemplateColumns: `repeat(${GRID_SIZE_COLS}, 1fr)`,
+          }}
+        >
+          {grid.map((row, x) => (
+            <div key={x} className="flex flex-1 flex-col">
+              {row.map((col, y) => (
+                <div key={y} className="relative h-full border-x border-x-orange-800">
+                  {/* Player */}
+                  {x === player.x && y === player.y && (
+                    <div
+                      className="flex h-full w-full items-center justify-center fill-amber-700 data-[hide=true]:hidden"
+                      data-hide={x === jammer.x && y === jammer.y}
+                    >
+                      <WallIcon className="h-auto w-9" />
+                    </div>
+                  )}
+                  {/* Jammer */}
+                  {x === jammer.x && y === jammer.y && (
+                    <div
+                      className="flex h-full w-full items-center justify-center fill-arrd-highlight data-[hide=true]:hidden"
+                      data-hide={x === player.x && y === player.y}
+                    >
+                      <StarIcon className="h-auto w-9" />
+                    </div>
+                  )}
+                  {x === jammer.x && y === jammer.y && x === player.x && y === player.y && (
+                    <div className="absolute -inset-4 flex h-full w-full origin-center scale-150 items-center justify-center fill-yellow-300">
+                      <ExplodeIcon className="h-auto w-9" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
         {/* CONTRÔLES DU JEU */}
         <div className="absolute bottom-0 left-0 top-0 w-1/2" id="c-left" onClick={() => movePlayer('left')} />
         <div className="absolute bottom-0 right-0 top-0 w-1/2 " id="c-right" onClick={() => movePlayer('right')} />
 
-        {grid.map((row, x) => (
-          <div key={x} className="flex flex-col">
-            {row.map((col, y) => (
-              <div key={y} className="h-6 border-x border-x-orange-600">
-                {/* Player */}
-                {x === player.x && y === player.y && (
-                  <div className="flex h-full w-full items-center justify-center fill-arrd-highlight">
-                    <DragonIcon />
-                  </div>
-                )}
-                {/* Jammer */}
-                {x === jammer.x && y === jammer.y && (
-                  <div className="flex h-full w-full items-center justify-center fill-arrd-textError">
-                    <BoltIcon />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
+        {!start && (
+          <>
+            <div className="absolute -inset-2 backdrop-blur-sm backdrop-filter">
+              <div className="bg-base-primary fixed inset-0 opacity-10" />
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center  justify-center gap-2">
+              {gameOver && (
+                <div className="bg-black/20 p-2 text-lg">
+                  SCORE:{' '}
+                  <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
+                </div>
+              )}
+              <Button onClick={() => startGame()} text="Jouer" size="large" type="secondary" />
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

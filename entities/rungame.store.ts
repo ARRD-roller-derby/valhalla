@@ -9,6 +9,8 @@ type RunGameState = {
   jammer: { x: number; y: number }
   player: { x: number; y: number }
   score: number
+  start: boolean
+  gameOver: boolean
 }
 
 type RunGameGetters = {
@@ -21,11 +23,15 @@ type RunGameSetters = {
   runJammer: (x: number | undefined, deepY: number) => void
   increaseScore: () => void
   decreaseScore: () => void
+  startGame: () => void
+  stopGame: () => void
 }
 
 export type RunGameStore = RunGameState & RunGameGetters & RunGameSetters
 
 export const useRunGame = create<RunGameStore>((set, get) => ({
+  start: false,
+  gameOver: false,
   grid: [],
   jammer: { x: 0, y: GRID_SIZE_ROWS - 1 },
   player: { x: 1, y: 2 },
@@ -65,6 +71,15 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     set((state) => ({ score: state.score + 10 }))
   },
   decreaseScore() {
+    const { score, start } = get()
+    const newScore = score - 5
+    if (newScore < 0 && start) return set({ gameOver: true, start: false })
     set((state) => ({ score: state.score - 5 }))
+  },
+  startGame() {
+    set({ start: true, gameOver: false, score: 0, jammer: { x: get().jammer.x, y: GRID_SIZE_ROWS + 40 } })
+  },
+  stopGame() {
+    set({ start: false, gameOver: true })
   },
 }))
