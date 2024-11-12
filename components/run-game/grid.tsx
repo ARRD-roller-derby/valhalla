@@ -83,10 +83,12 @@ export function Grid() {
     const newY = jammer.y - 1 < 0 || resetY ? Math.floor(Math.random() * 20) + GRID_SIZE_ROWS : jammer.y - 1
 
     const xValue = jammer.y - 1 < 0 || resetY ? getRandomColumn(jammer.x) : newX
-    const x = typeof xValue === 'number' ? xValue : undefined
-    refs.current.jammer = { x: x || jammer.x, y: newY }
+    const xRandom = typeof xValue === 'number' ? xValue : undefined
+    const x = typeof xRandom === 'number' ? xRandom : jammer.x
 
-    _runJammer(x || jammer.x, newY)
+    refs.current.jammer = { x, y: newY }
+
+    _runJammer(x, newY)
   }
 
   const run = (time: number) => {

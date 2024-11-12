@@ -20,7 +20,7 @@ type RunGameGetters = {
 
 type RunGameSetters = {
   movePlayer: (direction: 'left' | 'right', colNum?: number) => void
-  runJammer: (x: number | undefined, deepY: number) => void
+  runJammer: (x: number, deepY: number) => void
   increaseScore: () => void
   decreaseScore: () => void
   startGame: () => void
@@ -64,8 +64,7 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     set({ player: { x: newX, y } })
   },
   runJammer(newX, deepY) {
-    const { jammer } = get()
-    set({ jammer: { x: newX || jammer.x, y: deepY } })
+    set({ jammer: { x: newX, y: deepY } })
   },
   increaseScore() {
     set((state) => ({ score: state.score + 10 }))
