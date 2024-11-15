@@ -15,6 +15,7 @@ export function Grid() {
     score,
     start,
     gameOver,
+    life,
     startGame: _startGame,
     movePlayer: _movePlayer,
     runJammer: _runJammer,
@@ -244,8 +245,17 @@ export function Grid() {
   return (
     <div className="relative h-full w-full">
       <div className="absolute inset-2 grid grid-rows-[auto_1fr] md:justify-center">
-        <div>
-          SCORE: <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            SCORE: <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
+          </div>
+          <div className="flex gap-1">
+            {Array.from({ length: life }, (_, i) => (
+              <div key={i} className="flex items-center justify-center fill-amber-900 ">
+                <WallIcon className="h-3 w-3" />
+              </div>
+            ))}
+          </div>
         </div>
         <div
           className="pointer-events-none grid h-full w-full cursor-pointer lg:w-96"

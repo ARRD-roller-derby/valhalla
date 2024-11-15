@@ -10,6 +10,8 @@ type RunGameState = {
   player: { x: number; y: number }
   score: number
   start: boolean
+  life: number
+  pointTowinLife: number
   gameOver: boolean
 }
 
@@ -32,11 +34,13 @@ export type RunGameStore = RunGameState & RunGameGetters & RunGameSetters
 export const useRunGame = create<RunGameStore>((set, get) => ({
   start: false,
   gameOver: false,
+  life: 3,
   grid: [],
   jammer: { x: 0, y: GRID_SIZE_ROWS + 20 },
   player: { x: 1, y: 2 },
   indicator: { x: 0, y: 0 },
   score: 0,
+  pointTowinLife: 500,
   generateGrid() {
     const grid = Array.from({ length: GRID_SIZE_COLS }, () => Array.from({ length: GRID_SIZE_ROWS }, () => 0))
     set({ grid })
@@ -67,16 +71,25 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     set({ jammer: { x: newX, y: deepY } })
   },
   increaseScore() {
+    const { start, life, pointTowinLife } = get()
+
+    if (start) {
+      const newPointToWinLife = pointTowinLife - 10
+      if (newPointToWinLife >= 500) {
+        set((state) => ({ pointTowinLife: 0, life: state.life + 1 }))
+      }
+    }
     set((state) => ({ score: state.score + 10 }))
   },
   decreaseScore() {
-    const { score, start } = get()
-    const newScore = score - 5
-    if (newScore < 0 && start) return set({ gameOver: true, start: false })
-    set((state) => ({ score: state.score - 5 }))
+    const { start, life } = get()
+    const newLife = life - 1
+
+    set((state) => ({ score: state.score - 5, life: newLife }))
+    if (newLife <= 0 && start) return set({ gameOver: true, start: false })
   },
   startGame() {
-    set({ start: true, gameOver: false, score: 0, jammer: { x: get().jammer.x, y: GRID_SIZE_ROWS + 40 } })
+    set({ start: true, gameOver: false, score: 0, life: 3, jammer: { x: get().jammer.x, y: GRID_SIZE_ROWS + 40 } })
   },
   stopGame() {
     set({ start: false, gameOver: true })
