@@ -71,7 +71,7 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     set({ jammer: { x: newX, y: deepY } })
   },
   increaseScore() {
-    const { start, life, pointTowinLife } = get()
+    const { start, pointTowinLife } = get()
 
     if (start) {
       const newPointToWinLife = pointTowinLife - 10
@@ -85,8 +85,10 @@ export const useRunGame = create<RunGameStore>((set, get) => ({
     const { start, life } = get()
     const newLife = life - 1
 
-    set((state) => ({ score: state.score - 5, life: newLife }))
-    if (newLife <= 0 && start) return set({ gameOver: true, start: false })
+    if (start) {
+      set((state) => ({ score: state.score - 5, life: newLife }))
+      if (newLife <= 0) return set({ gameOver: true, start: false })
+    }
   },
   startGame() {
     set({ start: true, gameOver: false, score: 0, life: 3, jammer: { x: get().jammer.x, y: GRID_SIZE_ROWS + 40 } })

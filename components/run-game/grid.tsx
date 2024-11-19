@@ -308,7 +308,9 @@ export function Grid() {
               {gameOver && (
                 <div className="bg-black/20 p-2 text-lg">
                   SCORE:{' '}
-                  <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">{start ? score : 0}</span>
+                  <span className="text-lg font-bold oldstyle-nums text-arrd-highlight">
+                    {start || gameOver ? score : 0}
+                  </span>
                 </div>
               )}
               <Button
