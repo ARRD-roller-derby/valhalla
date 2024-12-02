@@ -23,7 +23,7 @@ export default async function questionUpdate(req: NextApiRequest, res: NextApiRe
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
 
-  const isCanView = checkRoles(['bureau', 'dev'], user)
+  const isCanView = checkRoles(['sagwa master', 'dev'], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
   const form = new formidable.IncomingForm()
