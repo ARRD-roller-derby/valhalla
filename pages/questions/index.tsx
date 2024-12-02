@@ -16,7 +16,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
 
   const roles = session?.user?.roles || []
 
-  if (!roles.some((role: any) => ['bureau', 'dev'].includes(role.name.toLocaleLowerCase())))
+  if (!roles.some((role: any) => ['sagwa master', 'dev'].includes(role.name.toLocaleLowerCase())))
     return { redirect: { destination: '/login' } }
 
   return { props: { session } }

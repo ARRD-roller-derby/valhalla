@@ -12,7 +12,7 @@ export default async function questions(req: NextApiRequest, res: NextApiRespons
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
 
-  const isCanView = checkRoles(['bureau', 'dev'], user)
+  const isCanView = checkRoles(['sagwa master', 'dev'], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
   await MongoDb()
