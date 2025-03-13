@@ -40,7 +40,7 @@ export function Member() {
   // Effets --------------------------------------------------
 
   useEffect(() => {
-    if (!member) fetchMember(query.id as string)
+    if (member) fetchMember(query.id as string)
   }, [query.id])
 
   // Rendus --------------------------------------------------
