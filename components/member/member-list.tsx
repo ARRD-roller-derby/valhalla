@@ -10,7 +10,7 @@ import { MemberCard } from '@/components'
 export function MemberList() {
   // Stores -------------------------------------------------------------------
   const { data: session } = useSession()
-  const { loading, members, fetchMembers } = useMembers()
+  const { loading, members, badges, fetchMembers } = useMembers()
 
   // Effets -------------------------------------------------------------------
   useEffect(() => {
@@ -27,7 +27,7 @@ export function MemberList() {
       {!loading && members.length > 0 && (
         <div className="flex flex-col gap-4 p-3 sm:grid sm:grid-cols-3 lg:grid-cols-4">
           {members.map((member) => (
-            <MemberProvider member={member} key={member.id}>
+            <MemberProvider member={member} badges={badges} key={member.id}>
               <MemberCard />
             </MemberProvider>
           ))}

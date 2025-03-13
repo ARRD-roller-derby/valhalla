@@ -6,6 +6,7 @@ import { authMiddleWare } from '@/utils/auth-middleware'
 import { DISCORD_TOKEN } from '@/utils'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
+import { UserBadge } from '@/models/user_badge.model'
 
 process.env.TZ = 'Europe/Paris'
 

@@ -1,6 +1,7 @@
 // Bibliothèques externes
 import { ReactNode, createContext, useContext } from 'react'
 import { create } from 'zustand'
+import { IBadge } from './badge.store'
 
 // TYPES --------------------------------------------------------------------
 
@@ -41,10 +42,12 @@ interface IMember extends IDolibarrMember {
 interface MemberProviderProps {
   children: ReactNode
   member: IMember
+  badges: IBadge[]
 }
 
 interface IStateMembers {
   members: IMember[]
+  badges: IBadge[]
   roles: TRole[]
   loading: boolean
   error?: string
@@ -69,6 +72,7 @@ export const useMembers = create<IMemberStore>((set, get) => ({
   members: [],
   loading: false,
   roles: [],
+  badges: [],
 
   // GETTERS----------------------------------------------------------------
   getMember(providerAccountId: string) {
@@ -91,9 +95,10 @@ export const useMembers = create<IMemberStore>((set, get) => ({
     set({ loading: true, members: [] })
     try {
       const res = await fetch(`/api/members/${providerAccountId}`)
-      const { member } = await res.json()
+      const { member, badges } = await res.json()
       set({
         members: [member],
+        badges,
         loading: false,
       })
     } catch (err: any) {
@@ -116,15 +121,18 @@ export const useMembers = create<IMemberStore>((set, get) => ({
 }))
 
 // CONTEXT ------------------------------------------------------------------
-const MemberCtx = createContext<IMember>({} as IMember)
+const MemberCtx = createContext<{
+  member: IMember
+  badges: IBadge[]
+}>({} as Pick<MemberProviderProps, 'member' | 'badges'>)
 
-export function MemberProvider({ children, member }: MemberProviderProps) {
-  return <MemberCtx.Provider value={member}>{children}</MemberCtx.Provider>
+export function MemberProvider({ children, member, badges = [] }: MemberProviderProps) {
+  return <MemberCtx.Provider value={{ member, badges }}>{children}</MemberCtx.Provider>
 }
 
 // HOOKS --------------------------------------------------------------------
 export function useMember() {
   const ctx = useContext(MemberCtx)
   if (!ctx) throw new Error('useMember must be used within a MemberProvider')
-  return { member: ctx }
+  return { member: ctx.member, badges: ctx.badges }
 }

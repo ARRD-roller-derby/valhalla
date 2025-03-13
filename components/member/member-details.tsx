@@ -2,12 +2,15 @@ import { useMember } from '@/entities'
 import { MemberRoles } from './member-roles'
 import dayjs from 'dayjs'
 import { DIET } from '@/utils'
+import { BadgeCard } from '../badge'
+import { sortedBadges } from '@/utils/sort-badges'
 
 export function MemberDetails() {
-  const { member } = useMember()
+  const { member, badges } = useMember()
 
   const diet = DIET.find((diet) => diet.value === (member?.options_rgimealimentaire || '0'))
 
+  console.log('member', badges)
   return (
     <div className="m-auto flex w-full flex-col gap-4 px-3 sm:w-96">
       <main className="m-auto flex w-full flex-col gap-4 sm:w-96 ">
@@ -54,6 +57,19 @@ export function MemberDetails() {
         )}
         <div className="flex items-end">
           <MemberRoles />
+        </div>
+        <div className="flex flex-col gap-4">
+          {badges.length === 0 ? (
+            <div>Aucun badge</div>
+          ) : (
+            <div className="text-center text-arrd-highlight">
+              {badges.length} Badge{badges.length > 1 ? 's' : ''}
+            </div>
+          )}
+
+          {badges.sort(sortedBadges).map((badge) => (
+            <BadgeCard key={`${badge._id}`} badge={badge} readonly />
+          ))}
         </div>
       </main>
     </div>

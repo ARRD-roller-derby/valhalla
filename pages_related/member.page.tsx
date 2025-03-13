@@ -13,7 +13,7 @@ import { BadgesList, MemberDetails } from '@/components'
 export function Member() {
   // Stores --------------------------------------------------
   const { data: session } = useSession()
-  const { loading, fetchMember, getMember } = useMembers()
+  const { loading, badges, fetchMember, getMember } = useMembers()
   // Hooks --------------------------------------------------
   const { query } = useRouter()
 
@@ -67,7 +67,7 @@ export function Member() {
 
   return (
     <AuthLayout title={member.username}>
-      <MemberProvider member={member}>
+      <MemberProvider member={member} badges={badges}>
         <div className="grid h-full grid-rows-[auto_auto_1fr_auto] items-start gap-1 p-2">
           <header className="flex items-center justify-center gap-2">
             {member.avatar && <img src={member.avatar} className="h-12 w-12 rounded-full" />}

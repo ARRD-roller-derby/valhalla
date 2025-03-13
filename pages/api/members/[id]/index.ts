@@ -2,12 +2,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
-import { TRole, User } from '@/models'
+import { Badge, TRole, User } from '@/models'
 
 // Bibliothèque interne
 import { DISCORD_GUILD_ID, DISCORD_TOKEN, DOLAPIKEY, DOL_URL, hexToTailwind } from '@/utils'
 import { dolibarrMemberParser } from '../../../../utils/dolibarr-member-parser'
 import { authMiddleWare } from '@/utils/auth-middleware'
+import { UserBadge } from '@/models/user_badge.model'
+import { ObjectId } from 'mongodb'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
@@ -47,6 +49,10 @@ async function member(req: NextApiRequest, res: NextApiResponse) {
 
   const dolibarrInfos = dolibarrMemberParser(dolibarrData, user, providerAccountId)
 
+  const userBagdes = await UserBadge.find({ providerAccountId }, 'badgeId').populate('badgeId')
+
+  const badges = await Badge.find({ _id: { $in: userBagdes.map((b) => b.badgeId) } })
+
   return res.status(200).json({
     member: {
       ...user.toJSON(),
@@ -59,6 +65,7 @@ async function member(req: NextApiRequest, res: NextApiResponse) {
         ? `https://cdn.discordapp.com/avatars/${providerMember.user.id}/${providerMember.user.avatar}.png?size=256`
         : '/static/images/valhalla.png',
     },
+    badges,
   })
 }
 

@@ -7,6 +7,7 @@ import { Checkbox, ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
 import { BADFLAGS } from 'dns'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
+import { sortedBadges } from '@/utils/sort-badges'
 
 const LEVELS = [
   {
@@ -36,28 +37,6 @@ export function BadgesList({ userId }: BadgesListProps) {
   const [search, setSearch] = useState<string>('')
   const [displayOnlyWin, setDisplayOnlyWin] = useState<boolean>(false)
   const [level, setLevel] = useState<{ label: string; value: unknown }>(LEVELS[0])
-
-  // Const -----------------------------------
-  const sortedBadges = (a: IBadge, b: IBadge) => {
-    const getBadgeScore = (badge: IBadge): number => {
-      let score = 0
-
-      // score += badge.win ? 1000 : 0
-
-      const levelIndex = BADGE_LEVELS.findIndex((level) => level.value === badge.level)
-
-      if (levelIndex !== -1) score += (levelIndex + 1) * 100
-
-      return score
-    }
-
-    const scoreA = getBadgeScore(a)
-    const scoreB = getBadgeScore(b)
-
-    if (scoreA !== scoreB) return scoreB - scoreA
-
-    return a.name.localeCompare(b.name)
-  }
 
   // Effects -----------------------------------
   useEffect(() => {
