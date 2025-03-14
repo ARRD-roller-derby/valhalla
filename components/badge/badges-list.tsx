@@ -40,7 +40,7 @@ export function BadgesList({ userId }: BadgesListProps) {
       <div className="my-1 flex w-full flex-col justify-center gap-2 sm:grid sm:grid-cols-[2fr_1fr] sm:items-center">
         <TextInput value={search} setValue={setSearch} />
         <div className="w-full pb-1">
-          <ListSelector options={BADGE_LEVELS} onSelect={setLevel} defaultValue={LEVELS[0]} />
+          <ListSelector options={[LEVELS[0], ...BADGE_LEVELS]} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>
       </div>
       <div className="flex justify-center">
