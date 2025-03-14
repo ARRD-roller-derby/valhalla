@@ -6,9 +6,10 @@ import { dc } from '@/utils'
 import { BadgeCardStatus } from './badge-card-status'
 
 type BadgeEventProps = {
-  badge: IBadge & { participants?: { name: string; providerAccountId: string; _id: string; haveBadge: boolean }[] }
+  badge: IBadge & { participants?: { name: string; providerAccountId: string; _id: string; win: boolean }[] }
+  displayOnlyNotWin?: boolean
 }
-export function BadgeEvent({ badge }: BadgeEventProps) {
+export function BadgeEvent({ badge, displayOnlyNotWin }: BadgeEventProps) {
   const badgeLevel = BADGE_LEVELS.find((level) => level.value === badge.level)
   const Icon = badgeLevel?.icon || BadgeIcon
   const color = badgeLevel?.color || 'fill-arrd-primary'
@@ -33,14 +34,21 @@ export function BadgeEvent({ badge }: BadgeEventProps) {
       </div>
       <div className="col-span-full flex max-h-[200px] flex-col gap-4 overflow-y-auto p-2">
         {badge?.participants
-          ?.filter((p) => !p.haveBadge)
+          ?.filter((p) => (displayOnlyNotWin ? !p.win : true))
+
           .map((participant) => (
             <div
-              key={participant._id}
+              key={participant.providerAccountId}
               className="grid grid-cols-[2fr_1fr] items-center gap-2 border-b border-arrd-bgLight pb-2"
             >
               <div className="text-sm">{participant.name}</div>
-              <BadgeCardStatus badge={badge} providerAccountId={participant.providerAccountId} />
+              <BadgeCardStatus
+                badge={{
+                  ...badge,
+                  win: participant.win,
+                }}
+                providerAccountId={participant.providerAccountId}
+              />
             </div>
           ))}
       </div>

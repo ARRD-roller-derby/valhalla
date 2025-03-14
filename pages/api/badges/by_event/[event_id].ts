@@ -72,7 +72,7 @@ async function badges_by_event(req: NextApiRequest, res: NextApiResponse) {
         type: badge.type,
         participants: participants
           .map((user: any) => {
-            const haveBadge = participantsBadges.find(
+            const win = participantsBadges.find(
               (p) => p.badgeId === badge._id.toString() && p.providerAccountId === user.providerAccountId
             )
 
@@ -80,14 +80,14 @@ async function badges_by_event(req: NextApiRequest, res: NextApiResponse) {
               name: user?.name,
               id: user?._id,
               providerAccountId: user?.providerAccountId,
-              haveBadge,
+              win: win ? true : false,
             }
           })
           .sort((a: any, b: any) => a.name.localeCompare(b.name))
-          .sort((_a: any, b: any) => (b.haveBadge ? -1 : 1)),
+          .sort((_a: any, b: any) => (b.win ? -1 : 1)),
       }
     })
-    .filter((badges) => badges.participants.filter((p: any) => p.haveBadge).length !== event.participants.length)
+    .filter((badges) => badges.participants.filter((p: any) => p.win).length !== event.participants.length)
     .sort((a, b) => a.participants.length - b.participants.length)
 
   return res.status(200).json({ badges: badgesWithParticipant })

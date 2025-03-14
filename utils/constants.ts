@@ -79,3 +79,22 @@ export const DIET = [
   { label: 'Paléo', value: '6' },
   { label: 'Sans Gluten', value: '8' },
 ]
+
+export const LEVELS = [
+  {
+    label: 'Tous',
+    value: 'tous',
+  },
+  {
+    label: 'Bronze',
+    value: 'bronze',
+  },
+  {
+    label: 'Argent',
+    value: 'argent',
+  },
+  {
+    label: 'Or',
+    value: 'or',
+  },
+]

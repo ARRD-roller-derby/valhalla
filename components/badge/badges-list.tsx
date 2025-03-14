@@ -2,31 +2,13 @@
 import { useEffect, useState } from 'react'
 
 // Bibliothèque interne
-import { type IBadge, useBadges } from '@/entities'
+import { useBadges } from '@/entities'
 import { Checkbox, ListSelector, Loader, TextInput } from '@/ui'
 import { BadgeCard } from './badge-card'
-import { BADFLAGS } from 'dns'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 import { sortedBadges } from '@/utils/sort-badges'
+import { LEVELS } from '@/utils'
 
-const LEVELS = [
-  {
-    label: 'Tous',
-    value: 'tous',
-  },
-  {
-    label: 'Bronze',
-    value: 'bronze',
-  },
-  {
-    label: 'Argent',
-    value: 'argent',
-  },
-  {
-    label: 'Or',
-    value: 'or',
-  },
-]
 type BadgesListProps = {
   userId?: string
 }
