@@ -10,7 +10,6 @@ export function MemberDetails() {
 
   const diet = DIET.find((diet) => diet.value === (member?.options_rgimealimentaire || '0'))
 
-  console.log('member', badges)
   return (
     <div className="m-auto flex w-full flex-col gap-4 px-3 sm:w-96">
       <main className="m-auto flex w-full flex-col gap-4 sm:w-96 ">

@@ -6,9 +6,10 @@ import { useMemo, useState } from 'react'
 
 type BadgeCardStatusProps = {
   badge: IBadge
+  providerAccountId?: string
 }
 
-export function BadgeCardStatus({ badge }: BadgeCardStatusProps) {
+export function BadgeCardStatus({ badge, providerAccountId }: BadgeCardStatusProps) {
   // ===== HOOKS =================================
   const router = useRouter()
   const { data: session } = useSession()
@@ -22,7 +23,7 @@ export function BadgeCardStatus({ badge }: BadgeCardStatusProps) {
   const handleWin = () => {
     unlockBadge(
       badge._id.toString(),
-      (router.query.id as string) || (session?.user?.providerAccountId.toString() as string)
+      providerAccountId || (router.query.id as string) || (session?.user?.providerAccountId.toString() as string)
     )
     setWin(!win)
   }

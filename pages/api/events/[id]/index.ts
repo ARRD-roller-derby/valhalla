@@ -11,6 +11,7 @@ async function event_findOne(req: NextApiRequest, res: NextApiResponse, user: an
   if (!event) return res.status(404).send('Événement non trouvé')
 
   const visibility = event.visibility.toLowerCase()
+
   if (visibility === 'membre') {
     const canSee = checkRoles([ROLES.membre], user)
     if (!canSee) return res.status(403).send('non autorisé')

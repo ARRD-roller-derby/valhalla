@@ -14,14 +14,21 @@ export type Podium = {
   podium: [WinnerPodium, WinnerPodium, WinnerPodium]
 }
 
-export type IBadge = IBadgeSchema & { win?: boolean }
+export type IBadge = IBadgeSchema & { _id: string; win?: boolean }
 type State = {
   loading: boolean
   loadingCreate: boolean
   loadingUpdate: boolean
   loadingDelete: boolean
   loadingGet: boolean
-  badges: IBadge[]
+  badges: (IBadge & {
+    participants?: {
+      name: string
+      providerAccountId: string
+      _id: string
+      haveBadge: boolean
+    }
+  })[]
   classement: { name: string; avatar: string; badges: { total: number; or: number; argent: number; bronze: number } }[]
   hallOfFame: Podium[]
   error: string | null
@@ -29,6 +36,7 @@ type State = {
 
 type GET = {
   getBadges: (userId?: string) => Promise<IBadgeSchema[]>
+  getBadgesByEvent: (eventId?: string) => Promise<IBadgeSchema[]>
   getBadge: (id: string) => Promise<IBadgeSchema>
   // All the loading states
   getLoading: () => boolean
@@ -69,6 +77,17 @@ export const useBadges = create<Store>((set, get) => ({
     set({ loadingGet: true, error: null, badges: [] })
     try {
       const res = await fetch(`/api/badges?${userId ? new URLSearchParams({ userId }).toString() : ''}`)
+      const { badges } = await res.json()
+      set({ badges, loadingGet: false })
+      return badges
+    } catch (err: any) {
+      set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
+    }
+  },
+  async getBadgesByEvent(eventId?: string) {
+    set({ loadingGet: true, error: null, badges: [] })
+    try {
+      const res = await fetch(`/api/badges/by_event/${eventId}`)
       const { badges } = await res.json()
       set({ badges, loadingGet: false })
       return badges
