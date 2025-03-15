@@ -51,6 +51,8 @@ export function EventBadges() {
                 return badge.level === level.value
               })
               .filter((badge) => badge.name.toLowerCase().includes(search.toLowerCase()))
+              //@ts-ignore
+              .filter((badge) => (displayOnlyNotWin ? !badge?.participants?.every((p: any) => p.win) : true))
               .map((badge) => (
                 <BadgeEvent
                   key={badge._id}
