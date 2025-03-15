@@ -28,7 +28,7 @@ async function badges_by_event(req: NextApiRequest, res: NextApiResponse) {
 
   const participants: any = []
 
-  for (const par of event.participants) {
+  for (const par of event.participants.filter((p: any) => !p.type.match(/absent/))) {
     const m = members.find((member) => member.id === par.userId)
     if (!m) {
       const baseUser: any = await User.findById(par.userId)
