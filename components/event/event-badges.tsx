@@ -12,6 +12,7 @@ export function EventBadges() {
   const { data: session } = useSession()
   const { getBadgesByEvent, badges, loadingGet } = useBadges()
   const [search, setSearch] = useState<string>('')
+  const [searchMember, setSearchMember] = useState<string>('')
   const [displayOnlyNotWin, setDisplayOnlyNotWin] = useState<boolean>(false)
   const [level, setLevel] = useState<{ label: string; value: unknown }>(LEVELS[0])
 
@@ -24,10 +25,11 @@ export function EventBadges() {
   return (
     <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto lg:max-w-lg">
       <div className="my-1 flex w-full flex-col justify-center gap-2 sm:grid sm:grid-cols-[2fr_1fr] sm:items-center">
-        <TextInput value={search} setValue={setSearch} />
+        <TextInput value={search} setValue={setSearch} placeholder="Rechercher un badge" />
         <div className="w-full pb-1">
           <ListSelector options={[LEVELS[0], ...BADGE_LEVELS]} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>
+        <TextInput value={searchMember} setValue={setSearchMember} placeholder="Rechercher un membre" />
       </div>
       <div className="flex justify-center">
         <Checkbox
@@ -50,7 +52,12 @@ export function EventBadges() {
               })
               .filter((badge) => badge.name.toLowerCase().includes(search.toLowerCase()))
               .map((badge) => (
-                <BadgeEvent key={badge._id} badge={badge as any} displayOnlyNotWin={displayOnlyNotWin} />
+                <BadgeEvent
+                  key={badge._id}
+                  badge={badge as any}
+                  displayOnlyNotWin={displayOnlyNotWin}
+                  search={searchMember}
+                />
               ))}
           </div>
         )}

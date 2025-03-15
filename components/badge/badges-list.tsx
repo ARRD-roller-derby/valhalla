@@ -38,7 +38,7 @@ export function BadgesList({ userId }: BadgesListProps) {
   return (
     <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto lg:max-w-lg">
       <div className="my-1 flex w-full flex-col justify-center gap-2 sm:grid sm:grid-cols-[2fr_1fr] sm:items-center">
-        <TextInput value={search} setValue={setSearch} />
+        <TextInput value={search} setValue={setSearch} placeholder="Rechercher un badge" />
         <div className="w-full pb-1">
           <ListSelector options={[LEVELS[0], ...BADGE_LEVELS]} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>

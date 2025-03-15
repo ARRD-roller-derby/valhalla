@@ -1,15 +1,17 @@
 import type { IBadge } from '@/entities'
-import { BadgeIcon } from '@/ui'
+import { BadgeIcon, TextInput } from '@/ui'
 import { ReadEditor } from '../editor'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 import { dc } from '@/utils'
 import { BadgeCardStatus } from './badge-card-status'
+import { useState } from 'react'
 
 type BadgeEventProps = {
   badge: IBadge & { participants?: { name: string; providerAccountId: string; _id: string; win: boolean }[] }
   displayOnlyNotWin?: boolean
+  search?: string
 }
-export function BadgeEvent({ badge, displayOnlyNotWin }: BadgeEventProps) {
+export function BadgeEvent({ badge, displayOnlyNotWin, search }: BadgeEventProps) {
   const badgeLevel = BADGE_LEVELS.find((level) => level.value === badge.level)
   const Icon = badgeLevel?.icon || BadgeIcon
   const color = badgeLevel?.color || 'fill-arrd-primary'
@@ -32,10 +34,11 @@ export function BadgeEvent({ badge, displayOnlyNotWin }: BadgeEventProps) {
           <ReadEditor content={badge.description} key={JSON.stringify(badge.description || '{}')} />
         </div>
       </div>
+
       <div className="col-span-full flex max-h-[200px] flex-col gap-4 overflow-y-auto p-2">
         {badge?.participants
           ?.filter((p) => (displayOnlyNotWin ? !p.win : true))
-
+          .filter((p) => p.name.toLowerCase().includes(search?.toLowerCase() || ''))
           .map((participant) => (
             <div
               key={participant.providerAccountId}
