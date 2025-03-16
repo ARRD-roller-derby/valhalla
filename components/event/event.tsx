@@ -4,6 +4,7 @@ import { useEvent } from '@/entities'
 import { CancelMsg, PageTabs } from '@/ui'
 import { dc } from '@/utils'
 import { EventBadges } from './event-badges'
+import { EventStat } from './event-stats'
 
 export function Event() {
   // Stores -------------------------------------------------------------------
@@ -18,6 +19,11 @@ export function Event() {
       title: 'Participants',
       tab: 'participants',
       element: <EventAttendees />,
+    },
+    {
+      title: 'Stats',
+      tab: 'stats',
+      element: <EventStat />,
     },
     {
       title: 'Badges',

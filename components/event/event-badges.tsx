@@ -23,22 +23,23 @@ export function EventBadges() {
   }, [session])
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto lg:max-w-lg">
+    <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto">
       <div className="my-1 flex w-full flex-col justify-center gap-2 sm:grid sm:grid-cols-[2fr_1fr] sm:items-center">
         <TextInput value={search} setValue={setSearch} placeholder="Rechercher un badge" />
         <div className="w-full pb-1">
           <ListSelector options={[LEVELS[0], ...BADGE_LEVELS]} onSelect={setLevel} defaultValue={LEVELS[0]} />
         </div>
         <TextInput value={searchMember} setValue={setSearchMember} placeholder="Rechercher un membre" />
+        <div className="flex justify-center text-sm">
+          <Checkbox
+            label="Uniquement les badges non obtenus"
+            onChange={() => setDisplayOnlyNotWin(!displayOnlyNotWin)}
+            checked={displayOnlyNotWin}
+          />
+        </div>
       </div>
-      <div className="flex justify-center">
-        <Checkbox
-          label="Uniquement les badges non obtenus"
-          onChange={() => setDisplayOnlyNotWin(!displayOnlyNotWin)}
-          checked={displayOnlyNotWin}
-        />
-      </div>
-      <div className="mx-auto mt-2 flex  max-w-[300px] flex-col justify-center gap-3 p-3">
+
+      <div className="mx-auto mt-2 flex  max-w-[450px] flex-col justify-center gap-3 p-3">
         {loadingGet ? (
           <div className="flex justify-center">
             <Loader />

@@ -23,7 +23,7 @@ dayjs.locale(fr)
 dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
-async function eventsNext(req: NextApiRequest, res: NextApiResponse, user: any) {
+async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any) {
   const roles = user.roles.map((role: any) => role.name.toLowerCase())
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
