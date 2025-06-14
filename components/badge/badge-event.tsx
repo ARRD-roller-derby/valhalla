@@ -4,12 +4,12 @@ import { ReadEditor } from '../editor'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 import { dc } from '@/utils'
 import { BadgeCardStatus } from './badge-card-status'
-import { useState } from 'react'
+import { useMemo } from 'react'
 
 type BadgeEventProps = {
   badge: IBadge & { participants?: { name: string; providerAccountId: string; _id: string; win: boolean }[] }
   displayOnlyNotWin?: boolean
-  search?: string
+  search?: { label: string; value: string }[]
 }
 export function BadgeEvent({ badge, displayOnlyNotWin, search }: BadgeEventProps) {
   const badgeLevel = BADGE_LEVELS.find((level) => level.value === badge.level)
@@ -38,7 +38,8 @@ export function BadgeEvent({ badge, displayOnlyNotWin, search }: BadgeEventProps
       <div className="col-span-full flex max-h-[200px] flex-col gap-4 overflow-y-auto p-2">
         {badge?.participants
           ?.filter((p) => (displayOnlyNotWin ? !p.win : true))
-          .filter((p) => p.name.toLowerCase().includes(search?.toLowerCase() || ''))
+          //@ts-ignore
+          .filter((p) => (search?.length > 0 ? search.some((s) => p.name.includes(s.value)) : true))
           .map((participant) => (
             <div
               key={participant.providerAccountId}

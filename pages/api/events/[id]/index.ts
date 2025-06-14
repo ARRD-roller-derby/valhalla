@@ -12,6 +12,7 @@ async function event_findOne(req: NextApiRequest, res: NextApiResponse, user: an
 
   const visibility = event.visibility.toLowerCase()
 
+  /*
   if (visibility === 'membre') {
     const canSee = checkRoles([ROLES.membre], user)
     if (!canSee) return res.status(403).send('non autorisé')
@@ -27,6 +28,7 @@ async function event_findOne(req: NextApiRequest, res: NextApiResponse, user: an
     if (!canSee) return res.status(403).send('non autorisé')
   }
 
+    */
   return res.status(200).json({
     event,
   })

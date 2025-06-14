@@ -26,6 +26,25 @@ export interface IParticipant {
   guestsNumber: number
 }
 
+export interface ICarpooling {
+  _id: ObjectId
+  messageId: string
+  participants: {
+    userId: string
+    name: string
+    status: 'leader' | 'confirmed' | 'pending'
+    updatedAt: Date
+  }[]
+  address: {
+    label: string
+    lat: number
+    lon: number
+  }
+  date: Date
+  places: number
+  updatedAt: Date
+}
+
 export interface IEvent {
   _id: ObjectId
   visibility: string
@@ -46,6 +65,7 @@ export interface IEvent {
     userId: string
     name: string
   }
+  carpooling?: ICarpooling
 }
 
 const ParticipantSchema = new Schema<IParticipant>({
@@ -55,6 +75,26 @@ const ParticipantSchema = new Schema<IParticipant>({
   type: String,
   name: String,
   guestsNumber: Number,
+})
+
+const CarpoolingSchema = new Schema<ICarpooling>({
+  participants: [
+    {
+      userId: String,
+      name: String,
+      status: String,
+      updatedAt: Date,
+    },
+  ],
+  address: {
+    label: String,
+    lat: Number,
+    lon: Number,
+  },
+  date: Date,
+  places: Number,
+  updatedAt: Date,
+  messageId: String,
 })
 
 const EventSchema = new Schema<IEvent>({
@@ -76,6 +116,7 @@ const EventSchema = new Schema<IEvent>({
     userId: String,
     name: String,
   },
+  carpooling: [CarpoolingSchema],
 })
 
 export const Event = models.events || model('events', EventSchema)
