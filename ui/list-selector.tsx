@@ -45,7 +45,7 @@ export function ListSelector({ onSelect, defaultValue: dv, options, isMulti = fa
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
           <Listbox.Options className="input absolute z-40 mb-2 mt-1 max-h-60 w-full overflow-auto">
-            {options.map((option) => (
+            {options.map((option: any) => (
               <Listbox.Option
                 key={option.label}
                 className={({ active }) =>
