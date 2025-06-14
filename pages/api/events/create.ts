@@ -97,7 +97,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
     }
     markdown += `\n[Voir l'événement](${req.headers.origin}/agenda/${event._id})`
 
-    publishToDiscord('event', markdown, event.title)
+    publishToDiscord('event', markdown)
   })
 
   return res.status(200).json({ events })
