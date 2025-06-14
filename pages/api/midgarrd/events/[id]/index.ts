@@ -66,7 +66,7 @@ async function nextEvent(req: NextApiRequest, res: NextApiResponse, user: IUser)
     }),
     carpooling: event.carpooling.map((carpool: any) => {
       return {
-        ...carpool,
+        ...carpool._doc,
         participants: carpool.participants.map((participant: any) => {
           const user = participant._doc || participant
           const m = members.find((member) => member.id === user.userId)
