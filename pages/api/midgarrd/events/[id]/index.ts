@@ -23,6 +23,7 @@ dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
 import { checkRoles, ROLES } from '@/utils'
+import { getDiscordMember } from '@/services/get-discord-member'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
@@ -49,7 +50,37 @@ async function nextEvent(req: NextApiRequest, res: NextApiResponse, user: IUser)
     if (!canSee) return res.status(403).send('non autorisé')
   }
 
-  return res.status(200).json(event)
+  const { members } = await getDiscordMember()
+  return res.status(200).json({
+    ...event._doc,
+    participants: event.participants.map((par: any) => {
+      const user = par._doc || par
+      const m = members.find((member) => member.id === user.userId)
+
+      return {
+        ...user,
+        avatar: m?.avatar,
+        name: m?.username || m?.global_name || m?.name || par.name,
+        providerAccountId: m?.providerAccountId,
+      }
+    }),
+    carpooling: event.carpooling.map((carpool: any) => {
+      return {
+        ...carpool,
+        participants: carpool.participants.map((participant: any) => {
+          const user = participant._doc || participant
+          const m = members.find((member) => member.id === user.userId)
+
+          return {
+            ...user,
+            avatar: m?.avatar,
+            name: m?.username || m?.global_name || m?.name || participant.name,
+            providerAccountId: m?.providerAccountId,
+          }
+        }),
+      }
+    }),
+  })
 }
 
 const helper = (request: NextApiRequest, response: NextApiResponse) => midgardMiddleWare(request, response, nextEvent)
