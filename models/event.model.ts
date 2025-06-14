@@ -43,6 +43,7 @@ export interface ICarpooling {
   date: Date
   places: number
   updatedAt: Date
+  name: string
 }
 
 export interface IEvent {
@@ -93,6 +94,7 @@ const CarpoolingSchema = new Schema<ICarpooling>({
   },
   date: Date,
   places: Number,
+  name: String,
   updatedAt: Date,
   messageId: String,
 })
