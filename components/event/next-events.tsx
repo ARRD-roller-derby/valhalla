@@ -25,7 +25,7 @@ export function NextEvents() {
       fetchForNext()
       //getForecasts()
     }
-  }, [session])
+  }, [])
 
   // Rendu --------------------------------------------------------------------
   if (loading)
