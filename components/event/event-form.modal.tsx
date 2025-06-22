@@ -10,6 +10,7 @@ import { RolesSelector } from '@/ui/roles-selector'
 import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
 import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
+import { useLocalState } from '@/hooks'
 
 interface EventModalProps {
   day?: dayjs.Dayjs
@@ -17,6 +18,7 @@ interface EventModalProps {
   eventToUpdate?: IEvent
 }
 
+const LS_KEY = 'valhalla-event-form-modal'
 export function EventFormModal({ day, eventToUpdate, customButton }: EventModalProps) {
   // Stores -----------------------------------------------------------------------------
   const { loading, currentDay, updateEvent, createEvent } = useEvents()
@@ -47,10 +49,10 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
       label: eventToUpdate?.address?.label || '',
       value: eventToUpdate?.address || '',
     } as TOption,
-  }
+  } as any
 
   // States ------------------------------------------------------------------------------
-  const [form, setForm] = useState(formInit)
+  const { localState: form, setLocalState: setForm } = useLocalState<any>(formInit || ({} as IEventForm), LS_KEY)
 
   // Fonctions ---------------------------------------------------------------------------
   const handleSubmit = async () => {
@@ -90,10 +92,11 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     } else {
       await createEvent(event)
     }
+    setForm(formInit)
   }
 
   const handleSetType = (type: string) => {
-    setForm((prev) => {
+    setForm((prev: any) => {
       if (prev.visibility === '@everyone' && type.match(/derby|patinage|scrimmage|match|bootcamp/i))
         prev.visibility = 'Membres'
       return { ...prev, type }
@@ -102,8 +105,8 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
 
   const handleChangeEnd = () => {
     if (form.start && form.end && dayjs(form.start).isValid() && dayjs(form.end).isValid()) {
-      if (dayjs(form.start).isAfter(dayjs(form.end))) setForm((prev) => ({ ...prev, end: form.start }))
-    } else if (!form.end) setForm((prev) => ({ ...prev, end: form.start, endHour: form.startHour }))
+      if (dayjs(form.start).isAfter(dayjs(form.end))) setForm((prev: any) => ({ ...prev, end: form.start }))
+    } else if (!form.end) setForm((prev: any) => ({ ...prev, end: form.start, endHour: form.startHour }))
 
     if (form.startHour && form.endHour) {
       const startDateTime = dayjs(form.start)
@@ -121,7 +124,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
 
         const newEndHour = newEndDateTime.format('HH:mm')
 
-        setForm((prev) => ({ ...prev, endHour: newEndHour }))
+        setForm((prev: any) => ({ ...prev, endHour: newEndHour }))
         setReset(Date.now())
       }
     }
@@ -130,7 +133,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
   // Effets ------------------------------------------------------------------------------
   useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
-    if (titleIsType || !form.title) setForm((prev) => ({ ...prev, title: form.type }))
+    if (titleIsType || !form.title) setForm((prev: any) => ({ ...prev, title: form.type }))
   }, [form.type])
 
   useEffect(() => {
@@ -140,11 +143,11 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
   // Render ------------------------------------------------------------------------------
   return (
     <Modal
-      onOpen={() => setForm(formInit)}
       button={customButton}
       footer={(close) => (
         <FooterModal
           closeModal={close}
+          onCancel={() => setForm(formInit)}
           loading={loading}
           txtConfirm={eventToUpdate ? 'Modifier' : 'Créer'}
           onConfirm={handleSubmit}
@@ -158,24 +161,27 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
           </LabelBlock>
 
           <LabelBlock label="Titre (facultatif)">
-            <TextInput value={form.title} setValue={(title) => setForm((prev) => ({ ...prev, title }))} />
+            <TextInput value={form.title} setValue={(title) => setForm((prev: any) => ({ ...prev, title }))} />
           </LabelBlock>
 
           <LabelBlock label="Début">
             <div className="grid grid-cols-[auto_auto_1fr] items-center gap-2">
-              <DateInput date={form.start} setDate={(start) => setForm((prev) => ({ ...prev, start }))} />
+              <DateInput date={form.start} setDate={(start) => setForm((prev: any) => ({ ...prev, start }))} />
               <div className="text-center">{'à'}</div>
-              <TimeInput time={form.startHour} setTime={(startHour) => setForm((prev) => ({ ...prev, startHour }))} />
+              <TimeInput
+                time={form.startHour}
+                setTime={(startHour) => setForm((prev: any) => ({ ...prev, startHour }))}
+              />
             </div>
           </LabelBlock>
 
           <LabelBlock label="Fin">
             <div className="grid grid-cols-[auto_auto_1fr] items-center gap-2">
-              <DateInput date={form.end} setDate={(end) => setForm((prev) => ({ ...prev, end }))} />
+              <DateInput date={form.end} setDate={(end) => setForm((prev: any) => ({ ...prev, end }))} />
               <div className="text-center">{'à'}</div>
               <TimeInput
                 time={form.endHour}
-                setTime={(endHour) => setForm((prev) => ({ ...prev, endHour }))}
+                setTime={(endHour) => setForm((prev: any) => ({ ...prev, endHour }))}
                 key={reset}
               />
             </div>
@@ -185,7 +191,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
             <Checkbox
               label="Activer la récurrence"
               checked={form.recurrence}
-              onChange={() => setForm((prev) => ({ ...prev, recurrence: !prev.recurrence }))}
+              onChange={() => setForm((prev: any) => ({ ...prev, recurrence: !prev.recurrence }))}
             />
           )}
 
@@ -193,12 +199,12 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
             <div className="mt-2 flex flex-col flex-wrap gap-1 sm:grid sm:grid-cols-[auto_1fr] sm:gap-3">
               <NumInput
                 num={form.frequencyCount}
-                setNum={(frequencyCount) => setForm((prev) => ({ ...prev, frequencyCount }))}
+                setNum={(frequencyCount) => setForm((prev: any) => ({ ...prev, frequencyCount }))}
               />
 
               <ListSelector
                 options={frequencyOpts}
-                onSelect={(frequency) => setForm((prev) => ({ ...prev, frequency }))}
+                onSelect={(frequency) => setForm((prev: any) => ({ ...prev, frequency }))}
               />
             </div>
           )}
@@ -206,7 +212,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
           <LabelBlock label="Description" col>
             <Editor
               content={form.description}
-              onChange={(description) => setForm((prev) => ({ ...prev, description }))}
+              onChange={(description) => setForm((prev: any) => ({ ...prev, description }))}
             />
           </LabelBlock>
 
@@ -214,7 +220,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
             <LabelBlock label="Adresse" col>
               <AddressSelector
                 address={form.address}
-                onSelect={(address: TOption) => setForm((prev) => ({ ...prev, address }))}
+                onSelect={(address: TOption) => setForm((prev: any) => ({ ...prev, address }))}
               />
             </LabelBlock>
           )}
@@ -226,7 +232,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
                 label: form.visibility,
                 value: form.visibility,
               }}
-              onSelect={(visibility) => setForm((prev) => ({ ...prev, visibility: visibility.value as string }))}
+              onSelect={(visibility) => setForm((prev: any) => ({ ...prev, visibility: visibility.value as string }))}
             />
           </LabelBlock>
         </div>
