@@ -12,7 +12,13 @@ export function useLocalState<T>(
   const ls = (): T => {
       if (typeof window !== 'undefined') {
         const ls = localStorage.getItem(nameOfState)
-        return ls ? JSON.parse(ls) : initialState
+        if (!ls) return initialState
+        try {
+          const parsed = JSON.parse(ls)
+          return parsed
+        } catch (error) {
+          return initialState
+        }
       } else {
         return initialState
       }
@@ -20,8 +26,16 @@ export function useLocalState<T>(
     [state, setState] = useState<T>(ls())
 
   const setLocalState = (newState: T) => {
-    setState(newState)
-    localStorage.setItem(nameOfState, JSON.stringify(newState))
+    if (typeof newState === 'object') {
+      setState(newState)
+      localStorage.setItem(nameOfState, JSON.stringify(newState))
+    } else if (typeof newState === 'function') {
+      setState((prev) => {
+        const state = newState(prev)
+        localStorage.setItem(nameOfState, JSON.stringify(state))
+        return state
+      })
+    }
   }
 
   return {
