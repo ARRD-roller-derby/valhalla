@@ -52,9 +52,10 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
   } as any
 
   // States ------------------------------------------------------------------------------
-  const { localState: form, setLocalState: setForm } = useLocalState<any>(formInit || ({} as IEventForm), LS_KEY)
+  const [form, setForm] = useState<any>(formInit || ({} as IEventForm))
 
   // Fonctions ---------------------------------------------------------------------------
+
   const handleSubmit = async () => {
     const { description, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
