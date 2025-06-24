@@ -31,11 +31,11 @@ export function EventFetch() {
 
   // Effets -------------------------------------------------------------
   useEffect(() => {
-    if (session?.user) {
+    if (session?.user && !event) {
       //getForecasts()
       findOne(router.query.eventId as any)
     }
-  }, [session])
+  }, [session, router.query.eventId])
 
   // Rendu --------------------------------------------------------------
   return (
