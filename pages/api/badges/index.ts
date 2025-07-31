@@ -1,20 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
-import { authOptions } from '../auth/[...nextauth]'
 process.env.TZ = 'Europe/Paris'
 
 import { Badge } from '@/models'
 import { UserBadge } from '@/models/user_badge.model'
+import { authMiddleWare } from '@/utils/auth-middleware'
 
-export default async function badges(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) return res.status(403).send('non autorisé')
+export async function badges(req: NextApiRequest, res: NextApiResponse, user: any) {
   await MongoDb()
 
   const badges_ = await Badge.find()
   const _userBadge = await UserBadge.find({
-    providerAccountId: req?.query?.userId || session.user.providerAccountId,
+    providerAccountId: req?.query?.userId || user.providerAccountId,
   })
 
   const userBadge = _userBadge.map((badge) => badge.badgeId)
@@ -33,3 +30,5 @@ export default async function badges(req: NextApiRequest, res: NextApiResponse) 
   })
   return res.status(200).json({ badges })
 }
+
+export default (request: NextApiRequest, response: NextApiResponse) => authMiddleWare(request, response, badges)

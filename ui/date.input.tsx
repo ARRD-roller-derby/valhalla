@@ -35,7 +35,7 @@ export function DateInput({ date = dayjs(), setDate }: DateInputProps) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Popover.Panel
-          className="absolute z-40  mt-1 flex  w-full min-w-[250px] flex-col gap-1 overflow-auto rounded border border-arrd-accent 
+          className="z-40  mt-1 flex  w-full min-w-[250px] flex-col gap-1 overflow-auto rounded border border-arrd-accent 
         bg-arrd-bg text-left align-middle text-base shadow-xl ring-1 ring-arrd-accent"
         >
           {({ close }) => (
