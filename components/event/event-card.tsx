@@ -79,6 +79,7 @@ export function EventCard() {
             )}
             <EventOrgaDetails />
             <div className="text-arrd-textSecondary text-sm">
+              {event.descriptionPublic && <ReadEditor content={event.descriptionPublic} />}
               {event.description && <ReadEditor content={event.description} />}
             </div>
             {event.address?.lat && event.address?.lon && !loading && <WeatherWidget />}

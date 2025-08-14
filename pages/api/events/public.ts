@@ -28,8 +28,12 @@ export default async function eventsPublic(_req: NextApiRequest, res: NextApiRes
 
   return res.status(200).json(
     events.map((event) => {
-      const newEvent = { ...event._doc }
+      const newEvent = {
+        ...event._doc,
+      }
       delete newEvent.participants
+      newEvent.description = newEvent.descriptionPublic
+      delete newEvent.descriptionPublic
       return newEvent
     })
   )

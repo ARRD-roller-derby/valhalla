@@ -53,6 +53,7 @@ export interface IEvent {
   recurrenceId?: string
   type: EEventType
   description?: Object
+  descriptionPublic?: Object
   title?: string
   start: Date
   end: Date
@@ -105,6 +106,7 @@ const EventSchema = new Schema<IEvent>({
   recurrenceId: String,
   type: String,
   description: Object,
+  descriptionPublic: Object,
   title: String,
   start: Date,
   end: Date,

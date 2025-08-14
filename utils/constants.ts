@@ -57,7 +57,7 @@ export const ROLES = {
   everyone: '@everyone',
 }
 
-export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenement]
+export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenement, ROLES.dev]
 
 export const PARTICIPATION_TYPES = {
   coach: 'coach',

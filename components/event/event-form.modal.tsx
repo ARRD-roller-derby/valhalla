@@ -10,7 +10,6 @@ import { RolesSelector } from '@/ui/roles-selector'
 import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
 import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
-import { useLocalState } from '@/hooks'
 
 interface EventModalProps {
   day?: dayjs.Dayjs
@@ -18,7 +17,6 @@ interface EventModalProps {
   eventToUpdate?: IEvent
 }
 
-const LS_KEY = 'valhalla-event-form-modal'
 export function EventFormModal({ day, eventToUpdate, customButton }: EventModalProps) {
   // Stores -----------------------------------------------------------------------------
   const { loading, currentDay, updateEvent, createEvent } = useEvents()
@@ -30,6 +28,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     type: EVENT_TYPES[0],
     title: EVENT_TYPES[0],
     description: {},
+    descriptionPublic: {},
 
     recurrence: false,
     frequency: frequencyOpts[0],
@@ -57,7 +56,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
   // Fonctions ---------------------------------------------------------------------------
 
   const handleSubmit = async () => {
-    const { description, visibility, type, title, address } = form
+    const { description, descriptionPublic, visibility, type, title, address } = form
     const [startHour, startMinute] = form.startHour.split(':')
     const [endHour, endMinute] = form.endHour.split(':')
     const start = dayjs(form.start.toDate())
@@ -73,6 +72,7 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
       title: title || type,
       type,
       description,
+      descriptionPublic,
       visibility: visibility || 'Membre',
       start: start.toISOString(),
       end: end.toISOString(),
@@ -208,6 +208,15 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
                 onSelect={(frequency) => setForm((prev: any) => ({ ...prev, frequency }))}
               />
             </div>
+          )}
+
+          {form.visibility === '@everyone' && (
+            <LabelBlock label="Description publique" col>
+              <Editor
+                content={form.descriptionPublic}
+                onChange={(descriptionPublic) => setForm((prev: any) => ({ ...prev, descriptionPublic }))}
+              />
+            </LabelBlock>
           )}
 
           <LabelBlock label="Description" col>
