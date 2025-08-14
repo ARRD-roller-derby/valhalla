@@ -93,6 +93,10 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
       markdown += `### Adresse\n${event.address.label}\n`
     }
 
+    if (event.descriptionPublic) {
+      markdown += tiptapJsonToMd(event.descriptionPublic.content)
+    }
+
     if (description) {
       markdown += tiptapJsonToMd(description.content)
     }
