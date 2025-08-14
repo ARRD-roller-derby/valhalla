@@ -36,7 +36,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
   const form = JSON.parse(req.body || '{}')
   await MongoDb()
 
-  const { start, end, description, title, type, visibility, address } = form
+  const { start, end, description, descriptionPublic, title, type, visibility, address } = form
 
   let populatedAddress = 0
 
@@ -45,6 +45,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
     start,
     end,
     description,
+    descriptionPublic,
     recurrenceId,
     title,
     type,

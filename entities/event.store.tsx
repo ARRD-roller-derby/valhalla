@@ -56,6 +56,7 @@ export interface IEventForm {
   title: string
   type: string
   description: any
+  descriptionPublic: any
   address?: string
   start: string
   end: string
