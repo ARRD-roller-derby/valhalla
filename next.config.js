@@ -13,6 +13,7 @@ runtimeCaching[0].handler = 'StaleWhileRevalidate'
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: false,
+  output: 'standalone',
   images: {
     domains: [
       `${process.env.S3_BUCKET}.${process.env.S3_DOMAIN}`,
