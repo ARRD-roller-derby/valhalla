@@ -61,8 +61,7 @@ export function EventParticipation() {
       myParticipation: {
         ...participation,
         btn: true,
-        label:
-          participation.status === 'à confirmer' ? 'Je serai peut-être présent en tant que ' : 'Je serai en tant que',
+        label: 'Je serai ',
       },
     }
   }, [event, events])
@@ -128,15 +127,6 @@ export function EventParticipation() {
           >
             {() => <EventAttendeesModal />}
           </Modal>
-          {myParticipation.btn && (
-            <Button
-              type="invert-primary"
-              text={myParticipation.status === 'à confirmer' ? 'Confirmer' : 'Peut-être'}
-              onClick={() =>
-                changeMyParticipationStatus(event._id, myParticipation.status === 'à confirmer' ? 'confirm' : 'maybe')
-              }
-            />
-          )}
         </div>
       </div>
     </div>

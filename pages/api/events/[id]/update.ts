@@ -70,7 +70,7 @@ export default async function event_update(req: NextApiRequest, res: NextApiResp
   })
 
   let markdown = `# ${newEvent.title}\n`
-  markdown += `${'```'} Cette événement vient d'être modifié ${'```'}\n\n`
+  markdown += `${'```'} Cet événement vient d'être modifié ${'```'}\n\n`
   if (newEvent.start) {
     markdown += `*Date: ${dayjs(newEvent.start).format('LLLL')}*\n`
   }
