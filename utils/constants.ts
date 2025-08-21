@@ -62,8 +62,8 @@ export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenemen
 export const PARTICIPATION_TYPES = {
   coach: 'coach',
   'assist-coach': 'assist-coach',
-  skater: 'patineur.euse',
-  visitor: 'visiteur.euse / NSO',
+  skater: 'patineur·euse',
+  visitor: 'visiteur·euse / NSO',
   organizer: 'organisateur.trice',
   invite: 'invité.e',
   absent: 'absent·e',
