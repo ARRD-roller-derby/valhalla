@@ -64,7 +64,7 @@ export const PARTICIPATION_TYPES = {
   'assist-coach': 'assist-coach',
   skater: 'patineur·euse',
   visitor: 'visiteur·euse / NSO',
-  organizer: 'organisateur.trice',
+  organizer: 'organisateur·ice',
   invite: 'invité.e',
   absent: 'absent·e',
 }
