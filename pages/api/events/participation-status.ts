@@ -55,7 +55,7 @@ async function event_participation_status(req: NextApiRequest, res: NextApiRespo
   if (isBetweenEventAndThreeHoursBeforeStart) {
     const newStatus: any = {
       'à confirmer': 'ne pas confirmer',
-      'absent.e': "d' annuler",
+      'absent·e': "d' annuler",
       absent: "d' annuler",
       present: 'confirmer',
       présent: 'confirmer',

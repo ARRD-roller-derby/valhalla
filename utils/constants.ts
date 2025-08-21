@@ -66,7 +66,7 @@ export const PARTICIPATION_TYPES = {
   visitor: 'visiteur.euse / NSO',
   organizer: 'organisateur.trice',
   invite: 'invité.e',
-  absent: 'absent.e',
+  absent: 'absent·e',
 }
 
 //regimes Alimentaire, ref à dolibarr

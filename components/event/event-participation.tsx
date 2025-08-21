@@ -50,10 +50,10 @@ export function EventParticipation() {
         myParticipation: { label: "Je n'ai pas encore", status: 'répondu', type: 'répondu', btn: false },
       }
 
-    if (participation?.type === 'absent.e')
+    if (participation?.type === 'absent·e')
       return {
         participationTypesCount,
-        myParticipation: { label: 'Je serais ', status: 'absent.e', type: 'absent.e', btn: false },
+        myParticipation: { label: 'Je serai ', status: 'absent·e', type: 'absent·e', btn: false },
       }
 
     return {

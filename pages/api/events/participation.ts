@@ -47,7 +47,7 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
     participantEvt.name = user.nickname || user.name
 
     if (form.participation.match(/absent/)) {
-      participantEvt.status = 'absent.e'
+      participantEvt.status = 'absent·e'
     } else {
       participantEvt.status = 'présent'
     }
@@ -70,7 +70,7 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
   if (isBetweenEventAndThreeHoursBeforeStart) {
     const newStatus: any = {
       'à confirmer': 'ne pas confirmer',
-      'absent.e': "d' annuler",
+      'absent·e': "d' annuler",
       absent: "d' annuler",
       present: 'confirmer',
       présent: 'confirmer',
