@@ -84,7 +84,7 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
     }** sa participation à l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format('LLLL')}.
 Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
       confirmParticipantsNum > 1 ? 's' : ''
-    } confirmé.e.${confirmParticipantsNum > 1 ? 's' : ''}** pour cet événement.\n---`
+    } confirmé·e.${confirmParticipantsNum > 1 ? 's' : ''}** pour cet événement.\n---`
 
     await publishToDiscord('logs', msg)
   }

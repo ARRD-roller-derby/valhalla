@@ -10,7 +10,7 @@ import { useEvent, useEvents } from '@/entities'
 import { IParticipant } from '@/models'
 import { EventAttendeesDetails } from './event-attendees-details'
 
-const order = ['coach', 'assist-coach', 'organizer', 'patineur·euse', 'visiteur·euse / NSO', 'invité.e', 'absent·e']
+const order = ['coach', 'assist-coach', 'organizer', 'patineur·euse', 'visiteur·euse / NSO', 'invité·e', 'absent·e']
 
 // Fonction de comparaison pour trier les participants
 const compareParticipants = (participantA: IParticipant, participantB: IParticipant) => {

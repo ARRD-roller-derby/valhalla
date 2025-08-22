@@ -49,7 +49,7 @@ export const participationTypes: IParticipationType[] = [
     type: ['Événement', 'En ligne', 'Autre', 'Assemblée générale', 'Randonnée / Balade'],
   },
   {
-    label: 'invité.e',
+    label: 'invité·e',
     key: PARTICIPATION_TYPES.invite,
     icon: <HandIcon className="h-6 w-6" />,
     roles: [ROLES.invite, ROLES.membre, ROLES.everyone],

@@ -65,7 +65,7 @@ export const PARTICIPATION_TYPES = {
   skater: 'patineur·euse',
   visitor: 'visiteur·euse / NSO',
   organizer: 'organisateur·ice',
-  invite: 'invité.e',
+  invite: 'invité·e',
   absent: 'absent·e',
 }
 
