@@ -12,13 +12,6 @@ import { PUSHER_API_ID, PUSHER_KEY, PUSHER_REGION, PUSHER_SECRET } from '@/utils
  * @param body des infos à passer ?
  */
 export async function trigger(event: string, type: TriggerTypes, body: any) {
-  console.log('trigger', event, type, body, {
-    appId: PUSHER_API_ID,
-    key: PUSHER_KEY,
-    secret: PUSHER_SECRET,
-    cluster: PUSHER_REGION,
-    useTLS: true,
-  })
   const pusher = new Pusher({
     appId: PUSHER_API_ID,
     key: PUSHER_KEY,
