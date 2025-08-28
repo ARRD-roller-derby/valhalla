@@ -2,7 +2,8 @@ import { HandIcon } from '@/ui'
 import { dc, participationTypes } from '@/utils'
 
 export function EventAttendeesDetails({ participant: p }: any) {
-  const icon = participationTypes.find((pType) => pType.key === p.type)?.icon || <HandIcon />
+  const icon = participationTypes.find((pType) => pType.key.replace(/[·.]/, '') === p.type.replace(/[·.]/, ''))
+    ?.icon || <HandIcon />
   return (
     <div
       key={p.name}
@@ -17,7 +18,7 @@ export function EventAttendeesDetails({ participant: p }: any) {
         {p.name}
         <div className="flex items-center  justify-end gap-1 text-right text-xs  italic text-arrd-primary ">
           <div className="flex w-3 items-center justify-center fill-arrd-highlight">{icon}</div>
-          {p.type} {p.status === 'à confirmer' ? '?' : ''}
+          {p.type}
         </div>
       </div>
     </div>

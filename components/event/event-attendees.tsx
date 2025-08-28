@@ -43,12 +43,13 @@ export function EventAttendees() {
 
   // Constantes ---------------------------------------------------------------
 
-  const { presentCount, hasConfirmedCount, absCount } = useMemo(() => {
-    const presentCount = participants.filter((p) => !p.type.match(/absent/) && p.status !== 'à confirmer').length
-    const hasConfirmedCount = participants.filter((p) => p.status === 'à confirmer').length
-    const absCount = participants.filter((p) => p.type.match(/absent/)).length
-    return { presentCount, hasConfirmedCount, absCount }
+  const presentCount = useMemo(() => {
+    return participants.filter((p) => !p.type.match(/absent/)).length
   }, [participants])
+
+  const absCount = useMemo(() => {
+    return participants.filter((p) => p.type.match(/absent/)).length - presentCount
+  }, [participants, presentCount])
 
   // Fonctions ----------------------------------------------------------------
   const handleFetch = async () => {
@@ -81,32 +82,13 @@ export function EventAttendees() {
         <div className="flex flex-col gap-2">
           {participants
 
-            .filter((p) => !p.type.match(/absent/) && p.status !== 'à confirmer')
+            .filter((p) => !p.type.match(/absent/))
             .sort(compareParticipants)
             .map((p: any) => (
               <EventAttendeesDetails key={p.name} participant={p} />
             ))}
         </div>
       </div>
-
-      {hasConfirmedCount > 0 && (
-        <div className="flex flex-col gap-1">
-          {hasConfirmedCount > 0 && (
-            <div className="text-center text-arrd-highlight">
-              {hasConfirmedCount} {'à confirmer'}
-            </div>
-          )}
-
-          <div className="flex flex-col gap-2">
-            {participants
-              .filter((p) => p.status === 'à confirmer')
-              .sort(compareParticipants)
-              .map((p: any) => (
-                <EventAttendeesDetails key={p.name} participant={p} />
-              ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex flex-col gap-1">
         {absCount > 0 && (

@@ -38,7 +38,8 @@ export function EventParticipation() {
     const participationTypesCount = participationTypes
       .map((pType) => ({
         key: pType.key,
-        count: event?.participants.filter((part) => part.type === pType.key).length,
+        count: event?.participants.filter((part) => part.type.replace(/[·.]/, '') === pType.key.replace(/[·.]/, ''))
+          .length,
       }))
       .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.count }), {})
 
