@@ -36,7 +36,6 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
   if (!participantEvt) {
     event.participants.push({
       userId: user.id,
-      status: 'présent',
       name: user.nickname || user.name,
       type: form.participation,
       createdAt: dayjs().toDate(),
@@ -45,12 +44,6 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
     })
   } else {
     participantEvt.name = user.nickname || user.name
-
-    if (form.participation.match(/absent/)) {
-      participantEvt.status = 'absent·e'
-    } else {
-      participantEvt.status = 'présent'
-    }
     participantEvt.type = form.participation
     participantEvt.guestsNumber = form.guestsNumber || 0
     participantEvt.updatedAt = dayjs().toDate()
@@ -68,23 +61,16 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
   const isBetweenEventAndThreeHoursBeforeStart = now?.isBetween(threeHoursBeforeStart, event.start)
 
   if (isBetweenEventAndThreeHoursBeforeStart) {
-    const newStatus: any = {
-      'à confirmer': 'ne pas confirmer',
-      'absent·e': "d' annuler",
-      absent: "d' annuler",
-      present: 'confirmer',
-      présent: 'confirmer',
-    }
+    const confirmParticipantsNum = event.participants.filter((p: IParticipant) => !p.type.match(/absent/)).length
 
-    const confirmParticipantsNum = event.participants.filter(
-      (p: IParticipant) => !p.status.match(/abs|conf/) && !p.type.match(/abs/)
-    ).length
-    const msg = `---\n**${capitalizeFirstLetter(user.nickname || user.name)}** vient de **${
-      newStatus[participant.status]
-    }** sa participation à l'événement **${'`'}${event.title}${'`'}** du ${dayjs(event.start).format('LLLL')}.
-Il y a maintenant **${'`'}${confirmParticipantsNum}${'`'} participant.e.${
-      confirmParticipantsNum > 1 ? 's' : ''
-    } confirmé·e.${confirmParticipantsNum > 1 ? 's' : ''}** pour cet événement.\n---`
+    let msg = `\n\n**${event.title}**`
+    msg += '\n'
+    msg += '**' + capitalizeFirstLetter(user.nickname || user.name) + '**'
+    msg += ' '
+    msg += '`' + (form.participation.match(/absent/) ? `ANNULE` : form.participation) + '`'
+    msg += `\nIl y a maintenant ${'`'}${confirmParticipantsNum}${'`'} participant·e${
+      confirmParticipantsNum > 1 ? '·s' : ''
+    } pour cet événement.`
 
     await publishToDiscord('logs', msg)
   }

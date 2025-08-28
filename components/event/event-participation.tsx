@@ -94,9 +94,10 @@ export function EventParticipation() {
               .map((pType) => (
                 <div
                   key={pType.key}
-                  className={dc('relative cursor-pointer p-1', [
+                  className={dc('relative  p-1', [
                     myParticipation.type === pType.key,
-                    'flex items-center justify-center rounded-full fill-white ring ring-arrd-primary',
+                    'pointer-events-none flex items-center justify-center rounded-full fill-white ring ring-arrd-primary',
+                    'cursor-pointer',
                   ])}
                   onClick={() => changeMyParticipation(event._id, pType.key)}
                 >
