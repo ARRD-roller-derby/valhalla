@@ -14,15 +14,12 @@ export enum EEventType {
   other = 'Autre',
 }
 
-export type TParticipantStatus = 'présent' | 'absent' | 'à confirmer'
-
 export interface IParticipant {
   _id: ObjectId
   userId: string
   name: string
-  status: TParticipantStatus
   updatedAt: Date
-  type: string
+  type: 'absent·e' | string
   guestsNumber: number
 }
 
@@ -72,7 +69,6 @@ export interface IEvent {
 
 const ParticipantSchema = new Schema<IParticipant>({
   userId: String,
-  status: String,
   updatedAt: Date,
   type: String,
   name: String,

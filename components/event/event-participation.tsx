@@ -2,13 +2,13 @@
 import dayjs from 'dayjs'
 import { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 // Bibliothèques internes
 import { TriggerTypes, useEvent, useEvents, useSocketTrigger } from '@/entities'
-import { Button, Modal, QuestionIcon } from '@/ui'
+import { Button, Modal } from '@/ui'
 import { Loader } from '@/ui/Loader'
-import { PARTICIPATION_TYPES, dc, participationTypes } from '@/utils'
+import { dc, participationTypes } from '@/utils'
 import { EventParticipationInfo } from './event-participation-info'
 import { EventAttendeesModal } from './event-attendees.modal'
 
@@ -32,28 +32,27 @@ export function EventParticipation() {
 
   const { myParticipation, participationTypesCount } = useMemo<{
     participationTypesCount: { [key: string]: number }
-    myParticipation: { label: string; status: string; type: string; btn: boolean }
+    myParticipation: { label: string; type: string; btn: boolean }
   }>(() => {
     const participation = event?.participants.find((part) => part.userId === session?.user?.id)
     const participationTypesCount = participationTypes
       .map((pType) => ({
         key: pType.key,
-        count: event?.participants
-          .filter((part) => part.status !== 'à confirmer')
-          .filter((part) => part.type === pType.key).length,
+        count: event?.participants.filter((part) => part.type.replace(/[·.]/, '') === pType.key.replace(/[·.]/, ''))
+          .length,
       }))
       .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.count }), {})
 
     if (!participation)
       return {
         participationTypesCount,
-        myParticipation: { label: "Je n'ai pas encore", status: 'répondu', type: 'répondu', btn: false },
+        myParticipation: { label: "Je n'ai pas encore", type: 'répondu', btn: false },
       }
 
-    if (participation?.type === 'absent·e')
+    if (participation?.type.match(/absent/))
       return {
         participationTypesCount,
-        myParticipation: { label: 'Je serai ', status: 'absent·e', type: 'absent·e', btn: false },
+        myParticipation: { label: 'Je serai ', type: 'absent·e', btn: false },
       }
 
     return {
@@ -94,18 +93,14 @@ export function EventParticipation() {
               .map((pType) => (
                 <div
                   key={pType.key}
-                  className={dc('relative cursor-pointer p-1', [
+                  className={dc('relative  p-1', [
                     myParticipation.type === pType.key,
-                    'flex items-center justify-center rounded-full fill-white ring ring-arrd-primary',
+                    'pointer-events-none flex items-center justify-center rounded-full fill-white ring ring-arrd-primary',
+                    'cursor-pointer',
                   ])}
                   onClick={() => changeMyParticipation(event._id, pType.key)}
                 >
                   {pType.icon}
-                  {myParticipation.type !== PARTICIPATION_TYPES.absent &&
-                    myParticipation.type === pType.key &&
-                    myParticipation.status === 'à confirmer' && (
-                      <QuestionIcon className="absolute -bottom-1 -right-2 h-4 w-4 rounded-full bg-arrd-primary fill-white p-1" />
-                    )}
                   {participationTypesCount[pType.key] > 0 && (
                     <div className="absolute -right-2 -top-1  flex h-4 w-4 items-center justify-center rounded-full bg-arrd-primary p-1 text-xs text-white">
                       {participationTypesCount[pType.key]}
