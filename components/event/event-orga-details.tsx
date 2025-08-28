@@ -26,14 +26,12 @@ export function EventOrgaDetails() {
             <div>
               <span className="text-xs">Coach: </span>
               <span className="text-sm font-bold">{coachAndAssistCoach.coach.name}</span>
-              {coachAndAssistCoach.coach.status === 'à confirmer' && '?'}
             </div>
           )}
           {coachAndAssistCoach.assistCoach && (
             <div>
               <span className="text-xs">Assit coach: </span>
               <span className="text-sm font-bold">{coachAndAssistCoach.assistCoach.name}</span>
-              {coachAndAssistCoach.assistCoach.status === 'à confirmer' && '?'}
             </div>
           )}
         </div>
