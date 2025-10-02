@@ -35,7 +35,17 @@ export const authOptions = {
       const guildRoles = (await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))) as TRole[]
 
       await MongoDb()
-      const user = await User.findById(new ObjectId(session.user.id))
+      let user = await User.findById(new ObjectId(session.user.id))
+
+      if (!user) {
+        await User.create({
+          _id: session.user.id,
+          providerAccountId: session.user.id,
+          name: session.user.name,
+          roles: [],
+        })
+        user = await User.findById(new ObjectId(session.user.id))
+      }
 
       if (!user.providerAccountId) {
         const account = await Account.findOne({ userId: session.user.id })
