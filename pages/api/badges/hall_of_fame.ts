@@ -8,6 +8,7 @@ import { Badge } from '@/models/badges.model'
 import { UserBadge } from '@/models/user_badge.model'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
+import { ROLES } from '@/utils'
 
 export default async function hallOfFame(req: NextApiRequest, res: NextApiResponse, midgard: boolean = false) {
   if (!midgard) {
@@ -97,6 +98,8 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
       if (!user) return null
 
       const roles = guildRoles.filter((role) => user?.roles?.includes(role.id)).map((role) => role.name)
+
+      if (!roles.some((role) => role.toLowerCase() === ROLES.membre)) return null
 
       return { name: user.nick || user.name, avatar: user.avatar, badges, roles }
     })
