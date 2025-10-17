@@ -43,13 +43,12 @@ export function EventAttendees() {
 
   // Constantes ---------------------------------------------------------------
 
-  const presentCount = useMemo(() => {
-    return participants.filter((p) => !p.type.match(/absent/)).length
+  const { presentCount, absCount } = useMemo(() => {
+    return {
+      presentCount: participants.filter((p) => !p.type.match(/absent/)).length,
+      absCount: participants.filter((p) => p.type.match(/absent/)).length,
+    }
   }, [participants])
-
-  const absCount = useMemo(() => {
-    return participants.filter((p) => p.type.match(/absent/)).length - presentCount
-  }, [participants, presentCount])
 
   // Fonctions ----------------------------------------------------------------
   const handleFetch = async () => {
