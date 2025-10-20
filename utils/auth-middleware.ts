@@ -10,10 +10,10 @@ export async function authMiddleWare(request: NextApiRequest, response: NextApiR
 
   if (session) return helper(request, response, session.user)
   const { headers } = request
-  let provider_id = headers?.['provider_id']
+  let provider_id = headers?.['x-provider-id']
   console.log(headers)
 
-  if (headers?.['provider_id'] && headers?.['authorization']?.replace('Bearer ', '') !== process.env.MIDGARD_TOKEN)
+  if (headers?.['x-provider-id'] && headers?.['authorization']?.replace('Bearer ', '') !== process.env.MIDGARD_TOKEN)
     return response.status(401).json({ error: 'non autorisé' })
 
   const isV2 = headers['authorization-origin'] === 'valhalla_1'
