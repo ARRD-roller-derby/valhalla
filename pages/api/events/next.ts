@@ -26,7 +26,6 @@ dayjs.tz.setDefault('Europe/Paris')
 
 async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any) {
   const roles = user.roles.map((role: any) => role.name.toLowerCase())
-  console.log(roles)
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
