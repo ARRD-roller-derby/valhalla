@@ -93,7 +93,7 @@ export const authOptions = {
       if (isMember) {
         roles.push({
           id: '0',
-          name: ROLES.invite,
+          name: ROLES.realInvite,
           color: 0x000000,
         })
       }

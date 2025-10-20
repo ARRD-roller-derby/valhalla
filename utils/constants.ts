@@ -43,6 +43,7 @@ export const frequencyOpts: TOption[] = [
 
 export const ROLES = {
   invite: '@everyone',
+  realInvite: 'invité',
   membre: 'membre',
   bureau: 'bureau',
   dev: 'dev',

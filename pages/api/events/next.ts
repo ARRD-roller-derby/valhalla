@@ -13,6 +13,7 @@ import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { authMiddleWare } from '@/utils/auth-middleware'
+import { ROLES } from '@/utils'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -25,6 +26,7 @@ dayjs.tz.setDefault('Europe/Paris')
 
 async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any) {
   const roles = user.roles.map((role: any) => role.name.toLowerCase())
+  console.log(roles)
   const start = dayjs().startOf('day').toISOString()
   const isMember = checkRoles(['membre'], user)
   const isAdmin = checkRoles(['bureau', 'dev'], user)
@@ -53,7 +55,7 @@ async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any)
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', '@everyone'].map((role: string) => new RegExp(role, 'i')),
+        $in: ['membre', '@everyone', ROLES.realInvite].map((role: string) => new RegExp(role, 'i')),
       },
     })
   }
