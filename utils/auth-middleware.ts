@@ -22,18 +22,17 @@ export async function authMiddleWare(request: NextApiRequest, response: NextApiR
 
     const secret = Buffer.from(process.env.API_KEY || '', 'hex')
 
-    console.log('secret============>', process.env.API_KEY)
     const { payload } = await jose.jwtDecrypt(token, secret)
 
-    console.log('payload', payload)
     provider_id = payload.sub
   }
 
-  console.log('======>', isV2)
-
   if (!provider_id) return response.status(401).json({ error: 'aucun id utilisateur' })
+
   await MongoDb()
+
   const user = await User.findOne({ providerAccountId: provider_id })
+
   if (user) {
     return helper(request, response, {
       ...user.toJSON(),

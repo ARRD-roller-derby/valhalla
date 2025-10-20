@@ -88,6 +88,15 @@ export const authOptions = {
           color: role.color,
         }))
 
+      const isMember = roles.some((role) => role.name.toLowerCase() === 'membre')
+
+      if (isMember) {
+        roles.push({
+          id: '0',
+          name: ROLES.invite,
+          color: 0x000000,
+        })
+      }
       const haveRoleChanged = checkChangedRoles(roles, user.roles)
 
       if (haveRoleChanged) {
