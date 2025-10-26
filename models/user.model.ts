@@ -22,6 +22,18 @@ export interface IUser {
   msp: boolean
   image: string
   roles: TRole[]
+  type: string
+  licence_number: string
+  roster_number: string
+  derby_name: string
+  allergies: string
+  diet: string
+  phone: string
+  town: string
+  zip: string
+  address: string
+  birth: string
+  gender: string
 }
 
 const RoleSchema = new Schema<TRole>({

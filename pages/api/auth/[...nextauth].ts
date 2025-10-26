@@ -1,6 +1,14 @@
 import clientPromise from '@/db/mongo.auth.connect'
 import { Account } from '@/models/account.model'
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_GUILD_ID, DISCORD_TOKEN, ROLES } from '@/utils/constants'
+import {
+  DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET,
+  DISCORD_GUILD_ID,
+  DISCORD_TOKEN,
+  DOL_URL,
+  DOLAPIKEY,
+  ROLES,
+} from '@/utils/constants'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
@@ -70,6 +78,7 @@ export const authOptions = {
           },
         }
       }
+
       if (!user || !member) return session
 
       if (member?.user?.global_name && user.name !== member.user.global_name) {
@@ -97,6 +106,7 @@ export const authOptions = {
           color: 0x000000,
         })
       }
+
       const haveRoleChanged = checkChangedRoles(roles, user.roles)
 
       if (haveRoleChanged) {
@@ -104,15 +114,48 @@ export const authOptions = {
         await user.save()
       }
 
-      // Vérifier si le document utilisateur a été modifié
       if (user.isModified('wallet')) {
-        // Mise à jour des champs modifiés uniquement
         const updateFields = {
           providerAccountId: user.providerAccountId,
         }
-
-        // Effectuer la mise à jour dans la base de données On utiliser pas user.save(). On utilise User.updateOne() pour éviter de déclencher les hooks
         await User.updateOne({ _id: user._id }, updateFields)
+      }
+
+      const params = new URLSearchParams({
+        DOLAPIKEY: DOLAPIKEY,
+        limit: '1',
+        sqlfilters: `(t.note_private:like:%${user.providerAccountId}%)`,
+      })
+
+      const dolibarrRes = await fetch(`${DOL_URL}members?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const dolibarrData = await dolibarrRes.json()
+
+      if (dolibarrData.length > 0) {
+        const result = dolibarrData[0]
+        const dolibarrInfos = {
+          type: result.type,
+          birth: result.birth,
+          gender: result.gender,
+          licence_number: result.array_options.options_nlicence,
+          roster_number: result.array_options.options_nroster,
+          derby_name: result.array_options.options_derbyname,
+          allergies: result.array_options.options_allergies,
+          diet: result.array_options.options_rgimealimentaire,
+          phone: result.phone_perso,
+          town: result.town,
+          zip: result.zip,
+          address: result.address,
+        }
+        session.user = {
+          ...session.user,
+          ...dolibarrInfos,
+        }
       }
 
       session.user = {
