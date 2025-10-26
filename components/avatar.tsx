@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 
 // Bibliothèques internes
-import { dc, hexToTailwind } from '@/utils'
+import { dc, hexToTailwind, ROLES } from '@/utils'
 
 export function Avatar() {
   // stores
@@ -55,13 +55,18 @@ export function Avatar() {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-2 text-xs">
-                  {session.user.roles.map((role) => (
-                    <div key={role.id}>
-                      <div style={{ backgroundColor: hexToTailwind(role.color as number) }} className="rounded-sm p-1">
-                        {role.name}
+                  {session.user.roles
+                    .filter((role) => ROLES.membre && role.name !== ROLES.realInvite)
+                    .map((role) => (
+                      <div key={role.id}>
+                        <div
+                          style={{ backgroundColor: hexToTailwind(role.color as number) }}
+                          className="rounded-sm p-1"
+                        >
+                          {role.name}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
                 <hr />
                 <button
