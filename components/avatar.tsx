@@ -13,8 +13,6 @@ export function Avatar() {
   // stores
   const { data: session } = useSession()
 
-  console.log(session)
-
   if (!session) return <></>
 
   return (
