@@ -1,3 +1,5 @@
+# Build avec les variables NEXT_PUBLIC (exemple) :
+#   docker build --build-arg NEXT_PUBLIC_WS_URL=wss://milena.arrd.fr -t valhalla .
 FROM node:22-alpine AS base
 
 RUN apk add --no-cache libc6-compat
@@ -13,6 +15,9 @@ RUN pnpm install --frozen-lockfile
 FROM base AS builder
 
 COPY . .
+
+ARG NEXT_PUBLIC_WS_URL
+ENV NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_WS_URL}
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
