@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useContext, useEffect, createContext, useState } from 'react'
-import { PUSHER_KEY, PUSHER_REGION } from '@/utils'
-import Pusher from 'pusher-js'
 import { useSession } from 'next-auth/react'
 
 // INTERFACES ---------------------------------------------------------------
@@ -43,21 +41,35 @@ export function useSocket() {
   const { data: session } = useSession()
   const [message, setMessage] = useState<ISocketMessage | null>(null)
 
-  const cbSocket = (data: ISocketMessage) => {
-    setMessage(data)
+  const cbSocket = (data: { action: { type: TriggerTypes; value: any } }) => {
+    setMessage(data?.action as ISocketMessage)
     setTimeout(() => setMessage(null), 400)
-    return data
+    return data?.action as ISocketMessage
   }
 
   useEffect(() => {
-    const pusher = new Pusher(PUSHER_KEY, {
-      cluster: PUSHER_REGION,
+    const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL || '')
+
+    ws.addEventListener('open', () => {
+      if (ws) {
+        ws.send(
+          JSON.stringify({
+            action: 'subscribe',
+            provider: session?.user?.id || 'public',
+          })
+        )
+        ws.send(
+          JSON.stringify({
+            action: 'subscribe',
+            provider: 'public',
+          })
+        )
+      }
     })
-
-    const channel = pusher.subscribe('valhalla')
-    channel.bind('public', cbSocket)
-
-    if (session?.user?.id) channel.bind(session.user.id, cbSocket)
+    ws.addEventListener('message', (ev) => {
+      const data = ev.data.startsWith('{') ? JSON.parse(ev.data) : ev.data
+      if (data.action) cbSocket(data)
+    })
   }, [])
 
   return message

@@ -8,14 +8,6 @@ export const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID || ''
 export const MONGO_URI = process.env.MONGO_URI || ''
 export const DISCORD_TOKEN = process.env.DISCORD_TOKEN || ''
 
-
-export const PUSHER_SECRET = process.env.PUSHER_SECRET || ''
-export const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY || ''
-export const PUSHER_API_ID = process.env.NEXT_PUBLIC_PUSHER_API_ID || ''
-export const PUSHER_REGION = process.env.NEXT_PUBLIC_PUSHER_REGION || ''
-
-
-
 export const DISCORD_EVENT_HOOK = process.env.DISCORD_EVENT_HOOK || ''
 export const DISCORD_NEWS_HOOK = process.env.DISCORD_NEWS_HOOK || ''
 export const DISCORD_ADMIN_HOOK = process.env.DISCORD_ADMIN_HOOK || ''
