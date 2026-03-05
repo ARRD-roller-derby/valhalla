@@ -1,4 +1,5 @@
 import { TriggerTypes } from '@/entities'
+import { WS_URL } from '@/utils'
 
 /**
  *
@@ -8,7 +9,7 @@ import { TriggerTypes } from '@/entities'
  */
 export async function trigger(room: string, action: TriggerTypes, body: any) {
   try {
-    fetch(`${process.env.WS_URL}/send`, {
+    fetch(`${WS_URL}/send`, {
       method: 'POST',
       body: JSON.stringify({
         room,
