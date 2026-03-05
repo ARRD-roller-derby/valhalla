@@ -14,6 +14,9 @@ export const DISCORD_ADMIN_HOOK = process.env.DISCORD_ADMIN_HOOK || ''
 export const DOLAPIKEY = process.env.DOLAPIKEY || ''
 export const DOL_URL = process.env.DOL_URL || ''
 
+export const WS_URL = process.env.WS_URL || ''
+export const NEXT_PUBLIC_WS_URL = process.env.NEXT_PUBLIC_WS_URL || ''
+
 export const WEATHER_API_URL = process.env.WEATHER_API_URL || ''
 
 export const S3_BUCKET = process.env.S3_BUCKET || ''

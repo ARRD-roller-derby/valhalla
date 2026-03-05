@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useContext, useEffect, createContext, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { NEXT_PUBLIC_WS_URL } from '@/utils/constants'
 
 // INTERFACES ---------------------------------------------------------------
 interface SocketProviderProps {
@@ -48,7 +49,7 @@ export function useSocket() {
   }
 
   useEffect(() => {
-    const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL || '')
+    const ws = new WebSocket(NEXT_PUBLIC_WS_URL)
 
     ws.addEventListener('open', () => {
       if (ws) {
