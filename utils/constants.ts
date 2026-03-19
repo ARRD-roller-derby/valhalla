@@ -51,7 +51,7 @@ export const ROLES = {
   evenement: 'evénement',
   merch: 'merch',
   refs: 'refs',
-  discrimination: 'discrimination',
+  discrimination: 'Inclusion+Diversité',
   com: 'com',
   fresh: 'freshs',
   guest: 'guest',
