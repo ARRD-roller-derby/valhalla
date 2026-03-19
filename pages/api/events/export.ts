@@ -5,6 +5,7 @@ import { checkRoles } from '@/utils/check-roles'
 import { EEventType, Event } from '@/models'
 import { authOptions } from '../auth/[...nextauth]'
 import { createEvents } from 'ics'
+import { ROLES } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -30,8 +31,8 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
   const { user } = session
 
   const start = dayjs().startOf('day').toISOString()
-  const isMember = checkRoles(['membre'], user)
-  const isAdmin = checkRoles(['bureau', 'dev'], user)
+  const isMember = checkRoles([ROLES.membre], user)
+  const isAdmin = checkRoles([ROLES.bureau, ROLES.dev], user)
   const between = {
     start: {
       $gte: start,
@@ -48,7 +49,7 @@ export default async function eventsNext(req: NextApiRequest, res: NextApiRespon
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', 'public'],
+        $in: [ROLES.membre.toLowerCase(), ROLES.membre_legacy.toLowerCase(), 'public'],
       },
     })
   }

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { authOptions } from '../auth/[...nextauth]'
 import { Answer, Question } from '@/models'
-import { checkRoles } from '@/utils'
+import { checkRoles, ROLES } from '@/utils'
 import validator from 'validator'
 import formidable from 'formidable'
 import fs from 'fs'
@@ -22,7 +22,7 @@ export default async function questionCreate(req: NextApiRequest, res: NextApiRe
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
 
-  const isCanView = checkRoles(['sagwa master', 'dev'], user)
+  const isCanView = checkRoles([ROLES.sagwa_master, ROLES.dev], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
   const form = new formidable.IncomingForm()

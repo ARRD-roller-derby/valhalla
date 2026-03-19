@@ -35,7 +35,7 @@ async function nextEvent(req: NextApiRequest, res: NextApiResponse, user: IUser)
 
   const visibility = event.visibility.toLowerCase()
 
-  if (visibility === 'membre') {
+  if (visibility === ROLES.membre.toLowerCase() || visibility === ROLES.membre_legacy.toLowerCase()) {
     const canSee = checkRoles([ROLES.membre], user)
     if (!canSee) return res.status(403).send('non autorisé')
   }

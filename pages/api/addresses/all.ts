@@ -3,9 +3,10 @@ import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { Address } from '@/models'
 import { authMiddleWare } from '@/utils/auth-middleware'
+import { ROLES } from '@/utils'
 
 async function address_all(req: NextApiRequest, res: NextApiResponse, user: any) {
-  const isCanView = checkRoles(['bureau', 'dev', 'evénements', 'coach'], user)
+  const isCanView = checkRoles([ROLES.bureau, ROLES.dev, ROLES.evenement, ROLES.coach], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
   await MongoDb()

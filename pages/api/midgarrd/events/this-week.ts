@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { Event } from '@/models'
+import { ROLES } from '@/utils'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -30,8 +31,8 @@ process.env.TZ = 'Europe/Paris'
 
 async function thisWeek(_req: NextApiRequest, res: NextApiResponse, user: IUser) {
   const start = dayjs().toISOString()
-  const isMember = checkRoles(['membre'], user)
-  const isAdmin = checkRoles(['bureau', 'dev'], user)
+  const isMember = checkRoles([ROLES.membre], user)
+  const isAdmin = checkRoles([ROLES.bureau, ROLES.dev], user)
 
   const roles = user.roles.map((role: any) => role.name)
 
@@ -61,7 +62,7 @@ async function thisWeek(_req: NextApiRequest, res: NextApiResponse, user: IUser)
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', 'public'],
+        $in: [ROLES.membre, ROLES.membre_legacy, ROLES.invite],
       },
     })
   }

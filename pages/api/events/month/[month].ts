@@ -13,6 +13,7 @@ import isBetween from 'dayjs/plugin/isBetween'
 import fr from 'dayjs/locale/fr'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { authMiddleWare } from '@/utils/auth-middleware'
+import { ROLES } from '@/utils'
 
 dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
@@ -32,8 +33,8 @@ async function eventsMonth(req: NextApiRequest, res: NextApiResponse, user: any)
 
   const startOfMonth = dayjs().month(month).year(year).startOf('month').toISOString()
   const endOfMonth = dayjs().month(month).year(year).endOf('month').toISOString()
-  const isMember = checkRoles(['membre'], user)
-  const isAdmin = checkRoles(['bureau', 'dev'], user)
+  const isMember = checkRoles([ROLES.membre], user)
+  const isAdmin = checkRoles([ROLES.bureau, ROLES.dev], user)
 
   const between = {
     start: {
@@ -61,7 +62,9 @@ async function eventsMonth(req: NextApiRequest, res: NextApiResponse, user: any)
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', 'public'].map((role: string) => new RegExp(role, 'i')),
+        $in: [ROLES.membre.toLowerCase(), ROLES.membre_legacy.toLowerCase(), ROLES.invite].map(
+          (role: string) => new RegExp(role, 'i')
+        ),
       },
     })
   }

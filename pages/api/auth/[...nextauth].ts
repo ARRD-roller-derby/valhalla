@@ -97,12 +97,12 @@ export const authOptions = {
           color: role.color,
         }))
 
-      const isMember = roles.some((role) => role.name.toLowerCase() === 'membre')
+      const isMember = roles.some((role) => role.name.toLowerCase() === ROLES.membre.toLowerCase())
 
       if (isMember) {
         roles.push({
           id: '0',
-          name: ROLES.realInvite,
+          name: ROLES.realInvite.toLowerCase(),
           color: 0x000000,
         })
       }

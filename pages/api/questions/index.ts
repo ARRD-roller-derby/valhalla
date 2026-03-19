@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { authOptions } from '../auth/[...nextauth]'
 import { Question } from '@/models'
-import { checkRoles } from '@/utils'
+import { checkRoles, ROLES } from '@/utils'
 
 process.env.TZ = 'Europe/Paris'
 
@@ -12,7 +12,7 @@ export default async function questions(req: NextApiRequest, res: NextApiRespons
   if (!session) return res.status(403).send('non autorisé')
   const { user } = session
 
-  const isCanView = checkRoles(['sagwa master', 'dev'], user)
+  const isCanView = checkRoles([ROLES.sagwa_master, ROLES.dev], user)
   if (!isCanView) return res.status(403).send('non autorisé')
 
   await MongoDb()

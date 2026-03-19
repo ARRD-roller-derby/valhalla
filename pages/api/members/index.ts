@@ -2,7 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 // Bibliothèque interne
-import { DOLAPIKEY, DOL_URL, dolibarrMemberParser, hexToTailwind } from '@/utils'
+import { DOLAPIKEY, DOL_URL, ROLES, dolibarrMemberParser, hexToTailwind } from '@/utils'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { authMiddleWare } from '@/utils/auth-middleware'
 
@@ -53,7 +53,7 @@ async function members(_req: NextApiRequest, res: NextApiResponse, user: any) {
           : '/static/images/valhalla.png',
       }
     })
-    .filter((member: any) => member.roles.some((role: any) => role.name.toLowerCase() === 'membre'))
+    .filter((member: any) => member.roles.some((role: any) => role.name.toLowerCase() === ROLES.membre.toLowerCase()))
 
     .sort((a: any, b: any) => a.username.localeCompare(b.username))
     .sort((a: any, b: any) => {

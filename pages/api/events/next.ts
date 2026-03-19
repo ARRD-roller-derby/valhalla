@@ -27,8 +27,8 @@ dayjs.tz.setDefault('Europe/Paris')
 async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any) {
   const roles = user.roles.map((role: any) => role.name.toLowerCase())
   const start = dayjs().startOf('day').toISOString()
-  const isMember = checkRoles(['membre'], user)
-  const isAdmin = checkRoles(['bureau', 'dev'], user)
+  const isMember = checkRoles([ROLES.membre], user)
+  const isAdmin = checkRoles([ROLES.bureau, ROLES.dev], user)
   const between = {
     start: {
       $gte: start,
@@ -54,7 +54,9 @@ async function eventsNext(_req: NextApiRequest, res: NextApiResponse, user: any)
     or.push({
       ...between,
       visibility: {
-        $in: ['membre', '@everyone', ROLES.realInvite].map((role: string) => new RegExp(role, 'i')),
+        $in: [ROLES.membre.toLowerCase(), ROLES.membre_legacy.toLowerCase(), ROLES.invite].map(
+          (role: string) => new RegExp(role, 'i')
+        ),
       },
     })
   }

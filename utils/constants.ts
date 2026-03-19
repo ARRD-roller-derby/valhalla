@@ -44,6 +44,7 @@ export const ROLES = {
   invite: '@everyone',
   realInvite: 'invité',
   membre: 'membres',
+  membre_legacy: 'membre',
   bureau: 'bureau',
   dev: 'dev',
   coach: 'coach',
@@ -55,6 +56,7 @@ export const ROLES = {
   fresh: 'freshs',
   guest: 'guest',
   everyone: '@everyone',
+  sagwa_master: 'sagwa master',
 }
 
 export const ROLES_CAN_MANAGE_EVENT = [ROLES.bureau, ROLES.coach, ROLES.evenement, ROLES.dev]
