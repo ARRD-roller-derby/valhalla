@@ -56,6 +56,7 @@ export const ROLES = {
   fresh: 'freshs',
   guest: 'guest',
   everyone: '@everyone',
+  patin: 'patin',
   sagwa_master: 'sagwa master',
 }
 

@@ -99,7 +99,8 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
 
       const roles = guildRoles.filter((role) => user?.roles?.includes(role.id)).map((role) => role.name)
 
-      if (!roles.some((role) => role.toLowerCase() === ROLES.membre)) return null
+      if (!roles.some((role) => role.toLowerCase() === ROLES.membre || role.toLowerCase() === ROLES.membre_legacy))
+        return null
 
       return { name: user.nick || user.name, avatar: user.avatar, badges, roles }
     })
@@ -123,11 +124,11 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total, points: user.badges.point }))
 
   const fresh = classement
-    .filter((user) => user?.roles.some((role) => role.toLowerCase() === 'fresh'))
+    .filter((user) => user?.roles.some((role) => role.toLowerCase().includes(ROLES.fresh)))
     .slice(0, 3)
     .map((user) => ({ name: user.name, avatar: user.avatar, total: user.badges.total, points: user.badges.point }))
 
-  const patinBadges = winnedBadges.filter((badge) => badge.type === 'patin')
+  const patinBadges = winnedBadges.filter((badge) => badge.type.includes(ROLES.patin))
 
   const userPatinBadgesGrouped = patinBadges.reduce((acc, userBadge) => {
     if (!acc[userBadge.providerAccountId]) {
