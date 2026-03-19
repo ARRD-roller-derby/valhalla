@@ -43,7 +43,7 @@ export const frequencyOpts: TOption[] = [
 export const ROLES = {
   invite: '@everyone',
   realInvite: 'invité',
-  membre: 'membre',
+  membre: 'membres',
   bureau: 'bureau',
   dev: 'dev',
   coach: 'coach',
@@ -52,7 +52,7 @@ export const ROLES = {
   refs: 'refs',
   discrimination: 'discrimination',
   com: 'com',
-  fresh: 'fresh',
+  fresh: 'freshs',
   guest: 'guest',
   everyone: '@everyone',
 }

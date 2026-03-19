@@ -93,7 +93,7 @@ export const authOptions = {
         .filter((role) => member.roles.includes(role.id))
         .map((role) => ({
           id: role.id,
-          name: role.name,
+          name: role.name.toLowerCase(),
           color: role.color,
         }))
 
