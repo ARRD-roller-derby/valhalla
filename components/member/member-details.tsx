@@ -15,7 +15,7 @@ export function MemberDetails() {
       <main className="m-auto flex w-full flex-col gap-4 sm:w-96 ">
         {member.datefin && (
           <div>
-            Membre jusqu'au <span className="text-arrd-highlight">{dayjs(member.datefin * 1000).format('LL')}</span>
+            Membre jusqu&rsquo;au <span className="text-arrd-highlight">{dayjs(member.datefin * 1000).format('LL')}</span>
           </div>
         )}
         {member.type && (

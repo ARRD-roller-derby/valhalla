@@ -19,7 +19,7 @@ export function BadgesClassement() {
   return (
     <div className="relative mx-auto mt-6 flex h-full max-w-lg flex-col gap-3">
       {classement.map((user) => (
-        <CardUI>
+        <CardUI key={user.name}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
