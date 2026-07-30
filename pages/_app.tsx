@@ -14,7 +14,6 @@ import { Router } from 'next/router'
 import 'leaflet/dist/leaflet.css'
 import 'nprogress/nprogress.css'
 import '../styles/globals.css'
-import 'cropperjs/dist/cropper.css'
 
 // Barre de chargement
 Router.events.on('routeChangeStart', () => NProgress.start())
