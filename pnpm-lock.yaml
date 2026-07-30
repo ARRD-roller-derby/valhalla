@@ -157,9 +157,6 @@ importers:
       autoprefixer:
         specifier: 10.5.4
         version: 10.5.4(postcss@8.5.25)
-      cropperjs:
-        specifier: ^1.5.13
-        version: 1.6.2
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
@@ -2175,9 +2172,6 @@ packages:
 
   crelt@1.0.7:
     resolution: {integrity: sha512-aK6BbWfhf4U/wCcLHKPJl/xa6VkVstRaPywWtMKGwuOLc/wZTyQYuoxgvZnNsBvv7Kg3YTBQYYBCggcviQczuA==}
-
-  cropperjs@1.6.2:
-    resolution: {integrity: sha512-nhymn9GdnV3CqiEHJVai54TULFAE3VshJTXSqSJKa8yXAKyBKDWdhHarnlIPrshJ0WMFTGuFvG02YjLXfPiuOA==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -6252,8 +6246,6 @@ snapshots:
       browserslist: 4.28.7
 
   crelt@1.0.7: {}
-
-  cropperjs@1.6.2: {}
 
   cross-spawn@7.0.6:
     dependencies:
