@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb'
+import type { ObjectId } from 'mongodb'
 import { Schema, model, models } from 'mongoose'
 
 export interface IAddress {

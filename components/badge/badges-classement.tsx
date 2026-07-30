@@ -1,6 +1,7 @@
+import { useEffect } from 'react'
 import { useBadges } from '@/entities'
 import { BadgeIcon, CardUI, Loader } from '@/ui'
-import { useEffect } from 'react'
+import Image from 'next/image'
 
 export function BadgesClassement() {
   const { classement, getLoading, getHallOfFame } = useBadges()
@@ -23,7 +24,7 @@ export function BadgesClassement() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img src={user.avatar} alt={user.name} className="h-8 w-8 rounded-full" />
+                <Image src={user.avatar} alt={user.name} className="h-8 w-8 rounded-full" />
                 <div className="text-arrd-highlight">{user.name}</div>
               </div>
               <div className="flex items-center gap-2">

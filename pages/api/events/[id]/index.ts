@@ -1,16 +1,15 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
-import { ROLES, checkRoles } from '@/utils'
 import { authMiddleWare } from '@/utils/auth-middleware'
 process.env.TZ = 'Europe/Paris'
 
-async function event_findOne(req: NextApiRequest, res: NextApiResponse, user: any) {
+async function event_findOne(req: NextApiRequest, res: NextApiResponse, _user: any) {
   await MongoDb()
   const event = await Event.findOne({ _id: req.query.id })
   if (!event) return res.status(404).send('Événement non trouvé')
 
-  const visibility = event.visibility.toLowerCase()
+  const _visibility = event.visibility.toLowerCase()
 
   /*
   if (visibility === 'membre') {

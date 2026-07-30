@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 // Bibliothèque externe
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useReducer } from 'react'
@@ -51,20 +51,22 @@ const initialState: IState = {
 
 const reducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
-    case NEXT_MONTH:
+    case NEXT_MONTH: {
       const nextMonth = state.month + 1
       return {
         ...state,
         month: nextMonth >= 12 ? 0 : nextMonth,
         year: nextMonth >= 12 ? state.year + 1 : state.year,
       }
-    case PREVIOUS_MONTH:
+    }
+    case PREVIOUS_MONTH: {
       const previousMonth = state.month - 1
       return {
         ...state,
         month: previousMonth < 0 ? 11 : previousMonth,
         year: previousMonth < 0 ? state.year - 1 : state.year,
       }
+    }
     case SET_CALENDAR:
       return {
         ...state,
@@ -134,7 +136,7 @@ export function useCalendar() {
   // effects
   useEffect(() => {
     createCalendar(state.year, state.month)
-  }, [state.year, state.month])
+  }, [state.year, state.month, createCalendar])
 
   return {
     cal: state.cal,

@@ -1,4 +1,4 @@
-import { IBadge } from '@/entities'
+import type { IBadge } from '@/entities'
 import { BADGE_LEVELS } from './badge-levels'
 
 export const sortedBadges = (a: IBadge, b: IBadge) => {

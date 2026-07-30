@@ -1,5 +1,5 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -20,7 +20,7 @@ dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
-import { IUser } from '@/models'
+import type { IUser } from '@/models'
 import { DOLAPIKEY, DOL_URL, dolibarrMemberParser } from '@/utils'
 
 // Initialiser le fuseau horaire

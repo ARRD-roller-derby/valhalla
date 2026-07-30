@@ -1,4 +1,4 @@
-import { IBadge, useBadges } from '@/entities'
+import { type IBadge, useBadges } from '@/entities'
 import { Button, Modal } from '@/ui'
 import { TrashIcon } from '@/ui/icons/TrashIcon'
 import { checkRoles, ROLES } from '@/utils'
@@ -26,9 +26,14 @@ export function BadgeDelete({ badge }: BadgeDeleteProps) {
   return (
     <Modal
       button={(open) => (
-        <div className="absolute right-1 top-1 fill-arrd-textError" onClick={open}>
+        <button
+          type="button"
+          aria-label="Supprimer le badge"
+          className="absolute right-1 top-1 border-0 bg-transparent p-0 fill-arrd-textError"
+          onClick={open}
+        >
           <TrashIcon />
-        </div>
+        </button>
       )}
       footer={(close) => (
         <div className="mt-2 flex justify-between gap-1 px-3">

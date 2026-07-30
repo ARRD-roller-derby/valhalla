@@ -7,9 +7,14 @@ export function EventParticipationInfo() {
     <Modal
       title="Signification des Icônes de Présence"
       button={(onClick) => (
-        <div onClick={onClick} className="flex h-full cursor-pointer items-center justify-center opacity-20">
+        <button
+          type="button"
+          aria-label="Afficher la signification des icônes de présence"
+          className="flex h-full items-center justify-center border-0 bg-transparent p-0 opacity-20"
+          onClick={onClick}
+        >
           <InfoIcon className="h-4 w-4 fill-arrd-text" />
-        </div>
+        </button>
       )}
     >
       {() => (

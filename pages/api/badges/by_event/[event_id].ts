@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Badge, Event, User } from '@/models'
 import { authMiddleWare } from '@/utils/auth-middleware'
@@ -44,7 +44,7 @@ async function badges_by_event(req: NextApiRequest, res: NextApiResponse) {
             avatar: baseUser._doc?.image,
             name: guest?.nick || guest?.global_name || guest?.name,
           })
-        } catch (e) {
+        } catch (_e) {
           participants.push({
             ...par._doc,
             name: baseUser.name,
@@ -80,7 +80,7 @@ async function badges_by_event(req: NextApiRequest, res: NextApiResponse) {
               name: user?.name,
               id: user?._id,
               providerAccountId: user?.providerAccountId,
-              win: win ? true : false,
+              win: !!win,
             }
           })
           .sort((a: any, b: any) => a.name.localeCompare(b.name))

@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { authMiddleWare } from '@/utils/auth-middleware'
 
 async function address_search(req: NextApiRequest, res: NextApiResponse) {

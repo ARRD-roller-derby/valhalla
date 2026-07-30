@@ -41,7 +41,7 @@ export function Menu() {
                     'fill-arrd-primary',
                   ])}
                 />
-                {!isMobile && ' ' + route.name}
+                {!isMobile && ` ${route.name}`}
               </div>
             </Link>
           )

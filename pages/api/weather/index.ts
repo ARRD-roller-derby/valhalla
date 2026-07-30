@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../auth/[...nextauth]'
 import { WEATHER_API_URL } from '@/utils'
@@ -60,7 +60,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
         timezone: resJson.timezone,
         hourly: {
           ...resJson.hourly,
-          time: resJson.hourly.time.filter((hour: string) => dayjs(hour + 'Z').isAfter(dayjs())),
+          time: resJson.hourly.time.filter((hour: string) => dayjs(`${hour}Z`).isAfter(dayjs())),
         },
         hourlyUnits: resJson.hourly_units,
       }
@@ -72,7 +72,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
 
   // Mise à jour des prévisions obsolètes
   for (const forecast of existingForecasts) {
-    if (dayjs(forecast.hourly.time[0] + 'Z').isBefore(dayjs().subtract(3, 'hour'))) {
+    if (dayjs(`${forecast.hourly.time[0]}Z`).isBefore(dayjs().subtract(3, 'hour'))) {
       try {
         const resApi = await fetch(`${WEATHER_API_URL}&latitude=${forecast.lat}&longitude=${forecast.lon}`)
         const resJson = await resApi.json()
@@ -81,7 +81,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
           timezone: resJson.timezone,
           hourly: {
             ...resJson.hourly,
-            time: resJson.hourly.time.filter((hour: string) => dayjs(hour + 'Z').isAfter(dayjs())),
+            time: resJson.hourly.time.filter((hour: string) => dayjs(`${hour}Z`).isAfter(dayjs())),
           },
           hourlyUnits: resJson.hourly_units,
         }
@@ -98,7 +98,7 @@ export default async function address_search(req: NextApiRequest, res: NextApiRe
     await Weather.create(forecastsToCreate)
   }
 
-  const forecasts = await Weather.find()
+  const _forecasts = await Weather.find()
 
   return res.status(200).json({ forecasts: [] })
 }

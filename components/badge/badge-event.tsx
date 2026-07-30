@@ -1,10 +1,9 @@
 import type { IBadge } from '@/entities'
-import { BadgeIcon, TextInput } from '@/ui'
+import { BadgeIcon, } from '@/ui'
 import { ReadEditor } from '../editor'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 import { dc } from '@/utils'
 import { BadgeCardStatus } from './badge-card-status'
-import { useMemo } from 'react'
 
 type BadgeEventProps = {
   badge: IBadge & { participants?: { name: string; providerAccountId: string; _id: string; win: boolean }[] }
@@ -38,7 +37,7 @@ export function BadgeEvent({ badge, displayOnlyNotWin, search }: BadgeEventProps
       <div className="col-span-full flex max-h-[200px] flex-col gap-4 overflow-y-auto p-2">
         {badge?.participants
           ?.filter((p) => (displayOnlyNotWin ? !p.win : true))
-          //@ts-ignore
+          //@ts-expect-error
           .filter((p) => (search?.length > 0 ? search.some((s) => p.name.includes(s.value)) : true))
           .map((participant) => (
             <div

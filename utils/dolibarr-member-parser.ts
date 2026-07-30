@@ -1,7 +1,7 @@
-import { IUser } from '@/models'
+import type { IUser } from '@/models'
 import { ROLES_CAN_MANAGE_EVENT } from './constants'
 import { checkRoles } from './check-roles'
-import { IDolibarrMember } from '@/entities'
+import type { IDolibarrMember } from '@/entities'
 
 export function dolibarrMemberParser(
   dolibarrData: any,

@@ -1,4 +1,4 @@
-import { Question } from '@/models'
+import type { Question } from '@/models'
 import { create } from 'zustand'
 
 // TYPES --------------------------------------------------------------------
@@ -46,7 +46,7 @@ export const useQuestions = create<QuestionStore>((set, get) => ({
     const form = new FormData()
 
     if (type === 'update') {
-      // @ts-ignore
+      // @ts-expect-error
       form.append('_id', question._id)
     }
 

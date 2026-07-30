@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 // Bibliothèques internes
 import { useEvent } from '@/entities'
-import { IWeatherHourlyUnits, useWeather } from '@/entities'
+import { type IWeatherHourlyUnits, useWeather } from '@/entities'
 import dayjs from 'dayjs'
 import { dc } from '@/utils'
 import { MoonIcon, RainIcon, SnowFlakeIcon, SunIcon } from '@/ui'
@@ -29,11 +29,7 @@ export function WeatherWidget() {
 
   // effects
   useEffect(() => {
-    handleForecast()
-  }, [])
-
-  const handleForecast = () => {
-    if (!event || !event?.address) return
+    if (!event?.address) return
 
     const { lon, lat } = event.address
     if (!lon || !lat) return
@@ -61,7 +57,7 @@ export function WeatherWidget() {
       hourlyUnits: forecastSt.hourlyUnits,
     }
     setForecast(forecastForEvent)
-  }
+  }, [event, getForecast])
 
   if (!forecast) return null
   return (

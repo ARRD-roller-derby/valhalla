@@ -1,7 +1,7 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
-import { Event, IUser } from '@/models'
+import { Event, type IUser } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'

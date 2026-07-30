@@ -1,7 +1,7 @@
 // Bibliothèques externes
 import { ListSelector } from '@/ui'
 import { EVENT_TYPES } from '@/entities'
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 
 interface EventTypeSelectorProps {
   onSelect: (eventType: string) => void

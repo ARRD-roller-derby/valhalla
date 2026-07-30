@@ -5,7 +5,7 @@ import { Listbox, Transition } from '@headlessui/react'
 // Bibliothèques internes
 import { CheckBadgeIcon, ShortIcon } from '@/ui'
 import { dc } from '@/utils'
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 
 interface ListSelectorProps {
   onSelect: (options: TOption) => void

@@ -29,7 +29,11 @@ export function EventCard() {
         <Modal
           title="Liste des participants"
           button={(onClick) => (
-            <div className="flex cursor-pointer flex-col items-center" onClick={onClick}>
+            <button
+              type="button"
+              className="flex flex-col items-center border-0 bg-transparent p-0"
+              onClick={onClick}
+            >
               <div className="text-xs">{start.format('dddd')}</div>
               <div className="text-4xl font-bold text-arrd-highlight">{start.format('DD')}</div>
               <div className="text-xs">{start.format('MMMM')}</div>
@@ -54,7 +58,7 @@ export function EventCard() {
                   <div className="flex flex-col items-center text-sm text-arrd-highlight">{end.format('HH:mm')}</div>
                 </div>
               )}
-            </div>
+            </button>
           )}
         >
           {() => <EventAttendeesModal />}

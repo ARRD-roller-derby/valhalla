@@ -1,5 +1,5 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 // Bibliothèque interne
 import { DOLAPIKEY, DOL_URL, ROLES, dolibarrMemberParser, hexToTailwind } from '@/utils'

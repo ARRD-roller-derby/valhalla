@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { authOptions } from '../auth/[...nextauth]'
-import { Answer, Question } from '@/models'
+import { type Answer, Question } from '@/models'
 import { checkRoles, ROLES } from '@/utils'
 import validator from 'validator'
 import formidable from 'formidable'
-import fs from 'fs'
+import fs from 'node:fs'
 import S3 from '@/utils/bucket'
 import { ObjectId } from 'mongodb'
 process.env.TZ = 'Europe/Paris'
@@ -31,7 +31,7 @@ export default async function questionCreate(req: NextApiRequest, res: NextApiRe
     fields: { question: string; _id: any; answers: string; file: any; status: string; img?: string }
   } = await new Promise((resolve, reject) => {
     form.parse(req, (_err: any, fields: any, files: any) => {
-      //@ts-ignore
+      //@ts-expect-error
       if (!files.file) return resolve({ fields })
       const fileContentBuffer = fs.readFileSync(files.file.filepath)
       resolve({
@@ -69,7 +69,6 @@ export default async function questionCreate(req: NextApiRequest, res: NextApiRe
 
   if (file) {
     const s3 = new S3()
-    // @ts-ignore
     const img = await s3.sendMedia({
       folder: 'questions',
       body: file.content as any,

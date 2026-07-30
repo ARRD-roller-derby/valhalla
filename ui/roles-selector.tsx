@@ -5,7 +5,7 @@ import { Listbox, Transition } from '@headlessui/react'
 // Bibliothèques internes
 import { ShortIcon } from '@/ui'
 import { dc } from '@/utils'
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 import { useMembers } from '@/entities'
 
 interface RolesSelectorProps {
@@ -27,7 +27,7 @@ export function RolesSelector({ onSelect, defaultValue }: RolesSelectorProps) {
   // effects
   useEffect(() => {
     fetchProfiles()
-  }, [])
+  }, [fetchProfiles])
 
   return (
     <Listbox value={selected} onChange={handleSelect}>

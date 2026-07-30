@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 
 export const APP_NAME = 'Valhalla'
 export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || ''

@@ -5,7 +5,7 @@ import { TriggerTypes, useBadges, useSocketTrigger } from '@/entities'
 import { BadgeIcon } from '@/ui'
 
 export function BadgeCounter() {
-  const { getCount } = useBadges()
+  const getCount = useBadges((state) => state.getCount)
   const [count, setCount] = useState(0)
 
   useSocketTrigger<number>(TriggerTypes.BADGE_COUNT, (msg: any) => {
@@ -13,13 +13,9 @@ export function BadgeCounter() {
     setCount(msg.count as number)
   })
 
-  const handleFetch = async () => {
-    setCount((await getCount()) as number)
-  }
-
   useEffect(() => {
-    handleFetch()
-  }, [])
+    void getCount().then((count) => setCount(count ?? 0))
+  }, [getCount])
 
   return (
     <Link href={'/badges'} className="relative cursor-pointer pt-1">

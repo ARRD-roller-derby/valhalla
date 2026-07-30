@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Badge, Event, User } from '@/models'
 import { authMiddleWare } from '@/utils/auth-middleware'

@@ -8,7 +8,7 @@ import { EventCard } from '@/components'
 import { useSession } from 'next-auth/react'
 
 // Modèles
-import { IEvent } from '@/models'
+import type { IEvent } from '@/models'
 
 export function NextEvents() {
   // Stores -------------------------------------------------------------------
@@ -25,7 +25,7 @@ export function NextEvents() {
       fetchForNext()
       //getForecasts()
     }
-  }, [])
+  }, [session?.user, fetchForNext])
 
   // Rendu --------------------------------------------------------------------
   if (loading)

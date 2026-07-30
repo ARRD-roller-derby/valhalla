@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 // Bibliothèques externes
 import { useRouter } from 'next/router'
 import Link from 'next/link'

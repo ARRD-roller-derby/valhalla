@@ -1,5 +1,5 @@
 // Bibliothèques externes
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 

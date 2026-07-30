@@ -17,7 +17,6 @@ import {
   UnderlineIcon,
   EditorMenuGroup,
   CodeIcon,
-  LinkIcon,
   ListIcon,
 } from '@/ui'
 import { dc } from '@/utils'

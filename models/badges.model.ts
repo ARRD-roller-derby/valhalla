@@ -1,4 +1,4 @@
-import { BADGE_LEVELS } from '@/utils/badge-levels'
+import type { BADGE_LEVELS } from '@/utils/badge-levels'
 import { Schema, model, models } from 'mongoose'
 
 export type IBadgeMedia = {

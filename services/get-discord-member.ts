@@ -1,4 +1,4 @@
-import { TRole } from '@/models'
+import type { TRole } from '@/models'
 import { DISCORD_GUILD_ID, DISCORD_TOKEN } from '@/utils'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'

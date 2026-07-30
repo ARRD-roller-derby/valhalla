@@ -1,5 +1,5 @@
 export function hexToTailwind(intColor: number): string {
-  let hexColor = '#' + intColor.toString(16).padStart(6, '0').toUpperCase()
+  let hexColor = `#${intColor.toString(16).padStart(6, '0').toUpperCase()}`
 
   // Vérifier si la chaîne hexColor est un code hexadécimal valide
   if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hexColor)) {

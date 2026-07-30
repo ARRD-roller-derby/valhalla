@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 // Bibliothèques internes
-import { Question } from '@/models'
+import type { Question } from '@/models'
 
 import { Button, Checkbox, FooterModal, LabelBlock, ListSelector, Modal, TextInput } from '@/ui'
 import { useQuestions } from '@/entities/question.store'
@@ -110,7 +110,7 @@ export function QuestionCreateModal({
           <LabelBlock label="Image" col>
             {imgSrc && (
               <div className="m-2 flex items-end justify-center">
-                <img src={imgSrc} alt="image" className="h-auto w-auto" />
+                <img src={imgSrc} alt="" className="h-auto w-auto" />
               </div>
             )}
             <input

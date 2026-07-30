@@ -7,7 +7,7 @@ import { Loader } from '@/ui'
 import { useEvent, useEvents } from '@/entities'
 
 // Modèles
-import { IParticipant } from '@/models'
+import type { IParticipant } from '@/models'
 import { EventAttendeesDetails } from './event-attendees-details'
 
 const order = ['coach', 'assist-coach', 'organizer', 'patineur·euse', 'visiteur·euse / NSO', 'invité·e', 'absent·e']
@@ -60,7 +60,7 @@ export function EventAttendees() {
   // Effets -------------------------------------------------------------------
   useEffect(() => {
     if (session?.user) handleFetch()
-  }, [session])
+  }, [session, handleFetch])
 
   // Rendu --------------------------------------------------------------------
   return (

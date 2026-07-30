@@ -1,6 +1,6 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
-import { Event, ICarpooling } from '@/models'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { Event, type ICarpooling } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'
@@ -21,7 +21,7 @@ dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
-import { IUser } from '@/models'
+import type { IUser } from '@/models'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'

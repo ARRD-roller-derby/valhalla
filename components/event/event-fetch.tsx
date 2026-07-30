@@ -9,7 +9,7 @@ import { Loader } from '@/ui/Loader'
 import { Event } from '@/components'
 
 // Modèles
-import { IEvent } from '@/models'
+import type { IEvent } from '@/models'
 
 export function EventFetch() {
   // Stores -------------------------------------------------------------
@@ -20,13 +20,13 @@ export function EventFetch() {
   const { loading: loadingWeather } = useWeather()
   const router = useRouter()
   useSocketTrigger<{ event: IEvent; userId: string }>(TriggerTypes.EVENT, (msg) => {
-    if (!msg || !msg.event) return
+    if (!msg?.event) return
     const isThisEvent = router.query.eventId === msg.event._id.toString()
     if (isThisEvent && msg.userId !== session?.user._id) setEvent(msg.event)
   })
 
   // Constantes ---------------------------------------------------------
-  const event = useMemo(() => getEvent(router.query.eventId as any), [session, router.query.eventId, events])
+  const event = useMemo(() => getEvent(router.query.eventId as any), [router.query.eventId, getEvent])
   const loading = loadingWeather || loadingEvent
 
   // Effets -------------------------------------------------------------
@@ -35,7 +35,8 @@ export function EventFetch() {
       //getForecasts()
       findOne(router.query.eventId as any)
     }
-  }, [session, router.query.eventId])
+  }, [session, router.query.eventId, //getForecasts()
+      findOne, event])
 
   // Rendu --------------------------------------------------------------
   return (

@@ -16,7 +16,7 @@ export function LabelBlock({ label, children, col = false }: LabelBlockProps) {
         'grid-rows-[auto_1fr] md:grid-cols-[auto_1fr] md:gap-1',
       ])}
     >
-      <label className="font-bold text-arrd-primary">{label}</label>
+      <span className="font-bold text-arrd-primary">{label}</span>
       {children}
     </div>
   )

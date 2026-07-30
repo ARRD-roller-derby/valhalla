@@ -20,7 +20,7 @@ export function EventBadges() {
 
   useEffect(() => {
     if (session?.user) getBadgesByEvent(event._id.toString())
-  }, [session])
+  }, [session, getBadgesByEvent, event._id.toString])
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4 lg:w-auto">
@@ -39,7 +39,7 @@ export function EventBadges() {
                 value: p.name,
               })) || []
           }
-          //@ts-ignore
+          //@ts-expect-error
           onSelect={setSearchMember}
           defaultValue={LEVELS[0]}
         />
@@ -65,9 +65,9 @@ export function EventBadges() {
                 if (level.value === 'tous') return true
                 return badge.level === level.value
               })
-              //@ts-ignore
+              //@ts-expect-error
               .filter((p) => (search?.length > 0 ? search.some((s) => p.name.includes(s.value)) : true))
-              //@ts-ignore
+              //@ts-expect-error
               .filter((badge) => (displayOnlyNotWin ? !badge?.participants?.every((p: any) => p.win) : true))
               .map((badge) => (
                 <BadgeEvent

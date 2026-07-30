@@ -9,7 +9,7 @@ export function RulesList() {
   const [rules, setRules] = useState<{ chapter: string; description: string; title: string }[]>([])
   const { query } = useRouter()
   const [search, setSearch] = useState(query.search as string)
-  const debouncedSearch = useDebounce(search, 500)
+  const _debouncedSearch = useDebounce(search, 500)
 
   const handleFetch = async () => {
     const params = new URLSearchParams(window.location.search)
@@ -30,7 +30,7 @@ export function RulesList() {
 
   useEffect(() => {
     handleFetch()
-  }, [debouncedSearch])
+  }, [handleFetch])
 
   console.log('rules', rules)
   return (

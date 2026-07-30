@@ -1,4 +1,4 @@
-import { TriggerTypes } from '@/entities'
+import type { TriggerTypes } from '@/entities'
 import { WS_URL } from '@/utils'
 
 /**

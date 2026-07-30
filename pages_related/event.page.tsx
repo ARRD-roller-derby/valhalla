@@ -15,7 +15,7 @@ export function Event() {
 
   // const
   const event = getEvent(router.query.eventId as any)
-  const title = event && event.title ? `${event.title} | AGENDA` : `AGENDA`
+  const title = event?.title ? `${event.title} | AGENDA` : `AGENDA`
 
   return (
     <AuthLayout title={title}>

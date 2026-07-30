@@ -23,7 +23,7 @@ export function BadgesList({ userId }: BadgesListProps) {
   // Effects -----------------------------------
   useEffect(() => {
     getBadges(userId)
-  }, [])
+  }, [userId, getBadges])
 
   if (loadingGet)
     return (

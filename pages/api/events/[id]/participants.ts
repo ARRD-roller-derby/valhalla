@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Event, User } from '@/models'
 import { getDiscordMember } from '@/services/get-discord-member'
@@ -6,11 +6,10 @@ import { authMiddleWare } from '@/utils/auth-middleware'
 import { DISCORD_TOKEN } from '@/utils'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
-import { UserBadge } from '@/models/user_badge.model'
 
 process.env.TZ = 'Europe/Paris'
 
-async function event_participants(req: NextApiRequest, res: NextApiResponse, user: any) {
+async function event_participants(req: NextApiRequest, res: NextApiResponse, _user: any) {
   await MongoDb()
 
   const event = await Event.findOne({ _id: req.query.id })
@@ -37,7 +36,7 @@ async function event_participants(req: NextApiRequest, res: NextApiResponse, use
             avatar: baseUser._doc?.image,
             name: guest?.nick || guest?.global_name || guest?.name,
           })
-        } catch (e) {
+        } catch (_e) {
           participants.push({
             ...par._doc,
             name: baseUser.name,

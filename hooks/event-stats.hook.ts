@@ -23,7 +23,7 @@ export function useEventStats() {
 
   useEffect(() => {
     if (session?.user) getEventStats()
-  }, [session])
+  }, [session, getEventStats])
 
   return { loading, stats, getEventStats }
 }

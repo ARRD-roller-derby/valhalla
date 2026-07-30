@@ -1,6 +1,6 @@
 // Bibliothèques externes
 import dayjs from 'dayjs'
-import { ObjectId } from 'mongodb'
+import type { ObjectId } from 'mongodb'
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
 
@@ -63,7 +63,7 @@ export function EventParticipation() {
         label: 'Je serai ',
       },
     }
-  }, [event, events])
+  }, [event, session?.user?.id])
 
   // Rendu ------------------------------------------------------
 
@@ -91,11 +91,15 @@ export function EventParticipation() {
               .filter((pType) => pType?.roles?.some((role) => roles.includes(role)))
               .filter((pType) => pType?.type?.includes(event?.type))
               .map((pType) => (
-                <div
+                <button
+                  type="button"
                   key={pType.key}
-                  className={dc('relative  p-1', [
+                  aria-label={`Participer en tant que ${pType.label}`}
+                  aria-pressed={myParticipation.type === pType.key}
+                  disabled={myParticipation.type === pType.key}
+                  className={dc('relative flex border-0 bg-transparent p-1', [
                     myParticipation.type === pType.key,
-                    'pointer-events-none flex items-center justify-center rounded-full fill-white ring ring-arrd-primary',
+                    'items-center justify-center rounded-full fill-white ring ring-arrd-primary',
                     'cursor-pointer',
                   ])}
                   onClick={() => changeMyParticipation(event._id, pType.key)}
@@ -106,7 +110,7 @@ export function EventParticipation() {
                       {participationTypesCount[pType.key]}
                     </div>
                   )}
-                </div>
+                </button>
               ))
           )}
         </div>

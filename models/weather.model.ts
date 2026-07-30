@@ -1,4 +1,4 @@
-import { IWeatherHourly, IWeatherHourlyUnits } from '@/entities'
+import type { IWeatherHourly, IWeatherHourlyUnits } from '@/entities'
 import { Schema, model, models } from 'mongoose'
 
 export interface IWeather {

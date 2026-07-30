@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { midgardMiddleWarewithoutUser } from '@/utils/midgard-middleware'
 import hallOfFame from '../../badges/hall_of_fame'
 

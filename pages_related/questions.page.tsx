@@ -59,7 +59,7 @@ export function Questions() {
                             type="secondary"
                             onClick={() => {
                               closeModal()
-                              // @ts-ignore
+                              // @ts-expect-error
                               deleteQuestion(question._id)
                             }}
                           />

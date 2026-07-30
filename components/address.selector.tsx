@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 
 // Bibliothèques internes
 import { useAddresses } from '@/entities'
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 import { AutoCompSelector } from '@/ui'
 
 interface AddressSelectorProps {
@@ -24,7 +24,7 @@ export function AddressSelector({ address, onSelect }: AddressSelectorProps) {
   // effects
   useEffect(() => {
     getAddresses()
-  }, [])
+  }, [getAddresses])
 
   return (
     <AutoCompSelector

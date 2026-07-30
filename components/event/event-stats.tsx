@@ -35,7 +35,7 @@ export function EventStat() {
               data-excellent={stat.completionRate > 80}
               data-full={stat.completionRate === 100}
             >
-              {stat.completionRate.toFixed(0) + '%'}
+              {`${stat.completionRate.toFixed(0)}%`}
             </div>
           </div>
         ))}

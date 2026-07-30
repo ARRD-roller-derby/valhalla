@@ -1,5 +1,5 @@
 // Bibliothèques externes
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -13,7 +13,7 @@ import fr from 'dayjs/locale/fr'
 import { authOptions } from '../../auth/[...nextauth]'
 import { MongoDb } from '@/db'
 import { Address, Event } from '@/models'
-import { ROLES, ROLES_CAN_MANAGE_EVENT, checkRoles, tiptapJsonToMd } from '@/utils'
+import { ROLES_CAN_MANAGE_EVENT, checkRoles, tiptapJsonToMd } from '@/utils'
 import { TriggerTypes } from '@/entities'
 import { publishToDiscord, trigger } from '@/services'
 

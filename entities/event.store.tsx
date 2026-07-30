@@ -1,8 +1,8 @@
-import { IEvent, IParticipant } from '@/models'
+import type { IEvent, IParticipant } from '@/models'
 import { ROLES } from '@/utils'
 import dayjs from 'dayjs'
-import { ObjectId } from 'mongodb'
-import { ReactNode, createContext, useContext } from 'react'
+import type { ObjectId } from 'mongodb'
+import { type ReactNode, createContext, useContext } from 'react'
 import { create } from 'zustand'
 
 // TYPES --------------------------------------------------------------------
@@ -153,7 +153,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         events: [...state.events.filter((e) => e._id !== id), event],
         loading: false,
       }))
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: "impossible de récupérer l' événement" })
     }
   },
@@ -164,7 +164,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
       const res = await fetch(`/api/events/${eventId}/export_skills`)
       const { csv } = await res.json()
       return csv
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingExport: false, error: "impossible de récupérer l' événement" })
     }
   },
@@ -174,17 +174,17 @@ export const useEvents = create<IEventStore>((set, get) => ({
       const res = await fetch(`/api/events/export`)
       const { ics } = await res.json()
       return ics
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingExport: false, error: "impossible de récupérer l' événement" })
     }
   },
   async fetchForCal(month, year) {
     set({ loading: true })
     try {
-      const res = await fetch('/api/events/month/' + month + '_' + year)
+      const res = await fetch(`/api/events/month/${month}_${year}`)
       const { events } = await res.json()
       set({ events, loading: false })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: 'impossible de récupérer les événements' })
     }
   },
@@ -194,7 +194,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
       const res = await fetch('/api/events/next')
       const { events } = await res.json()
       set({ events, loading: false })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: 'impossible de récupérer les événements' })
     }
   },
@@ -208,7 +208,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         loadingEvent: null,
         events: get().events.map((e) => (e._id === eventId ? { ...e, participants } : e)),
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingEvent: null, error: 'impossible de récupérer les participants' })
     }
   },
@@ -232,7 +232,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
       })
       const { events: newEvents } = await res.json()
       set((state) => ({ events: [...state.events, ...newEvents], loading: false }))
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: "impossible de créer l'événement" })
     }
   },
@@ -248,7 +248,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         events: [...state.events.filter((e) => e._id !== id), evt],
         loading: false,
       }))
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: "impossible de créer l'événement" })
     }
   },
@@ -271,7 +271,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         const participants = state.participants.map((p) => (p._id === participant._id ? participant : p))
         return { events, participants, loadingEvent: null }
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingEvent: null, error: "impossible de créer l'événement" })
     }
   },
@@ -294,7 +294,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         const participants = state.participants.map((p) => (p._id === participant._id ? participant : p))
         return { events, participants, loadingEvent: null }
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingEvent: null, error: "impossible de créer l'événement" })
     }
   },
@@ -315,7 +315,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         const events = state.events.map((e) => (e._id === event._id ? event : e))
         return { events, loadingEvent: null }
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingEvent: null, error: "impossible de créer l'événement" })
     }
   },
@@ -336,7 +336,7 @@ export const useEvents = create<IEventStore>((set, get) => ({
         const events = state.events.filter((e) => e._id !== event._id)
         return { events, loadingEvent: null }
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingEvent: null, error: "impossible de créer l'événement" })
     }
   },

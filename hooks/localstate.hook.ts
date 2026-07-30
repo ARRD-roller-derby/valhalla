@@ -16,7 +16,7 @@ export function useLocalState<T>(
         try {
           const parsed = JSON.parse(ls)
           return parsed
-        } catch (error) {
+        } catch (_error) {
           return initialState
         }
       } else {

@@ -1,5 +1,5 @@
-import { IAddress } from '@/models'
-import { TOption } from '@/types'
+import type { IAddress } from '@/models'
+import type { TOption } from '@/types'
 import { create } from 'zustand'
 
 // TYPES --------------------------------------------------------------------
@@ -16,13 +16,13 @@ interface IGetAddresses {
   searchAddress: (search: string) => Promise<void>
 }
 
-interface ISetAddresses {}
+type ISetAddresses = {}
 
 export type IAddressStore = IStateAddresses & IGetAddresses & ISetAddresses
 
 // STORE --------------------------------------------------------------------
 
-export const useAddresses = create<IAddressStore>((set, get) => ({
+export const useAddresses = create<IAddressStore>((set, _get) => ({
   //STATE --------------------------------------------------------------------
   loading: false,
   addresses: [],

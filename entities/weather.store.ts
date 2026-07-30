@@ -41,7 +41,7 @@ interface IGetWeather {
   getForecast: (lat: number, lon: number) => IForecast | undefined
 }
 
-interface ISetWeather {}
+type ISetWeather = {}
 
 export type IWeatherStore = IStateWeather & IGetWeather & ISetWeather
 

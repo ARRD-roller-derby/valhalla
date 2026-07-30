@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useContext, useEffect, createContext, useState } from 'react'
+
+import { type ReactNode, useContext, useEffect, createContext, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { NEXT_PUBLIC_WS_URL } from '@/utils/constants'
 
@@ -32,8 +32,8 @@ export function useSocketTrigger<T>(type: TriggerTypes, action: (msg: T) => void
   const message = useContext(SocketContext)
 
   useEffect(() => {
-    if (message && message?.type == type) action(message?.value)
-  }, [message])
+    if (message && message?.type === type) action(message?.value)
+  }, [message, action, type])
 
   return message
 }
@@ -71,7 +71,7 @@ export function useSocket() {
       const data = ev.data.startsWith('{') ? JSON.parse(ev.data) : ev.data
       if (data.action) cbSocket(data)
     })
-  }, [])
+  }, [session?.user?.id, cbSocket])
 
   return message
 }

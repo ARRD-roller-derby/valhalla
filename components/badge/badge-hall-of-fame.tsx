@@ -8,7 +8,7 @@ export function BadgeHallOfFame() {
 
   useEffect(() => {
     getHallOfFame()
-  }, [])
+  }, [getHallOfFame])
 
   if (getLoading())
     return (

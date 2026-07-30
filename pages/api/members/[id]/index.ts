@@ -1,15 +1,14 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
-import { Badge, TRole, User } from '@/models'
+import { Badge, type TRole, User } from '@/models'
 
 // Bibliothèque interne
 import { DISCORD_GUILD_ID, DISCORD_TOKEN, DOLAPIKEY, DOL_URL, hexToTailwind } from '@/utils'
 import { dolibarrMemberParser } from '../../../../utils/dolibarr-member-parser'
 import { authMiddleWare } from '@/utils/auth-middleware'
 import { UserBadge } from '@/models/user_badge.model'
-import { ObjectId } from 'mongodb'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'

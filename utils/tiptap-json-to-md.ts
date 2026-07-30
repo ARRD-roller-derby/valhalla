@@ -26,7 +26,7 @@ export function tiptapJsonToMd(contentArray: ITipTapContent[]) {
         })
       }
 
-      markdown += txt + ' '
+      markdown += `${txt} `
     } else if (content.type === 'heading') {
       markdown += '\n'
       markdown += `${'#'.repeat(content.attrs?.level ?? 0)} ${content.content ? tiptapJsonToMd(content.content) : ''}\n`

@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { MongoDb } from '@/db'
 import { authOptions } from '../auth/[...nextauth]'
@@ -54,7 +54,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     }
     if (!acc[userBadge.providerAccountId][userBadge.level]) acc[userBadge.providerAccountId][userBadge.level] = 0
     acc[userBadge.providerAccountId][userBadge.level]++
-    acc[userBadge.providerAccountId]['point'] += userBadge.point
+    acc[userBadge.providerAccountId].point += userBadge.point
     acc[userBadge.providerAccountId].total++
     acc.unLockDate = userBadge.unLockDate
     return acc
@@ -145,7 +145,7 @@ export default async function hallOfFame(req: NextApiRequest, res: NextApiRespon
     }
     if (!acc[userBadge.providerAccountId][userBadge.level]) acc[userBadge.providerAccountId][userBadge.level] = 0
     acc[userBadge.providerAccountId][userBadge.level]++
-    acc[userBadge.providerAccountId]['point'] += userBadge.point
+    acc[userBadge.providerAccountId].point += userBadge.point
     acc[userBadge.providerAccountId].total++
     acc.unLockDate = userBadge.unLockDate
     return acc

@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../../../auth/[...nextauth]'
 import { ROLES } from '@/utils'
-import { Badge, IBadgeSchema } from '@/models'
+import { Badge, type IBadgeSchema } from '@/models'
 process.env.TZ = 'Europe/Paris'
 
 export default async function badge_update(req: NextApiRequest, res: NextApiResponse) {

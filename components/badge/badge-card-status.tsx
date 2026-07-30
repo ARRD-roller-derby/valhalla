@@ -1,4 +1,4 @@
-import { IBadge, useBadges } from '@/entities'
+import { type IBadge, useBadges } from '@/entities'
 import { checkRoles, ROLES } from '@/utils'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -39,6 +39,7 @@ export function BadgeCardStatus({ badge, providerAccountId }: BadgeCardStatusPro
   if (canSee)
     return (
       <button
+        type="button"
         className="rounded-sm bg-arrd-secondary p-1  text-xs text-arrd-textLight data-[win=true]:bg-arrd-textDark"
         onClick={handleWin}
         data-win={win}

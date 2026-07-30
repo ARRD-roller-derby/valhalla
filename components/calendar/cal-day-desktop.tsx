@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 // Bibliothèques internes
 import { EventFormModal, EventLink } from '@/components'
 import { EventProvider, useEvents } from '@/entities'
-import { ICallDay, useCanSee } from '@/hooks'
+import { type ICallDay, useCanSee } from '@/hooks'
 import { dc } from '@/utils'
 import { Modal } from '@/ui'
 
@@ -34,12 +34,13 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
       <EventFormModal
         day={day.date}
         customButton={(onClick) => (
-          <div
-            className="absolute right-0 top-1 w-full cursor-pointer pr-1 text-right text-xs font-semibold"
+          <button
+            type="button"
+            className="absolute right-0 top-1 w-full border-0 bg-transparent p-0 pr-1 text-right text-xs font-semibold"
             onClick={justEventManager ? onClick : undefined}
           >
             {day.date.format('DD')}
-          </div>
+          </button>
         )}
       />
 
@@ -48,7 +49,12 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
           <EventFormModal
             day={day.date}
             customButton={(onClick) => (
-              <div className="flex-grow cursor-pointer text-arrd-textLight" onClick={onClick} />
+              <button
+                type="button"
+                aria-label="Ajouter un événement"
+                className="flex-grow border-0 bg-transparent p-0 text-arrd-textLight"
+                onClick={onClick}
+              />
             )}
           />
         )}
@@ -61,9 +67,13 @@ export function CalDayDesktop({ day }: CalDayDesktopProps) {
           <Modal
             title={`Événements du ${day.date.format('DD/MM/YYYY')}`}
             button={(onClick) => (
-              <div className="mt-1 cursor-pointer text-right text-xs text-arrd-highlight" onClick={onClick}>
+              <button
+                type="button"
+                className="mt-1 w-full border-0 bg-transparent p-0 text-right text-xs text-arrd-highlight"
+                onClick={onClick}
+              >
                 + {events.length - 1} autres
-              </div>
+              </button>
             )}
           >
             {() => (

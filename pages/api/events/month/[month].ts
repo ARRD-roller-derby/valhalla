@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { Event } from '@/models'
@@ -29,7 +29,7 @@ async function eventsMonth(req: NextApiRequest, res: NextApiResponse, user: any)
   const queryMonth = req.query.month as string
   const monthAndYear = queryMonth.split('_')
 
-  const [month, year] = monthAndYear.map((m: string) => parseInt(m))
+  const [month, year] = monthAndYear.map((m: string) => parseInt(m, 10))
 
   const startOfMonth = dayjs().month(month).year(year).startOf('month').toISOString()
   const endOfMonth = dayjs().month(month).year(year).endOf('month').toISOString()

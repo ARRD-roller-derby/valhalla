@@ -1,7 +1,7 @@
 // Bibliothèques externes
-import { ReactNode, createContext, useContext } from 'react'
+import { type ReactNode, createContext, useContext } from 'react'
 import { create } from 'zustand'
-import { IBadge } from './badge.store'
+import type { IBadge } from './badge.store'
 
 // TYPES --------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ interface IFetchMembers {
   fetchProfiles: () => Promise<void>
 }
 
-interface ISetMembers {}
+type ISetMembers = {}
 
 export type IMemberStore = IStateMembers & IGetMembers & ISetMembers & IFetchMembers
 
@@ -87,7 +87,7 @@ export const useMembers = create<IMemberStore>((set, get) => ({
       const res = await fetch('/api/members')
       const { members } = await res.json()
       set(() => ({ members, loading: false }))
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: 'impossible de trouver les membres' })
     }
   },
@@ -101,7 +101,7 @@ export const useMembers = create<IMemberStore>((set, get) => ({
         badges,
         loading: false,
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: 'impossible de trouve le membre' })
     }
   },
@@ -112,7 +112,7 @@ export const useMembers = create<IMemberStore>((set, get) => ({
 
       const { roles } = await res.json()
       set({ roles, loading: false })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loading: false, error: 'impossible de trouver les profils' })
     }
   },

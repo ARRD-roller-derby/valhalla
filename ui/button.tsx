@@ -22,6 +22,7 @@ export function Button({ onClick, text, type, size = 'default', disabled, loadin
 
   return (
     <button
+      type="button"
       onClick={onClick}
       data-size={size}
       className={dc(

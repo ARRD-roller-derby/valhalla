@@ -1,4 +1,4 @@
-import { IBadgeSchema } from '@/models/badges.model'
+import type { IBadgeSchema } from '@/models/badges.model'
 import { create } from 'zustand'
 
 export type WinnerPodium = {
@@ -80,7 +80,7 @@ export const useBadges = create<Store>((set, get) => ({
       const { badges } = await res.json()
       set({ badges, loadingGet: false })
       return badges
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
     }
   },
@@ -91,7 +91,7 @@ export const useBadges = create<Store>((set, get) => ({
       const { badges } = await res.json()
       set({ badges, loadingGet: false })
       return badges
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
     }
   },
@@ -102,7 +102,7 @@ export const useBadges = create<Store>((set, get) => ({
       const { badge } = await res.json()
       set((prev) => ({ badges: [...prev.badges.filter((b) => b._id !== badge._id), badge], loadingGet: false }))
       return badge
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
     }
   },
@@ -112,7 +112,7 @@ export const useBadges = create<Store>((set, get) => ({
       const res = await fetch('/api/badges/count')
       const { count } = await res.json()
       return count
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ error: 'impossible de récupérer le nombre de compétences' })
     }
   },
@@ -132,7 +132,7 @@ export const useBadges = create<Store>((set, get) => ({
       const { hallOfFame, classement } = await res.json()
       set({ hallOfFame, classement, loadingGet: false })
       return hallOfFame
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingGet: false, error: 'impossible de récupérer la compétence' })
     }
   },
@@ -146,7 +146,7 @@ export const useBadges = create<Store>((set, get) => ({
       })
       const { badge: newBadge } = await res.json()
       set((state) => ({ badges: [...state.badges, { ...newBadge, win: false }], loadingCreate: false }))
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingCreate: false, error: 'impossible de créer la compétence' })
     }
   },
@@ -166,7 +166,7 @@ export const useBadges = create<Store>((set, get) => ({
       set({
         loadingUpdate: false,
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingUpdate: false, error: 'impossible de mettre à jour la compétence', badges })
     }
   },
@@ -182,7 +182,7 @@ export const useBadges = create<Store>((set, get) => ({
       await fetch(`/api/badges/${badgeId}/unlock/${userId}`, {
         method: 'PUT',
       })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingUpdate: false, error: 'impossible de débloquer la compétence', badges })
     } finally {
       set({ loadingUpdate: false })
@@ -201,7 +201,7 @@ export const useBadges = create<Store>((set, get) => ({
         method: 'DELETE',
       })
       set({ loadingDelete: false })
-    } catch (err: any) {
+    } catch (_err: any) {
       set({ loadingDelete: false, error: 'impossible de supprimer la compétence', badges })
     }
   },

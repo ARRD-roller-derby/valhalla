@@ -11,7 +11,7 @@ import { CalDayDesktop, CalDayMobile, CalEventForDay, EventFilterButton, EventFo
 import { dc } from '@/utils'
 
 // Modèles
-import { IEvent } from '@/models'
+import type { IEvent } from '@/models'
 
 export function Calendar() {
   // Stores -----------------------------------------------------------------
@@ -38,7 +38,7 @@ export function Calendar() {
   // Effets -----------------------------------------------------------------
   useEffect(() => {
     fetchForCal(currentMonthNum, currentYear)
-  }, [fetchForCal, currentMonthNum])
+  }, [fetchForCal, currentMonthNum, currentYear])
 
   // Rendu ------------------------------------------------------------------
   if (!session?.user) return <></>

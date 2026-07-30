@@ -14,7 +14,7 @@ import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
 import { MongoDb } from '@/db/db'
 import { REST } from '@discordjs/rest'
-import { TRole, User } from '@/models/user.model'
+import { type TRole, User } from '@/models/user.model'
 import { Routes } from 'discord-api-types/v10'
 import { ObjectId } from 'mongodb'
 
@@ -60,10 +60,10 @@ export const authOptions = {
         if (account) user.providerAccountId = account.providerAccountId
       }
 
-      let member: any = undefined
+      let member: any
       try {
         member = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
-      } catch (e) {
+      } catch (_e) {
         return {
           ...session,
           user: {

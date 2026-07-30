@@ -1,5 +1,5 @@
 // Bibliothèques externes
-import { Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 
 // Bibliothèques internes
 import { dc } from '@/utils'
@@ -14,7 +14,9 @@ interface EditorMenuBtnProps {
 export function EditorMenuBtn({ name, onClick, isDisabled, icon, editor }: EditorMenuBtnProps) {
   return (
     <button
+      type="button"
       key={name}
+      aria-label={name}
       onClick={onClick}
       disabled={isDisabled()}
       className={dc(

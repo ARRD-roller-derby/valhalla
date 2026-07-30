@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 // Bibliothèque externe
 import { useEffect } from 'react'
 
@@ -11,14 +11,14 @@ export function useIsMobile(): boolean {
 
   // functions
   function handleResize() {
-    setLocalState({ isMobile: window.innerWidth <= 600 ? true : false })
+    setLocalState({ isMobile: window.innerWidth <= 600 })
   }
 
   // effects
   useEffect(() => {
     window.addEventListener('resize', handleResize)
     handleResize()
-  }, [])
+  }, [handleResize])
 
   return typeof window !== 'undefined' ? localState.isMobile : false
 }

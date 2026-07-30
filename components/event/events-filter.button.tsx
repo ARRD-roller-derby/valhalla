@@ -1,5 +1,5 @@
-import { TEventTypeFilter, useEvents, useMembers } from '@/entities'
-import { TOption } from '@/types'
+import { type TEventTypeFilter, useEvents, } from '@/entities'
+import type { TOption } from '@/types'
 import { ListSelector } from '@/ui'
 import { useSession } from 'next-auth/react'
 import { useMemo, useState } from 'react'

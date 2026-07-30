@@ -3,7 +3,7 @@ import { Button, FooterModal, LabelBlock, ListSelector, Modal, TextInput } from 
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { Editor } from '../editor'
-import { IBadgeSchema } from '@/models/badges.model'
+import type { IBadgeSchema } from '@/models/badges.model'
 import { BADGE_LEVELS } from '@/utils/badge-levels'
 
 type BadgeFormProps = {

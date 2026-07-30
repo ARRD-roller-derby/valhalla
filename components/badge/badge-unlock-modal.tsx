@@ -1,4 +1,4 @@
-import { IBadge, useBadges } from '@/entities'
+import { type IBadge, useBadges } from '@/entities'
 import { Button, Modal } from '@/ui'
 import { useEffect, useState } from 'react'
 import JSConfetti from 'js-confetti'
@@ -21,7 +21,7 @@ export function BadgeUnlockModal() {
         })
       }
     })
-  }, [])
+  }, [getHasViewed])
 
   const handleClose = () => {
     setData(null)

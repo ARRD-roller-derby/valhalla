@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+
 
 // Bibliothèques externes
 import { Menu, Transition } from '@headlessui/react'
@@ -68,6 +68,7 @@ export function Avatar() {
                 </div>
                 <hr />
                 <button
+                  type="button"
                   className={dc('p-1 text-left text-sm text-arrd-textLight', [active, 'bg-arrd-secondary'])}
                   onClick={() => signOut()}
                 >

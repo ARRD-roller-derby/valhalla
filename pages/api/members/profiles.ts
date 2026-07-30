@@ -1,5 +1,5 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
 
@@ -11,7 +11,7 @@ import { authMiddleWare } from '@/utils/auth-middleware'
 process.env.TZ = 'Europe/Paris'
 
 //Les profiles Discord
-async function profiles(req: NextApiRequest, res: NextApiResponse) {
+async function profiles(_req: NextApiRequest, res: NextApiResponse) {
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
 
   const roles: any = await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))

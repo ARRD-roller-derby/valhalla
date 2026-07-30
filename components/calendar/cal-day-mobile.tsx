@@ -1,9 +1,6 @@
-// Bibliothèques externes
 import dayjs from 'dayjs'
-
-// Bibliothèques internes
 import { useEvents } from '@/entities'
-import { ICallDay } from '@/hooks'
+import type { ICallDay } from '@/hooks'
 import { dc } from '@/utils'
 
 interface CalDayMobileProps {
@@ -11,17 +8,14 @@ interface CalDayMobileProps {
 }
 
 export function CalDayMobile({ day }: CalDayMobileProps) {
-  // Stores -------------------------------------------------------------------
   const { currentDay, getEventForDay, eventFilter, setCurrentDay } = useEvents()
-
-  // Constantes --------------------------------------------------------------
   const events = getEventForDay(day.date).filter(eventFilter)
 
-  // Rendu -------------------------------------------------------------------
   return (
-    <div
+    <button
+      type="button"
       className={dc(
-        'relative flex h-8 w-8 items-center justify-center rounded-full',
+        'relative flex h-8 w-8 items-center justify-center rounded-full border-0 p-0',
         [day.isCurrentMonth, 'text-txtLight', 'bg-bg cursor-not-allowed opacity-50'],
         [dayjs().isSame(day.date, 'day'), 'bg-arrd-accent', 'bg-arrd-bgLight'],
         [!!currentDay && dayjs(currentDay).isSame(day.date, 'day'), 'ring-tierce ring-4 ']
@@ -34,6 +28,6 @@ export function CalDayMobile({ day }: CalDayMobileProps) {
           {events.length}
         </div>
       )}
-    </div>
+    </button>
   )
 }

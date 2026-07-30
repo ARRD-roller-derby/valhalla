@@ -15,7 +15,7 @@ export function MemberList() {
   // Effets -------------------------------------------------------------------
   useEffect(() => {
     if (session?.user) fetchMembers()
-  }, [session])
+  }, [session, fetchMembers])
 
   return (
     <>

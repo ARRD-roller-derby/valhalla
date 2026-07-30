@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { EVENT_TYPES, TEventType } from '@/entities'
+import { EVENT_TYPES, type TEventType } from '@/entities'
 import { HandIcon, WhistleIcon, HelpIcon, IslandIcon, OrganizerIcon, SkaterIcon, WalkIcon } from '@/ui'
 import { PARTICIPATION_TYPES, ROLES } from '@/utils'
 

@@ -64,9 +64,14 @@ export function EventDetails() {
             <EventFormModal
               eventToUpdate={event}
               customButton={(onClick) => (
-                <div onClick={onClick} className="cursor-pointer">
+                <button
+                  type="button"
+                  aria-label="Modifier l'événement"
+                  className="border-0 bg-transparent p-0"
+                  onClick={onClick}
+                >
                   <EditIcon className="fill-arrd-highlight " />
-                </div>
+                </button>
               )}
             />
           )}

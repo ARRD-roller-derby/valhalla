@@ -1,7 +1,8 @@
 // Bibliothèques externes
 import { Tab } from '@headlessui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import type React from 'react'
+import { useMemo } from 'react'
 
 // Bibliothèques internes
 import { dc } from '@/utils'
@@ -21,7 +22,7 @@ export function PageTabs({ tabs }: { tabs: ITab[] }) {
     const idx = tabs.findIndex((tab) => tab.tab === query.tab)
     if (!query.tab || idx < 0) return 0
     return idx
-  }, [query])
+  }, [query, tabs.findIndex])
 
   // functions
   const handleClick = (tab: ITab) => {

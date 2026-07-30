@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 process.env.TZ = 'Europe/Paris'
 
 import dayjs from 'dayjs'

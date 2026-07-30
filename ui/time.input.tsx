@@ -1,5 +1,5 @@
 // Bibliothèques internes
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 import { ListSelector } from '@/ui'
 
 interface TimeInputProps {

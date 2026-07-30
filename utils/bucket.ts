@@ -45,7 +45,7 @@ export default class S3 {
           ACL: 'public-read',
           Key: link,
           Body: body,
-          Tagging: 'arrd=' + tag,
+          Tagging: `arrd=${tag}`,
         })
       )
       return `${process.env.S3_PUBLIC_ENDPOINT || ''.replace('BUCKETNAME', this.bucketName)}/${link}`
@@ -78,7 +78,7 @@ export default class S3 {
       if (!bucketIsExist) {
         await this.s3Client.send(new CreateBucketCommand({ Bucket: Name }))
       }
-    } catch (e) {
+    } catch (_e) {
       throw new Error('Error while creating bucket')
     }
     return Name

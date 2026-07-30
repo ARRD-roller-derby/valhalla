@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { User } from '@/models'
@@ -13,13 +13,13 @@ export async function authMiddleWare(request: NextApiRequest, response: NextApiR
   const { headers } = request
   let provider_id = headers?.['x-provider-id']
 
-  if (headers?.['x-provider-id'] && headers?.['authorization']?.replace('Bearer ', '') !== process.env.MIDGARD_TOKEN)
+  if (headers?.['x-provider-id'] && headers?.authorization?.replace('Bearer ', '') !== process.env.MIDGARD_TOKEN)
     return response.status(401).json({ error: 'non autorisé' })
 
   const isV2 = headers['authorization-origin'] === 'valhalla_1'
 
   if (isV2) {
-    const token = headers?.['authorization']?.replace('Bearer ', '') || ''
+    const token = headers?.authorization?.replace('Bearer ', '') || ''
 
     const secret = Buffer.from(process.env.API_KEY || '', 'hex')
 

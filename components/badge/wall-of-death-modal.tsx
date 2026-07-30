@@ -11,9 +11,9 @@ export function WallOfDeathModal() {
       title="Wall of Death"
       onClose={stopGame}
       button={(open) => (
-        <div onClick={open}>
+        <button type="button" aria-label="Ouvrir Wall of Death" className="border-0 bg-transparent p-0" onClick={open}>
           <WallIcon className="h-7 w-7 fill-black opacity-10" />
-        </div>
+        </button>
       )}
     >
       {() => (

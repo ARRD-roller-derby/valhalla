@@ -12,7 +12,7 @@ export function EventAttendeesDetails({ participant: p }: any) {
         'opacity-50',
       ])}
     >
-      <div className="">{p.avatar && <img src={p.avatar} className="h-12 w-12 rounded-full" />}</div>
+      <div className="">{p.avatar && <img src={p.avatar} alt="" className="h-12 w-12 rounded-full" />}</div>
 
       <div className="flex-1 text-right font-bold first-letter:uppercase">
         {p.name}

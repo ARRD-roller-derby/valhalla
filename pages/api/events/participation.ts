@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
-import { Event, IParticipant } from '@/models'
+import { Event, type IParticipant } from '@/models'
 import { capitalizeFirstLetter } from '@/utils'
 import { publishToDiscord, trigger } from '@/services'
 import { TriggerTypes } from '@/entities'
@@ -65,9 +65,9 @@ async function event_participation(req: NextApiRequest, res: NextApiResponse, us
 
     let msg = `\n\n**${event.title}**`
     msg += '\n'
-    msg += '**' + capitalizeFirstLetter(user.nickname || user.name) + '**'
+    msg += `**${capitalizeFirstLetter(user.nickname || user.name)}**`
     msg += ' '
-    msg += '`' + (form.participation.match(/absent/) ? `ANNULE` : form.participation) + '`'
+    msg += `\`${form.participation.match(/absent/) ? `ANNULE` : form.participation}\``
     msg += `\nIl y a maintenant ${'`'}${confirmParticipantsNum}${'`'} participant·e${
       confirmParticipantsNum > 1 ? '·s' : ''
     } pour cet événement.`

@@ -112,14 +112,19 @@ export function Modal({ title, openDefault = false, children, button, onOpen, on
                     className="flex justify-between p-2 text-2xl font-medium leading-6 text-arrd-primary"
                   >
                     <div>{title}</div>
-                    <div onClick={closeModal}>
-                      <CrossIcon className="h-7 w-7 cursor-pointer fill-arrd-primary" />
-                    </div>
+                    <button
+                      type="button"
+                      aria-label="Fermer la modale"
+                      className="border-0 bg-transparent p-0"
+                      onClick={closeModal}
+                    >
+                      <CrossIcon className="h-7 w-7 fill-arrd-primary" />
+                    </button>
                   </Dialog.Title>
 
                   {children(closeModal)}
 
-                  {footer && footer(closeModal)}
+                  {footer?.(closeModal)}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

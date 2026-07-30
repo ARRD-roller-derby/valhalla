@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { Event } from '@/models'
 import { ROLES_CAN_MANAGE_EVENT, checkRoles } from '@/utils'

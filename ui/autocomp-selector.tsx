@@ -4,7 +4,7 @@ import { Combobox, Transition } from '@headlessui/react'
 
 // Bibliothèques internes
 import { dc } from '@/utils'
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 import { ShortIcon, Loader } from '@/ui'
 import { useDebounce } from '@/hooks'
 
@@ -32,7 +32,7 @@ export function AutoCompSelector({ defaultValue, options, loading, onSelect, onS
   // effects
   useEffect(() => {
     if (debouncedQuery && debouncedQuery.length > 5) onSearch(debouncedQuery)
-  }, [debouncedQuery])
+  }, [debouncedQuery, onSearch])
 
   return (
     <Combobox value={selected} onChange={handleSelect}>

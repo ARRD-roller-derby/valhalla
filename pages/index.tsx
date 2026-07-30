@@ -1,6 +1,6 @@
 // Bibliothèques externes
 import { getSession } from 'next-auth/react'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 export default function IndexPage() {
   return <></>
 }

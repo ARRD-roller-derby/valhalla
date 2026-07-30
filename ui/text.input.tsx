@@ -27,9 +27,14 @@ export function TextInput({ value, longText, placeholder, setValue }: TextInputP
           onChange={(e) => setValue(e.target.value)}
         />
       )}
-      <div className="fill-arrd flex items-center justify-center" onClick={() => setValue('')}>
+      <button
+        type="button"
+        aria-label="Effacer le texte"
+        className="fill-arrd flex items-center justify-center border-0 bg-transparent p-0"
+        onClick={() => setValue('')}
+      >
         <CrossIcon />
-      </div>
+      </button>
     </div>
   )
 }

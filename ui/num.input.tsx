@@ -12,9 +12,9 @@ export function NumInput({ num = 0, setNum }: NumInputProps) {
 
   return (
     <div className="inline-flex items-center gap-1">
-      <div onClick={() => setNum(num - 1)}>
+      <button type="button" aria-label="Diminuer la valeur" className="border-0 bg-transparent p-0" onClick={() => setNum(num - 1)}>
         <SquareMinusIcon className={iconClasses} />
-      </div>
+      </button>
 
       <input
         type="number"
@@ -22,15 +22,15 @@ export function NumInput({ num = 0, setNum }: NumInputProps) {
           const valueStr = e.target.value
           //empêche la saisie de caractère autre que des chiffres
           if (valueStr && !/^\d+$/.test(valueStr)) return
-          const value = valueStr ? parseInt(valueStr) : 0
+          const value = valueStr ? parseInt(valueStr, 10) : 0
           setNum(value)
         }}
         value={num}
         className="input max-w-[75px]"
       />
-      <div onClick={() => setNum(num + 1)}>
+      <button type="button" aria-label="Augmenter la valeur" className="border-0 bg-transparent p-0" onClick={() => setNum(num + 1)}>
         <SquarePlusIcon className={iconClasses} />
-      </div>
+      </button>
     </div>
   )
 }

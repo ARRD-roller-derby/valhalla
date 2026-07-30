@@ -1,4 +1,4 @@
-import { Podium as PodiumType } from '@/entities'
+import type { Podium as PodiumType } from '@/entities'
 
 type PodiumProps = {
   podium: PodiumType

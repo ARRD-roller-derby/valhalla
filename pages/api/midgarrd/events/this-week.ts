@@ -1,5 +1,5 @@
 // Bibliothèque externe
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { Event } from '@/models'
@@ -24,7 +24,7 @@ dayjs.tz.guess()
 dayjs.tz.setDefault('Europe/Paris')
 
 import { midgardMiddleWare } from '@/utils/midgard-middleware'
-import { IUser } from '@/models'
+import type { IUser } from '@/models'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'

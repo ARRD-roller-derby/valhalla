@@ -246,7 +246,7 @@ export function Grid() {
         refs.current.recognitionInstance = null
       }
     }
-  }, [])
+  }, [run, keyBoardHandler, initGame])
 
   // === RENDER === //
 
@@ -274,7 +274,7 @@ export function Grid() {
         >
           {grid.map((row, x) => (
             <div key={x} className="flex flex-1 flex-col">
-              {row.map((col, y) => (
+              {row.map((_col, y) => (
                 <div key={y} className="relative h-full border-x border-x-orange-800">
                   {/* Player */}
                   {x === player.x && y === player.y && (
@@ -305,8 +305,20 @@ export function Grid() {
           ))}
         </div>
         {/* CONTRÔLES DU JEU */}
-        <div className="absolute bottom-0 left-0 top-0 w-1/2" id="c-left" onClick={() => movePlayer('left')} />
-        <div className="absolute bottom-0 right-0 top-0 w-1/2 " id="c-right" onClick={() => movePlayer('right')} />
+        <button
+          type="button"
+          aria-label="Déplacer le joueur vers la gauche"
+          className="absolute bottom-0 left-0 top-0 w-1/2 border-0 bg-transparent p-0"
+          id="c-left"
+          onClick={() => movePlayer('left')}
+        />
+        <button
+          type="button"
+          aria-label="Déplacer le joueur vers la droite"
+          className="absolute bottom-0 right-0 top-0 w-1/2 border-0 bg-transparent p-0"
+          id="c-right"
+          onClick={() => movePlayer('right')}
+        />
 
         {!start && (
           <>

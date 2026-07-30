@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 // Bibliothèques internes
-import { IEvent } from '@/models'
-import { TOption } from '@/types'
+import type { IEvent } from '@/models'
+import type { TOption } from '@/types'
 import { frequencyOpts } from '@/utils'
 import { RolesSelector } from '@/ui/roles-selector'
-import { EVENT_TYPES, IEventForm, useEvents } from '@/entities'
+import { EVENT_TYPES, type IEventForm, useEvents } from '@/entities'
 import { Editor, AddressSelector, EventTypeSelector } from '@/components'
 import { Checkbox, DateInput, FooterModal, LabelBlock, ListSelector, Modal, NumInput, TimeInput, TextInput } from '@/ui'
 
@@ -60,12 +60,12 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
     const [startHour, startMinute] = form.startHour.split(':')
     const [endHour, endMinute] = form.endHour.split(':')
     const start = dayjs(form.start.toDate())
-      .set('hour', parseInt(startHour))
-      .set('minute', parseInt(startMinute))
+      .set('hour', parseInt(startHour, 10))
+      .set('minute', parseInt(startMinute, 10))
       .set('second', 0)
     const end = dayjs(form.end.toDate())
-      .set('hour', parseInt(endHour))
-      .set('minute', parseInt(endMinute))
+      .set('hour', parseInt(endHour, 10))
+      .set('minute', parseInt(endMinute, 10))
       .set('second', 0)
 
     const event: IEventForm = {
@@ -111,16 +111,16 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
 
     if (form.startHour && form.endHour) {
       const startDateTime = dayjs(form.start)
-        .hour(parseInt(form.startHour.split(':')[0]))
-        .minute(parseInt(form.startHour.split(':')[1]))
+        .hour(parseInt(form.startHour.split(':')[0], 10))
+        .minute(parseInt(form.startHour.split(':')[1], 10))
       const endDateTime = dayjs(form.end)
-        .hour(parseInt(form.endHour.split(':')[0]))
-        .minute(parseInt(form.endHour.split(':')[1]))
+        .hour(parseInt(form.endHour.split(':')[0], 10))
+        .minute(parseInt(form.endHour.split(':')[1], 10))
 
       if (dayjs(form.start).isSame(dayjs(form.end)) && startDateTime.isAfter(endDateTime)) {
         const newEndDateTime = dayjs(form.start)
-          .hour(parseInt(form.startHour.split(':')[0]))
-          .minute(parseInt(form.startHour.split(':')[1]))
+          .hour(parseInt(form.startHour.split(':')[0], 10))
+          .minute(parseInt(form.startHour.split(':')[1], 10))
           .add(1, 'hour')
 
         const newEndHour = newEndDateTime.format('HH:mm')
@@ -135,11 +135,11 @@ export function EventFormModal({ day, eventToUpdate, customButton }: EventModalP
   useEffect(() => {
     const titleIsType = EVENT_TYPES.find((type) => type === form.title)
     if (titleIsType || !form.title) setForm((prev: any) => ({ ...prev, title: form.type }))
-  }, [form.type])
+  }, [form.type, form.title])
 
   useEffect(() => {
     handleChangeEnd()
-  }, [form.start, form.end, form.startHour, form.endHour])
+  }, [handleChangeEnd])
 
   // Render ------------------------------------------------------------------------------
   return (

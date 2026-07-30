@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { MongoDb } from '@/db'
 import { checkRoles } from '@/utils/check-roles'
 import { getServerSession } from 'next-auth/next'
@@ -38,7 +38,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
 
   const { start, end, description, descriptionPublic, title, type, visibility, address } = form
 
-  let populatedAddress = 0
+  const populatedAddress = 0
 
   const recurrenceId = uuid()
   const eventParams = {
@@ -61,7 +61,7 @@ export default async function event_create(req: NextApiRequest, res: NextApiResp
     const { frequency, count } = form.recurrence
     const start = dayjs(eventParams.start)
     const end = dayjs(eventParams.end)
-    for (let i = 1; i < parseInt(count); i++) {
+    for (let i = 1; i < parseInt(count, 10); i++) {
       populatedAddress
       creatableEvents.push({
         ...eventParams,

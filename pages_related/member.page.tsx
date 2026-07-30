@@ -6,7 +6,6 @@ import { AuthLayout } from '@/layout'
 import { useRouter } from 'next/router'
 import { MemberProvider, useMembers } from '@/entities'
 import { Loader, PageTabs } from '@/ui'
-import { useCanSee } from '@/hooks'
 import { useEffect } from 'react'
 import { BadgesList, MemberDetails } from '@/components'
 
@@ -41,7 +40,7 @@ export function Member() {
 
   useEffect(() => {
     if (member) fetchMember(query.id as string)
-  }, [query.id])
+  }, [query.id, member, fetchMember])
 
   // Rendus --------------------------------------------------
 
@@ -70,7 +69,7 @@ export function Member() {
       <MemberProvider member={member} badges={badges}>
         <div className="grid h-full grid-rows-[auto_auto_1fr_auto] items-start gap-1 p-2">
           <header className="flex items-center justify-center gap-2">
-            {member.avatar && <img src={member.avatar} className="h-12 w-12 rounded-full" />}
+            {member.avatar && <img src={member.avatar} alt="" className="h-12 w-12 rounded-full" />}
             <div className="text-center text-2xl font-bold text-arrd-highlight">{member?.username}</div>
           </header>
           <PageTabs tabs={tabs} />
