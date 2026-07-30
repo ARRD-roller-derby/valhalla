@@ -15,7 +15,7 @@ export function EventParticipationInfo() {
       {() => (
         <div className="flex flex-col justify-center gap-1">
           <div className="p-3 text-sm italic">
-            Saviez-vous ? Double-cliquez sur l'icône de présence pour indiquer que votre participation est à confirmer !
+            Saviez-vous ? Double-cliquez sur l&rsquo;icône de présence pour indiquer que votre participation est à confirmer !
           </div>
           <div className="grid grid-cols-2 gap-3 fill-arrd-highlight px-3 ">
             {participationTypes.map((pType) => (

@@ -160,8 +160,17 @@ export function Grid() {
       return
     }
 
-    //@ts-ignore
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    type SpeechRecognitionConstructor = new () => any
+    const speechRecognitionWindow = window as Window &
+      typeof globalThis & {
+        SpeechRecognition?: SpeechRecognitionConstructor
+        webkitSpeechRecognition?: SpeechRecognitionConstructor
+      }
+    const SpeechRecognition =
+      speechRecognitionWindow.SpeechRecognition || speechRecognitionWindow.webkitSpeechRecognition
+
+    if (!SpeechRecognition) return
+
     refs.current.recognitionInstance = new SpeechRecognition()
     refs.current.recognitionInstance.lang = 'fr-FR'
     refs.current.recognitionInstance.interimResults = false
