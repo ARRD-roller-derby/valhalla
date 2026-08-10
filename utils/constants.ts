@@ -31,7 +31,7 @@ export const DISCORD_LINKS = {
   logs: DISCORD_ADMIN_HOOK,
 }
 
-export const URL_API_DERBY_FRANCE = process.env.URL_API_DERBY_FRANCE || ''
+export const NEXT_PUBLIC_URL_API_DERBY_FRANCE = process.env.NEXT_PUBLIC_URL_API_DERBY_FRANCE || ''
 
 export const frequencyOpts: TOption[] = [
   { label: 'Tous les jours', value: 'day' },

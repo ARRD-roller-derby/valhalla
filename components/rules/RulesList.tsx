@@ -1,6 +1,6 @@
 import { useDebounce } from '@/hooks'
 import { CardUI, Loader, TextInput } from '@/ui'
-import { URL_API_DERBY_FRANCE } from '@/utils'
+import { NEXT_PUBLIC_URL_API_DERBY_FRANCE } from '@/utils'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -13,12 +13,18 @@ export function RulesList() {
 
   const handleFetch = async () => {
     const params = new URLSearchParams(window.location.search)
-    params.set('search', search)
+    const safeSearch = typeof search?.trim() === 'string' ? search.trim() : ''
+    params.set('search', safeSearch)
     window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
     setLoading(true)
-    const url = search ? `${URL_API_DERBY_FRANCE}rules/search/${search}` : `${URL_API_DERBY_FRANCE}rules`
+    const url = safeSearch ? `${NEXT_PUBLIC_URL_API_DERBY_FRANCE}rules/search/${safeSearch}` : `${NEXT_PUBLIC_URL_API_DERBY_FRANCE}rules`
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, {
+        "headers": {
+          "Content-Type": "application/json",
+          'Accept': 'application/json'
+        }
+      })
       const data = await res.json()
       setRules(data)
     } catch (error) {
