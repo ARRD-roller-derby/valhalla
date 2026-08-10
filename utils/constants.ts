@@ -1,5 +1,5 @@
 // Bibliothèque interne
-import { TOption } from '@/types'
+import type { TOption } from '@/types'
 
 export const APP_NAME = 'Valhalla'
 export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || ''
@@ -31,7 +31,7 @@ export const DISCORD_LINKS = {
   logs: DISCORD_ADMIN_HOOK,
 }
 
-export const URL_API_DERBY_FRANCE = 'https://api.rollerderby.ovh/'
+export const URL_API_DERBY_FRANCE = process.env.URL_API_DERBY_FRANCE || ''
 
 export const frequencyOpts: TOption[] = [
   { label: 'Tous les jours', value: 'day' },
