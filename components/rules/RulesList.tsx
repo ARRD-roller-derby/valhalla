@@ -1,6 +1,6 @@
 import { useDebounce } from '@/hooks'
 import { CardUI, Loader, TextInput } from '@/ui'
-import { NEXT_PUBLIC_URL_API_DERBY_FRANCE } from '@/utils'
+
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -17,14 +17,13 @@ export function RulesList() {
     params.set('search', safeSearch)
     window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
     setLoading(true)
-    const url = safeSearch ? `${NEXT_PUBLIC_URL_API_DERBY_FRANCE}rules/search/${safeSearch}` : `${NEXT_PUBLIC_URL_API_DERBY_FRANCE}rules`
+    const url = `/api/rules?${new URLSearchParams({ search: safeSearch }).toString()}`
     try {
       const res = await fetch(url, {
-        "headers": {
-          "Content-Type": "application/json",
-          'Accept': 'application/json'
-        }
+        headers: { Accept: 'application/json' },
       })
+      if (!res.ok) throw new Error('Impossible de récupérer les règles')
+
       const data = await res.json()
       setRules(data)
     } catch (error) {
@@ -38,7 +37,6 @@ export function RulesList() {
     handleFetch()
   }, [debouncedSearch])
 
-  console.log('rules', rules)
   return (
     <div className="mx-auto flex max-w-[500px] flex-col gap-4">
       <TextInput value={search} setValue={setSearch} placeholder="Rechercher un règle" />
