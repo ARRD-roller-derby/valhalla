@@ -1,5 +1,13 @@
-import clientPromise from '@/db/mongo.auth.connect'
-import { Account } from '@/models/account.model'
+import { REST } from "@discordjs/rest";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import { Routes } from "discord-api-types/v10";
+import { ObjectId } from "mongodb";
+import NextAuth from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
+import { MongoDb } from "@/db/db";
+import clientPromise from "@/db/mongo.auth.connect";
+import { Account } from "@/models/account.model";
+import { type TRole, User } from "@/models/user.model";
 import {
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
@@ -8,22 +16,14 @@ import {
   DOL_URL,
   DOLAPIKEY,
   ROLES,
-} from '@/utils/constants'
-import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
-import NextAuth from 'next-auth'
-import DiscordProvider from 'next-auth/providers/discord'
-import { MongoDb } from '@/db/db'
-import { REST } from '@discordjs/rest'
-import { TRole, User } from '@/models/user.model'
-import { Routes } from 'discord-api-types/v10'
-import { ObjectId } from 'mongodb'
+} from "@/utils/constants";
 
 function checkChangedRoles(newRole: TRole[], userRole: TRole[]) {
   if (newRole.length !== userRole.length) {
-    return true // Longueurs différentes, donc pas les mêmes rôles
+    return true; // Longueurs différentes, donc pas les mêmes rôles
   }
 
-  return !newRole.every((role) => userRole.some((r) => r.id === role.id))
+  return !newRole.every((role) => userRole.some((r) => r.id === role.id));
 }
 
 export const authOptions = {
@@ -32,18 +32,21 @@ export const authOptions = {
     DiscordProvider({
       clientId: DISCORD_CLIENT_ID,
       clientSecret: DISCORD_CLIENT_SECRET,
+      issuer: "https://discord.com",
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
     async session(session: any) {
-      const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
-      const guildRoles = (await rest.get(Routes.guildRoles(DISCORD_GUILD_ID))) as TRole[]
+      const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
+      const guildRoles = (await rest.get(
+        Routes.guildRoles(DISCORD_GUILD_ID),
+      )) as TRole[];
 
-      await MongoDb()
-      let user = await User.findById(new ObjectId(session.user.id))
+      await MongoDb();
+      let user = await User.findById(new ObjectId(session.user.id));
 
       if (!user) {
         await User.create({
@@ -51,18 +54,20 @@ export const authOptions = {
           providerAccountId: session.user.id,
           name: session.user.name,
           roles: [],
-        })
-        user = await User.findById(new ObjectId(session.user.id))
+        });
+        user = await User.findById(new ObjectId(session.user.id));
       }
 
       if (!user.providerAccountId) {
-        const account = await Account.findOne({ userId: session.user.id })
-        if (account) user.providerAccountId = account.providerAccountId
+        const account = await Account.findOne({ userId: session.user.id });
+        if (account) user.providerAccountId = account.providerAccountId;
       }
 
-      let member: any = undefined
+      let member: any;
       try {
-        member = await rest.get(Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId))
+        member = await rest.get(
+          Routes.guildMember(DISCORD_GUILD_ID, user.providerAccountId),
+        );
       } catch (e) {
         return {
           ...session,
@@ -70,24 +75,24 @@ export const authOptions = {
             ...session.user,
             roles: [
               {
-                id: '0',
+                id: "0",
                 name: ROLES.everyone,
                 color: 0x000000,
               },
             ],
           },
-        }
+        };
       }
 
-      if (!user || !member) return session
+      if (!user || !member) return session;
 
       if (member?.user?.global_name && user.name !== member.user.global_name) {
         User.updateOne(
           { _id: user._id },
           {
             name: member.nick || member.user.global_name,
-          }
-        )
+          },
+        );
       }
       const roles = guildRoles
         .filter((role) => member.roles.includes(role.id))
@@ -95,49 +100,54 @@ export const authOptions = {
           id: role.id,
           name: role.name.toLowerCase(),
           color: role.color,
-        }))
+        }));
 
-      const isMember = roles.some((role) => role.name.toLowerCase() === ROLES.membre.toLowerCase())
+      const isMember = roles.some(
+        (role) => role.name.toLowerCase() === ROLES.membre.toLowerCase(),
+      );
 
       if (isMember) {
         roles.push({
-          id: '0',
+          id: "0",
           name: ROLES.realInvite.toLowerCase(),
           color: 0x000000,
-        })
+        });
       }
 
-      const haveRoleChanged = checkChangedRoles(roles, user.roles)
+      const haveRoleChanged = checkChangedRoles(roles, user.roles);
 
       if (haveRoleChanged) {
-        user.roles = roles
-        await user.save()
+        user.roles = roles;
+        await user.save();
       }
 
-      if (user.isModified('wallet')) {
+      if (user.isModified("wallet")) {
         const updateFields = {
           providerAccountId: user.providerAccountId,
-        }
-        await User.updateOne({ _id: user._id }, updateFields)
+        };
+        await User.updateOne({ _id: user._id }, updateFields);
       }
 
       const params = new URLSearchParams({
         DOLAPIKEY: DOLAPIKEY,
-        limit: '1',
+        limit: "1",
         sqlfilters: `(t.note_private:like:%${user.providerAccountId}%)`,
-      })
+      });
 
-      const dolibarrRes = await fetch(`${DOL_URL}members?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const dolibarrRes = await fetch(
+        `${DOL_URL}members?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      })
+      );
 
-      const dolibarrData = await dolibarrRes.json()
+      const dolibarrData = await dolibarrRes.json();
 
       if (dolibarrData.length > 0) {
-        const result = dolibarrData[0]
+        const result = dolibarrData[0];
         const dolibarrInfos = {
           type: result.type,
           birth: result.birth,
@@ -151,11 +161,11 @@ export const authOptions = {
           town: result.town,
           zip: result.zip,
           address: result.address,
-        }
+        };
         session.user = {
           ...session.user,
           ...dolibarrInfos,
-        }
+        };
       }
 
       session.user = {
@@ -165,10 +175,10 @@ export const authOptions = {
         image: member.user.avatar
           ? `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
           : null,
-      }
-      return session
+      };
+      return session;
     },
   },
-}
+};
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
