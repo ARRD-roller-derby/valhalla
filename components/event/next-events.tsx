@@ -21,14 +21,20 @@ export function NextEvents() {
 
   // Effets ------------------------------------------------------------------
   useEffect(() => {
-    if (session?.user) {
-      fetchForNext()
-      //getForecasts()
+    if (!session?.user) return
+
+    const refetchOnFocus = () => {
+      void fetchForNext()
     }
-  }, [])
+
+    void fetchForNext()
+    window.addEventListener('focus', refetchOnFocus)
+
+    return () => window.removeEventListener('focus', refetchOnFocus)
+  }, [fetchForNext, session?.user])
 
   // Rendu --------------------------------------------------------------------
-  if (loading)
+  if (loading && events.length === 0)
     return (
       <div className="flex items-center justify-center">
         <Loader />
