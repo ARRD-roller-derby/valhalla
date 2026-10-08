@@ -21,6 +21,7 @@ export interface IParticipant {
   updatedAt: Date
   type: 'absent·e' | string
   guestsNumber: number
+  isFresh?: boolean
 }
 
 export interface ICarpooling {

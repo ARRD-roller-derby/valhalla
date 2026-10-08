@@ -3,7 +3,7 @@ import { MongoDb } from '@/db'
 import { Event, User } from '@/models'
 import { getDiscordMember } from '@/services/get-discord-member'
 import { authMiddleWare } from '@/utils/auth-middleware'
-import { DISCORD_TOKEN } from '@/utils'
+import { DISCORD_TOKEN, ROLES } from '@/utils'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v10'
 import { UserBadge } from '@/models/user_badge.model'
@@ -14,12 +14,13 @@ async function event_participants(req: NextApiRequest, res: NextApiResponse, use
   await MongoDb()
 
   const event = await Event.findOne({ _id: req.query.id })
-  const { members } = await getDiscordMember()
+  const { members, guildRoles } = await getDiscordMember()
 
   if (!event) return res.status(404).send('Événement non trouvé')
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
 
   const participants = []
+  const freshRoleId = guildRoles.find((role) => role.name.toLowerCase() === ROLES.fresh)?.id
 
   for (const par of event.participants) {
     const m = members.find((member) => member.id === par.userId)
@@ -49,6 +50,7 @@ async function event_participants(req: NextApiRequest, res: NextApiResponse, use
         ...par._doc,
         ...m,
         name: m?.nick || m?.global_name || m?.name,
+        isFresh: !!freshRoleId && m.roles.includes(freshRoleId),
       })
     }
   }

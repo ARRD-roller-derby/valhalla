@@ -7,10 +7,11 @@ export function EventAttendeesDetails({ participant: p }: any) {
   return (
     <div
       key={p.name}
-      className={dc('flex items-center  gap-2 rounded border border-arrd-bgLight p-2', [
-        !!p.type.match(/absent/),
-        'opacity-50',
-      ])}
+      className={dc(
+        'flex items-center  gap-2 rounded border border-arrd-bgLight p-2',
+        [!!p.type.match(/absent/), 'opacity-50'],
+        [!!p.isFresh, 'border-arrd-primary'],
+      )}
     >
       <div className="">{p.avatar && <img src={p.avatar} className="h-12 w-12 rounded-full" />}</div>
 

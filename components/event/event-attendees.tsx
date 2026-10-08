@@ -14,6 +14,10 @@ const order = ['coach', 'assist-coach', 'organizer', 'patineur·euse', 'visiteur
 
 // Fonction de comparaison pour trier les participants
 const compareParticipants = (participantA: IParticipant, participantB: IParticipant) => {
+  if (participantA.isFresh !== participantB.isFresh) {
+    return Number(participantA.isFresh) - Number(participantB.isFresh)
+  }
+
   const typeA = participantA.type
   const typeB = participantB.type
 
@@ -43,9 +47,14 @@ export function EventAttendees() {
 
   // Constantes ---------------------------------------------------------------
 
-  const { presentCount, absCount } = useMemo(() => {
+  const { presentCount, confirmedCount, freshCount, absCount } = useMemo(() => {
+    const presentParticipants = participants.filter((p) => !p.type.match(/absent/))
+    const freshCount = presentParticipants.filter((p) => p.isFresh).length
+
     return {
-      presentCount: participants.filter((p) => !p.type.match(/absent/)).length,
+      presentCount: presentParticipants.length,
+      confirmedCount: presentParticipants.length - freshCount,
+      freshCount,
       absCount: participants.filter((p) => p.type.match(/absent/)).length,
     }
   }, [participants])
@@ -73,9 +82,14 @@ export function EventAttendees() {
 
       <div className="flex flex-col gap-1">
         {participants.length > 0 && (
-          <div className="text-center text-arrd-highlight">
-            {presentCount} présent·e{participants.length > 1 ? '·s' : ''}
-          </div>
+          <>
+            <div className="text-center text-arrd-highlight">
+              {presentCount} présent·e{participants.length > 1 ? '·s' : ''}
+            </div>
+            <div className="text-center text-sm text-arrd-primary">
+              {confirmedCount} confirmés / {freshCount} freshs
+            </div>
+          </>
         )}
 
         <div className="flex flex-col gap-2">
