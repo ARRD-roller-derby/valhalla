@@ -49,7 +49,10 @@ const userSchema = new Schema<IUser>({
   numRoster: Number,
   mst: Boolean,
   msp: Boolean,
-  roles: [RoleSchema],
+  roles: {
+    type: [RoleSchema],
+    default: [],
+  },
 })
 
 export const User = models.users || model('users', userSchema)

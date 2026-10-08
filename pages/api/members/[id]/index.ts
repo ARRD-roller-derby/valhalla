@@ -9,7 +9,6 @@ import { DISCORD_GUILD_ID, DISCORD_TOKEN, DOLAPIKEY, DOL_URL, hexToTailwind } fr
 import { dolibarrMemberParser } from '../../../../utils/dolibarr-member-parser'
 import { authMiddleWare } from '@/utils/auth-middleware'
 import { UserBadge } from '@/models/user_badge.model'
-import { ObjectId } from 'mongodb'
 
 // Initialiser le fuseau horaire
 process.env.TZ = 'Europe/Paris'
@@ -25,7 +24,7 @@ async function member(req: NextApiRequest, res: NextApiResponse) {
   //TODO, ici, c 'est à dolibarr qu'on va faire appel pour récupérer les infos du membre
   const user = await User.findOne({ providerAccountId })
   const roles = guildRoles
-    .filter((role) => providerMember.roles.includes(role.id))
+    .filter((role) => providerMember.roles?.includes(role.id))
     .map((role) => ({
       id: role.id,
       name: role.name,
@@ -55,7 +54,7 @@ async function member(req: NextApiRequest, res: NextApiResponse) {
 
   return res.status(200).json({
     member: {
-      ...user.toJSON(),
+      ...user?.toJSON(),
       ...providerMember.user,
       ...dolibarrInfos,
       roles,

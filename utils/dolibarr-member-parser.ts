@@ -5,13 +5,13 @@ import { IDolibarrMember } from '@/entities'
 
 export function dolibarrMemberParser(
   dolibarrData: any,
-  user: IUser,
+  user: IUser | null,
   providerAccountId: string
 ): Partial<IDolibarrMember> {
   const dolibarrInfos: Partial<IDolibarrMember> = {}
   if (dolibarrData.length > 0) {
     const dolibarrMember = dolibarrData[0]
-    const canSeePrivateInfos = checkRoles(ROLES_CAN_MANAGE_EVENT, user) || user.id === providerAccountId
+    const canSeePrivateInfos = checkRoles(ROLES_CAN_MANAGE_EVENT, user) || user?.id === providerAccountId
 
     if (dolibarrMember) {
       dolibarrInfos.type = dolibarrMember.type

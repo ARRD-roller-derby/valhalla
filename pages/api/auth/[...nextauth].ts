@@ -18,7 +18,7 @@ import {
   ROLES,
 } from "@/utils/constants";
 
-function checkChangedRoles(newRole: TRole[], userRole: TRole[]) {
+function checkChangedRoles(newRole: TRole[], userRole: TRole[] = []) {
   if (newRole.length !== userRole.length) {
     return true; // Longueurs différentes, donc pas les mêmes rôles
   }
